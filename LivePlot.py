@@ -11,4 +11,3 @@ def init():
     ax.set_ylim(-1, 1)
     return ln,
 
-def updaet(frame)
