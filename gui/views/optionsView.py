@@ -5,7 +5,7 @@ import os
 from pyqtgraph import LinearRegionItem, mkBrush, mkPen, SignalProxy, InfiniteLine, TextItem, ArrowItem
 from PyQt5 import uic
 import pyvisa as visa
-
+from tools.threadWorker import Worker
 
 import logging
 
@@ -28,11 +28,27 @@ class OptionsView(QWidget, Ui_optionsView):
         self.rm = visa.ResourceManager()
         self.oscillatorList = self.rm.list_resources()
 
-        self.connect_comboBox()
 
-    def connect_comboBox(self):
+        self.update_comboBox()
+        self.connect_oscillo()
+        self.create_threads()
+
+        log.debug("Connecting optionsView gui Widgets")
+
+    def create_threads(self, *args):
+        self.acqWorker = Worker(self.manage_data_flow, *args)
+        self.acqWorker.moveToThread(self.acqThread)
+        self.acqThread.started.connect(self.acqWorker.run)
+
+    def update_comboBox(self):
+        log.debug("Updating USBPortsList")
         self.USBPortsList.addItems(self.oscillatorList)
+
+    def connect_oscillo(self):
+        log.debug("Connection to oscilloscope")
+        #my_oscillo = self.rm.open_resource(str(self.USBPortsList.currentText()))
 
 
     def connect_signals(self):
         pass
+
