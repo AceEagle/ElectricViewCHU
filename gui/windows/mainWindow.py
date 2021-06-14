@@ -33,7 +33,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tabWidget = QTabWidget()
         self.setCentralWidget(self.tabWidget)
         self.tabWidget.addTab(self.optionsView, "Options")
-        self.tabWidget.addTab(self.lensView, "Data")
+        self.tabWidget.addTab(self.dataView, "Data")
 
     def setup_menuBar(self):
         self.helpAction = QAction(self)
@@ -46,8 +46,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def create_views_and_dialogs(self):
         self.helpDialog = HelpDialog()
-        self.filterView = OptionsView(model=self.model)
-        self.lensView = DataView(model=self.model)
+        self.optionsView = OptionsView(model=self.model)
+        self.dataView = DataView(model=self.model)
 
     def connect_buttons(self):
         self.helpAction.triggered.connect(self.show_helpDialog)
@@ -80,4 +80,4 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             raise RuntimeError("No Qt Application found.")
 
         styleFile = qss_file = open(filePath).read()
-        app.setStyleSheet(styleFile)QtBaseClass = uic.loadUiType(MainWindowPath)
+        app.setStyleSheet(styleFile)

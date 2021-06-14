@@ -5,10 +5,6 @@ import os
 from pyqtgraph import LinearRegionItem, mkBrush, mkPen, SignalProxy, InfiniteLine, TextItem, ArrowItem
 from PyQt5 import uic
 import pyvisa as visa
-from gui.modules import mockSpectrometer as mock
-from tools.threadWorker import Worker
-from tools.CircularList import RingBuffer
-import numpy as np
 
 
 import logging
@@ -25,3 +21,15 @@ class OptionsView(QWidget, Ui_optionsView):
     s_data_acquisition_done = pyqtSignal()
 
     def __init__(self, model=None):
+        super(OptionsView, self).__init__()
+        self.setupUi(self)
+        self.model = model
+        self.plotItem = None
+        self.dataPlotItem = None
+        self.connect_widgets()
+
+    def connect_widgets(self):
+        pass
+
+    def connect_signals(self):
+        pass

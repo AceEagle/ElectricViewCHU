@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-from gui.windows.mainWindow import MainModel
+from gui.windows.mainWindow import MainWindow
+from tools.mainModel import MainModel
 import sys
 import ctypes
 import logging
