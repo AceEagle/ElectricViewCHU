@@ -26,10 +26,15 @@ class OptionsView(QWidget, Ui_optionsView):
         self.model = model
         self.plotItem = None
         self.dataPlotItem = None
+
+        self.rm = visa.ResourceManager()
+        self.oscillatorList = self.rm.list_resources()
+
         self.connect_widgets()
 
     def connect_widgets(self):
-        pass
+        self.USBPortsList.addIteam(self.oscillatorList[i])
+
 
     def connect_signals(self):
         pass

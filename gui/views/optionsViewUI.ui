@@ -48,14 +48,14 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="USBPortsLabel">
            <property name="text">
-            <string>TextLabel</string>
+            <string>Choose USB Port</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QComboBox" name="comboBox"/>
+          <widget class="QComboBox" name="USBPorts"/>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_6">
