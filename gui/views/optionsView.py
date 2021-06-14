@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QMessageBox, QCheckBox, QFileDialog
+from PyQt5.QtWidgets import QWidget, QMessageBox, QCheckBox, QFileDialog, QComboBox
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread
 import copy
 import os
@@ -22,18 +22,16 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def __init__(self, model=None):
         super(OptionsView, self).__init__()
-        self.setupUi(self)
         self.model = model
-        self.plotItem = None
-        self.dataPlotItem = None
+        self.setupUi(self)
 
         self.rm = visa.ResourceManager()
         self.oscillatorList = self.rm.list_resources()
 
-        self.connect_widgets()
+        self.connect_comboBox()
 
-    def connect_widgets(self):
-        self.USBPortsList.addIteam(self.oscillatorList[i])
+    def connect_comboBox(self):
+        self.USBPortsList.addItems(self.oscillatorList)
 
 
     def connect_signals(self):
