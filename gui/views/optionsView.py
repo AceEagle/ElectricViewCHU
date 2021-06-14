@@ -31,14 +31,14 @@ class OptionsView(QWidget, Ui_optionsView):
 
         self.update_comboBox()
         self.connect_oscillo()
-        self.create_threads()
+#        self.create_threads()
 
         log.debug("Connecting optionsView gui Widgets")
 
-    def create_threads(self, *args):
-        self.acqWorker = Worker(self.manage_data_flow, *args)
-        self.acqWorker.moveToThread(self.acqThread)
-        self.acqThread.started.connect(self.acqWorker.run)
+    # def create_threads(self, *args):
+    #    self.acqWorker = Worker(self.manage_data_flow, *args)
+    #   self.acqWorker.moveToThread(self.acqThread)
+    #  self.acqThread.started.connect(self.acqWorker.run)
 
     def update_comboBox(self):
         log.debug("Updating USBPortsList")
