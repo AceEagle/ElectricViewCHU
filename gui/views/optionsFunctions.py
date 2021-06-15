@@ -17,6 +17,5 @@ class OptionsFunctions():
         return self.rm.list_resources()
 
     def nbPointsOscillo(self, number):
-        if number in self.nbPointsList:
-            if number is int:
-
+        print(self.myOscillo.query("*IDN?"))
+        self.myOscillo.write("trace:points %d" % number)
