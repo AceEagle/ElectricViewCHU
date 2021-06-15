@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math
 #from optionsFunctions import rawDataFileName
 import panda as pd
-
+import PyTektronixScope as pts
 
 log = logging.getLogger(__name__)
 

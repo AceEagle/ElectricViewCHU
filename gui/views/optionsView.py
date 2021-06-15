@@ -6,7 +6,7 @@ from pyqtgraph import LinearRegionItem, mkBrush, mkPen, SignalProxy, InfiniteLin
 from PyQt5 import uic
 import pyvisa as visa
 from tools.pyqtWorker import Worker
-
+from PyTektronixScope import TektronixScope
 import logging
 
 
@@ -31,6 +31,7 @@ class OptionsView(QWidget, Ui_optionsView):
 
         self.update_comboBox()
         self.connect_oscillo()
+        self.myOscillo = None
 #        self.create_threads()
 
         log.debug("Connecting optionsView gui Widgets")
@@ -46,8 +47,8 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def connect_oscillo(self):
         log.debug("Connection to oscilloscope")
-        #my_oscillo = self.rm.open_resource(str(self.USBPortsList.currentText()))
+        self.myOscillo = TektronixScope(str(self.USBPortsList.currentText()))
 
-    def connect_signals(self):
-        pass
+    def get_data(self, channel):
+        self.myOscillo.read_data_one_channel(channel, x_axis_out=False)
 
