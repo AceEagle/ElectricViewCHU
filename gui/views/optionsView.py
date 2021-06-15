@@ -5,7 +5,7 @@ import os
 from pyqtgraph import LinearRegionItem, mkBrush, mkPen, SignalProxy, InfiniteLine, TextItem, ArrowItem
 from PyQt5 import uic
 import pyvisa as visa
-from tools.threadWorker import Worker
+from tools.pyqtWorker import Worker
 
 import logging
 
