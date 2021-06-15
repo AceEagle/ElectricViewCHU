@@ -48,7 +48,6 @@ class OptionsView(QWidget, Ui_optionsView):
         log.debug("Connection to oscilloscope")
         #my_oscillo = self.rm.open_resource(str(self.USBPortsList.currentText()))
 
-
     def connect_signals(self):
         pass
 

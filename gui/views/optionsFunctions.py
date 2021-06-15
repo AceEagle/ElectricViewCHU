@@ -1,6 +1,7 @@
 import logging
 import tools.pyqtWorker
 import pyvisa as visa
+import panda as pd
 
 
 log = logging.getLogger(__name__)
@@ -16,6 +17,6 @@ class OptionsFunctions():
     def detect_oscilloscopes(self):
         return self.rm.list_resources()
 
-    def nbPointsOscillo(self, number):
+    def nb_points_oscilloscope(self, number):
         print(self.myOscillo.query("*IDN?"))
         self.myOscillo.write("trace:points %d" % number)
