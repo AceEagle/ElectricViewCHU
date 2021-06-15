@@ -19,3 +19,6 @@ class DataFunctions():
         df["Tension"] = df["Tension"].str.replace(r' \(.+$', '')
         df = df[~df['Tension'].str.contains('\[edit\]')].reset_index(drop=True)
         print(df)
+
+    def initiate_graph(self):
+        plt.plot
