@@ -24,7 +24,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QFrame" name="frame">
+    <widget class="QFrame" name="OscilloTopFrame">
      <property name="minimumSize">
       <size>
        <width>1071</width>
@@ -42,33 +42,56 @@
        <enum>QLayout::SetMaximumSize</enum>
       </property>
       <item>
-       <widget class="QGroupBox" name="OscilloCom">
+       <widget class="QGroupBox" name="PSCommBox">
         <property name="title">
-         <string>Oscillator Communication</string>
+         <string>Power Supply Parameters</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="0">
-          <widget class="QLabel" name="USBPortsLabel">
-           <property name="text">
-            <string>Choose USB Port</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="USBPortsList"/>
-         </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="PSModeLabel">
            <property name="text">
-            <string>TextLabel</string>
+            <string>Mode</string>
            </property>
           </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="PSModeComboBox"/>
+         </item>
+         <item row="4" column="1">
+          <widget class="QSpinBox" name="PSPercentageSpinBox"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="PSFrequenceDSpinBox"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="PSFrequenceLabel">
+           <property name="text">
+            <string>Frequence</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="PSPercentageLabel">
+           <property name="text">
+            <string>Cycle Percentage</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="PSWaveFormLabel">
+           <property name="text">
+            <string>Wave Form</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="PSWaveFormComboBox"/>
          </item>
         </layout>
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="OscilloPara">
+       <widget class="QGroupBox" name="OscilloParamBox">
         <property name="title">
          <string>Oscillator Parameters</string>
         </property>
@@ -97,6 +120,9 @@
            </property>
           </widget>
          </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="comboBox"/>
+         </item>
         </layout>
        </widget>
       </item>
@@ -104,57 +130,39 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QGroupBox" name="groupBox_3">
+    <widget class="QGroupBox" name="CommunicationBotFrame">
      <property name="title">
-      <string>Defining Constants</string>
+      <string>Communication</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QWidget" name="widget_3" native="true">
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="maximumSize">
-            <size>
-             <width>55</width>
-             <height>139</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <widget class="QLabel" name="USBPortsLabel">
+        <property name="text">
+         <string>Choose USB Port</string>
+        </property>
        </widget>
       </item>
-      <item>
-       <spacer name="horizontalSpacer">
+      <item row="0" column="1">
+       <widget class="QComboBox" name="USBPortsComboBox"/>
+      </item>
+      <item row="0" column="2">
+       <spacer name="ButtonTopSpace">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>20</width>
+          <height>40</height>
          </size>
         </property>
        </spacer>
       </item>
-      <item>
-       <widget class="QWidget" name="widget_4" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QPlainTextEdit" name="plainTextEdit">
-           <property name="minimumSize">
-            <size>
-             <width>400</width>
-             <height>139</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="InjectButton">
+        <property name="text">
+         <string>Inject Prameters</string>
+        </property>
        </widget>
       </item>
      </layout>
