@@ -29,7 +29,14 @@
          <string>Data Processing Parameters</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="13" column="0">
+         <item row="15" column="1">
+          <widget class="QToolButton" name="SaveDataToolButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="0">
           <spacer name="G6DownSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -42,17 +49,38 @@
            </property>
           </spacer>
          </item>
-         <item row="14" column="0">
+         <item row="15" column="0">
           <widget class="QPushButton" name="SaveDataPButton">
            <property name="text">
             <string>Save Data</string>
            </property>
           </widget>
          </item>
+         <item row="13" column="0">
+          <widget class="QCheckBox" name="G6CheckBox">
+           <property name="text">
+            <string>Graph6</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QCheckBox" name="G3CheckBox">
+           <property name="text">
+            <string>Graph3</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0">
+          <widget class="QCheckBox" name="G4CheckBox">
+           <property name="text">
+            <string>Graph4</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="0">
           <widget class="QDial" name="AmpliDial"/>
          </item>
-         <item row="3" column="0">
+         <item row="4" column="0">
           <spacer name="G1DownSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -72,7 +100,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item row="6" column="0">
           <spacer name="G2DownSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -85,7 +113,7 @@
            </property>
           </spacer>
          </item>
-         <item row="7" column="0">
+         <item row="8" column="0">
           <spacer name="G3DownSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -98,7 +126,21 @@
            </property>
           </spacer>
          </item>
-         <item row="9" column="0">
+         <item row="3" column="0">
+          <widget class="QCheckBox" name="G1CheckBox">
+           <property name="text">
+            <string>Graph1</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QCheckBox" name="G2CheckBox">
+           <property name="text">
+            <string>Graph2</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="0">
           <spacer name="G4DownSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -112,6 +154,13 @@
           </spacer>
          </item>
          <item row="11" column="0">
+          <widget class="QCheckBox" name="G5CheckBox">
+           <property name="text">
+            <string>Graph5</string>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="0">
           <spacer name="G5DownSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -124,54 +173,8 @@
            </property>
           </spacer>
          </item>
-         <item row="14" column="1">
-          <widget class="QToolButton" name="SaveDataToolButton">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QCheckBox" name="G1CheckBox">
-           <property name="text">
-            <string>Graph1</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QCheckBox" name="G3CheckBox">
-           <property name="text">
-            <string>Graph2</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QCheckBox" name="G2CheckBox">
-           <property name="text">
-            <string>Graph3</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="QCheckBox" name="G4CheckBox">
-           <property name="text">
-            <string>Graph4</string>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="0">
-          <widget class="QCheckBox" name="G6CheckBox">
-           <property name="text">
-            <string>Graph6</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="0">
-          <widget class="QCheckBox" name="G5CheckBox">
-           <property name="text">
-            <string>Graph5</string>
-           </property>
-          </widget>
+         <item row="2" column="0" alignment="Qt::AlignHCenter">
+          <widget class="QLCDNumber" name="lcdNumber"/>
          </item>
         </layout>
        </widget>
@@ -181,19 +184,9 @@
         <property name="title">
          <string>Data Appreciation</string>
         </property>
-        <layout class="QGridLayout" name="graphGridLayout">
+        <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="0">
-          <spacer name="GraphSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
+          <widget class="QGraphicsView" name="graphicsView"/>
          </item>
         </layout>
        </widget>
