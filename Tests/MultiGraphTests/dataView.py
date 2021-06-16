@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QCheckBox, QGraphicsView, QGroupBox, QGridLayout
 from PyQt5.QtCore import pyqtSignal
-from PyQt5 import uic
+from PyQt5 import uic, QtMultimedia
 import logging
 import os
 
@@ -51,29 +51,41 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         else:
             self.graphGridLayout.addWidget(spaceGraphX)
 
-    def delete_graph_space(self):
-        pass
+    def delete_graph_space(self, spaceGraphX):
+        self.graphGridLayout.remove(spaceGraphX)
 
     def initiate_graph1(self):
-        self.add_graph_space(self.spaceGraph1)
-        pass
+        if self.G1CheckBox.isChecked:
+            self.add_graph_space(self.spaceGraph1)
+        else:
+            self.delete_graph_space(self.spaceGraph1)
 
     def initiate_graph2(self):
-        self.add_graph_space(self.spaceGraph2)
-        pass
+        if self.G2CheckBox.isChecked:
+            self.add_graph_space(self.spaceGraph2)
+        else:
+            self.delete_graph_space(self.spaceGraph2)
 
     def initiate_graph3(self):
-        self.add_graph_space(self.spaceGraph3)
-        pass
+        if self.G3CheckBox.isChecked:
+            self.add_graph_space(self.spaceGraph3)
+        else:
+            self.delete_graph_space(self.spaceGraph3)
 
     def initiate_graph4(self):
-        self.add_graph_space(self.spaceGraph4)
-        pass
+        if self.G4CheckBox.isChecked:
+            self.add_graph_space(self.spaceGraph4)
+        else:
+            self.delete_graph_space(self.spaceGraph4)
 
     def initiate_graph5(self):
-        self.add_graph_space(self.spaceGraph5)
-        pass
+        if self.G5CheckBox.isChecked:
+            self.add_graph_space(self.spaceGraph5)
+        else:
+            self.delete_graph_space(self.spaceGraph5)
 
     def initiate_graph6(self):
-        self.add_graph_space(self.spaceGraph6)
-        pass
+        if self.G6CheckBox.isChecked:
+            self.add_graph_space(self.spaceGraph6)
+        else:
+            self.delete_graph_space(self.spaceGraph6)
