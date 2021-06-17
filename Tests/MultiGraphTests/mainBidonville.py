@@ -9,6 +9,8 @@ import logging
 import logging.config
 from logging.handlers import RotatingFileHandler
 import os
+import unittest
+
 
 log = logging.getLogger(__name__)
 

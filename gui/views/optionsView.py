@@ -43,12 +43,12 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def update_comboBox(self):
         log.debug("Updating USBPortsList")
-        self.USBPortsList.addItems(self.oscillatorList)
+        self.USBPortsComboBox.addItems(self.oscillatorList)
 
     def connect_oscillo(self):
         log.debug("Connection to oscilloscope")
-        self.myOscillo = TektronixScope(str(self.USBPortsList.currentText()))
+        #self.myOscillo = TektronixScope(str(self.USBPortsComboBox.currentText()))
 
     def get_data(self, channel):
-        self.myOscillo.read_data_one_channel(channel, x_axis_out=False)
-
+        #self.myOscillo.read_data_one_channel(channel, x_axis_out=False)
+        pass

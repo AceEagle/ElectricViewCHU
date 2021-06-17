@@ -186,7 +186,7 @@
         </property>
         <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="0">
-          <widget class="QGraphicsView" name="graphicsView"/>
+          <widget class="GraphicsLayoutWidget" name="graphicsView"/>
          </item>
         </layout>
        </widget>
@@ -196,6 +196,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GraphicsLayoutWidget</class>
+   <extends>QWidget</extends>
+   <header>pyqtgraph</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
