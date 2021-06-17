@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QCheckBox, QGraphicsView, QGroupBox, QGridLayout
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5 import uic, QtMultimedia
 import logging
 import os
@@ -80,3 +80,11 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
                 except:
                     pass
 
+    @pyqtSlot(dict)
+    def update_graph(self, simPlotData):
+        for graphic in Data().graphics:
+            try:
+                kwargs = simPlotData[graphic]
+                self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
+            except:
+                log.info("null")
