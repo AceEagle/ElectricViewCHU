@@ -23,6 +23,68 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="CommunicationBotFrame">
+     <property name="title">
+      <string>Communication</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="1" column="1">
+       <widget class="QComboBox" name="USBPortsComboBox">
+        <property name="minimumSize">
+         <size>
+          <width>351</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="USBPortsLabel">
+        <property name="text">
+         <string>Choose Oscilloscope USB Port</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="comboBox"/>
+      </item>
+      <item row="2" column="3">
+       <widget class="QPushButton" name="InjectButton">
+        <property name="minimumSize">
+         <size>
+          <width>350</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Inject Prameters</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Choose AFG USB Port</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QFrame" name="OscilloTopFrame">
      <property name="minimumSize">
@@ -47,45 +109,110 @@
          <string>Power Supply Parameters</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
-         <item row="1" column="0">
+         <item row="5" column="1">
+          <spacer name="verticalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="3" column="1">
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="7" column="1">
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="9" column="1">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="PSModeComboBox"/>
+         </item>
+         <item row="8" column="1">
+          <widget class="QSpinBox" name="PSPercentageSpinBox"/>
+         </item>
+         <item row="2" column="0">
           <widget class="QLabel" name="PSModeLabel">
            <property name="text">
             <string>Mode</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="PSModeComboBox"/>
-         </item>
          <item row="4" column="1">
-          <widget class="QSpinBox" name="PSPercentageSpinBox"/>
-         </item>
-         <item row="2" column="1">
           <widget class="QDoubleSpinBox" name="PSFrequenceDSpinBox"/>
          </item>
-         <item row="2" column="0">
+         <item row="4" column="0">
           <widget class="QLabel" name="PSFrequenceLabel">
            <property name="text">
             <string>Frequence</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="PSPercentageLabel">
-           <property name="text">
-            <string>Cycle Percentage</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
+         <item row="6" column="0">
           <widget class="QLabel" name="PSWaveFormLabel">
            <property name="text">
             <string>Wave Form</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item row="8" column="0">
+          <widget class="QLabel" name="PSPercentageLabel">
+           <property name="text">
+            <string>Cycle Percentage</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
           <widget class="QComboBox" name="PSWaveFormComboBox"/>
+         </item>
+         <item row="1" column="1">
+          <spacer name="verticalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>
@@ -96,56 +223,43 @@
          <string>Oscillator Parameters</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
+         <item row="2" column="1">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="0">
           <widget class="QLabel" name="NbDataPointsLabel">
            <property name="text">
             <string># of Data Points</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item row="1" column="1">
           <widget class="QComboBox" name="NbDataPointsComboBox"/>
          </item>
+         <item row="0" column="1">
+          <spacer name="verticalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QGroupBox" name="CommunicationBotFrame">
-     <property name="title">
-      <string>Communication</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="0">
-       <widget class="QLabel" name="USBPortsLabel">
-        <property name="text">
-         <string>Choose USB Port</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="USBPortsComboBox"/>
-      </item>
-      <item row="0" column="2">
-       <spacer name="ButtonTopSpace">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="2">
-       <widget class="QPushButton" name="InjectButton">
-        <property name="text">
-         <string>Inject Prameters</string>
-        </property>
        </widget>
       </item>
      </layout>

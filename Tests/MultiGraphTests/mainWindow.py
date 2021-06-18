@@ -1,7 +1,7 @@
 from gui.dialog.helpDialog import HelpDialog
-from dataView import DataView
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QVBoxLayout, QTabWidget, QAction, QApplication
-from PyQt5.QtCore import Qt, pyqtSlot, QFile, QTextStream
+from gui.views.dataView import DataView
+from PyQt5.QtWidgets import QMainWindow, QLabel, QTabWidget, QAction, QApplication
+from PyQt5.QtCore import Qt
 import logging
 import os
 from PyQt5 import uic
