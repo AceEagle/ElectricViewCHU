@@ -88,3 +88,5 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except:
                 log.info("null")
+
+                
