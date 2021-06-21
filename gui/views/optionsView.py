@@ -26,7 +26,7 @@ class OptionsView(QWidget, Ui_optionsView):
         self.setupUi(self)
 
         self.rm = visa.ResourceManager()
-        self.oscillatorList = self.rm.list_resources()
+        #self.oscillatorList = self.rm.list_resources()
 
 
         self.update_comboBox()
@@ -43,7 +43,7 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def update_comboBox(self):
         log.debug("Updating USBPortsList")
-        self.USBPortsComboBox.addItems(self.oscillatorList)
+        #self.USBPortsComboBox.addItems(self.oscillatorList)
 
     def connect_oscillo(self):
         log.debug("Connection to oscilloscope")
