@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QCheckBox, QGraphicsView, QGroupBox, QGridLayout
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread, QThreadPool
 from PyQt5 import uic, QtMultimedia
 import logging
 import os
@@ -7,6 +7,7 @@ from pydispatch import dispatcher
 import math
 from gui.views.data import Data
 from pyqtgraph import PlotItem, widgets
+from tools.pyqtWorker import Worker
 
 
 log = logging.getLogger(__name__)
@@ -29,6 +30,8 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         self.connect_checkbox()
         self.allPlotsDict = {}
         self.create_plots()
+        self.threadpool = QThreadPool()
+        log.debug("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
     def connect_checkbox(self):
         self.G1CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph1" , caller=self.G1CheckBox))
