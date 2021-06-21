@@ -66,7 +66,6 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
             dataPlotItem = self.allPlotsDict[graphic]["plotItem"].plot()
             self.allPlotsDict[graphic]["plotDataItem"][graphic] = dataPlotItem
             self.allPlotsDict[graphic]["plotItem"].setTitle(graphic)
-        print(self.allPlotsDict)
 
     def update_plots_position(self):
         self.graphicsView.clear()
@@ -92,4 +91,6 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
             except:
                 log.info("null")
 
+    def lissajous_filter(self, tension, charge):
+        pass
                 
