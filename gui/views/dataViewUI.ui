@@ -35,6 +35,63 @@
          <string>Data Processing Parameters</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
+         <item row="3" column="0" alignment="Qt::AlignHCenter">
+          <widget class="QLCDNumber" name="AmpliNumber"/>
+         </item>
+         <item row="11" column="0">
+          <spacer name="G4DownSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="12" column="0">
+          <widget class="QCheckBox" name="G5CheckBox">
+           <property name="text">
+            <string>Graph5</string>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="0">
+          <widget class="QCheckBox" name="G6CheckBox">
+           <property name="text">
+            <string>Graph6</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="0">
+          <widget class="QCheckBox" name="G4CheckBox">
+           <property name="text">
+            <string>Graph4</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0">
+          <spacer name="G3DownSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="0" alignment="Qt::AlignHCenter">
+          <widget class="QLabel" name="AmpliLabel">
+           <property name="text">
+            <string>Amplitude</string>
+           </property>
+          </widget>
+         </item>
          <item row="16" column="1" alignment="Qt::AlignLeft">
           <widget class="QToolButton" name="SaveDataToolButton">
            <property name="text">
@@ -55,12 +112,18 @@
            </property>
           </spacer>
          </item>
-         <item row="0" column="0" alignment="Qt::AlignHCenter">
-          <widget class="QLabel" name="AmpliLabel">
-           <property name="text">
-            <string>Amplitude</string>
+         <item row="13" column="0">
+          <spacer name="G5DownSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-          </widget>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item row="1" column="0">
           <widget class="QSlider" name="AmpliSlider">
@@ -75,51 +138,15 @@
            </property>
           </widget>
          </item>
-         <item row="13" column="0">
-          <spacer name="G5DownSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="6" column="0">
-          <widget class="QCheckBox" name="G2CheckBox">
+         <item row="16" column="0">
+          <widget class="QPushButton" name="SaveDataPButton">
            <property name="text">
-            <string>Graph2</string>
+            <string>Save Data</string>
            </property>
           </widget>
          </item>
-         <item row="11" column="0">
-          <spacer name="G4DownSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="3" column="0" alignment="Qt::AlignHCenter">
-          <widget class="QLCDNumber" name="AmpliNumber"/>
-         </item>
-         <item row="12" column="0">
-          <widget class="QCheckBox" name="G5CheckBox">
-           <property name="text">
-            <string>Graph5</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <spacer name="G3DownSpacer">
+         <item row="5" column="0">
+          <spacer name="G1DownSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -138,30 +165,10 @@
            </property>
           </widget>
          </item>
-         <item row="7" column="0">
-          <spacer name="G2DownSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="14" column="0">
-          <widget class="QCheckBox" name="G6CheckBox">
+         <item row="6" column="0">
+          <widget class="QCheckBox" name="G2CheckBox">
            <property name="text">
-            <string>Graph6</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="0">
-          <widget class="QCheckBox" name="G4CheckBox">
-           <property name="text">
-            <string>Graph4</string>
+            <string>Graph2</string>
            </property>
           </widget>
          </item>
@@ -172,15 +179,8 @@
            </property>
           </widget>
          </item>
-         <item row="16" column="0">
-          <widget class="QPushButton" name="SaveDataPButton">
-           <property name="text">
-            <string>Save Data</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <spacer name="G1DownSpacer">
+         <item row="7" column="0">
+          <spacer name="G2DownSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
