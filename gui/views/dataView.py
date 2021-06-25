@@ -28,10 +28,15 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         self.plotItem = None
         self.dataPlotItem = None
         self.connect_checkbox()
+        self.connect_buttons()
         self.allPlotsDict = {}
         self.create_plots()
         self.threadpool = QThreadPool()
         log.debug("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
+
+    def connect_buttons(self):
+        self.LaunchDataPButton.clicked.connect(self.launch_data)
+        log.info("Connecting dataView GUI")
 
     def connect_checkbox(self):
         self.G1CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph1" , caller=self.G1CheckBox))
@@ -92,4 +97,23 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
                 log.info("null")
 
     def lissajous_filter(self, tension, charge):
+        pass
+
+    def launch_data(self):
+        self.LaunchDataPButton.setEnabled(False)
+        self.LaunchDataPButton.clicked.disconnect()
+        self.LaunchDataPButton.clicked.connect(self.stop_data)
+        self.LaunchDataPButton.setText("Stop")
+        self.LaunchDataPButton.setEnabled(True)
+
+
+    def stop_data(self):
+        self.LaunchDataPButton.setEnabled(False)
+        self.LaunchDataPButton.setText("Resume")
+        pass
+        self.LaunchDataPButton.clicked.disconnect()
+        self.LaunchDataPButton.clicked.connect(self.resume_data)
+        self.LaunchDataPButton.setEnabled(True)
+
+    def resume_data(self):
         pass
