@@ -13,7 +13,6 @@ class Worker(QRunnable):
         self.fn = fn
         self.args = args
         self.kwargs = kwargs
-        self.threadpool = QThreadPool()
 
     @pyqtSlot()
     def run(self):

@@ -26,12 +26,14 @@ class OptionsView(QWidget, Ui_optionsView):
         self.setupUi(self)
 
         self.rm = visa.ResourceManager()
-        #self.oscillatorList = self.rm.list_resources()
-
+        self.instrumentsList = None
 
         self.update_comboBox()
-        self.connect_oscillo()
+        self.connect_instruments()
         self.myOscillo = None
+        self.myAFG = None
+        self.USBPortsAFGComboBox.currentTextChanged.connect(self.connect_instruments)
+        self.USBPortsOscilloComboBox.currentTextChanged.connect(self.connect_instruments)
 #        self.create_threads()
 
         log.debug("Connecting optionsView gui Widgets")
@@ -41,14 +43,25 @@ class OptionsView(QWidget, Ui_optionsView):
     #   self.acqWorker.moveToThread(self.acqThread)
     #  self.acqThread.started.connect(self.acqWorker.run)
 
+    def connect_buttons(self):
+        self.RefreshPButton.clicked.connect(self.update_combobox)
+
     def update_comboBox(self):
         log.debug("Updating USBPortsList")
-        #self.USBPortsComboBox.addItems(self.oscillatorList)
+        self.instrumentsList = self.rm.list_resources()
+        self.USBPortsAFGComboBox.clear()
+        self.USBPortsOscilloComboBox.clear()
+        self.USBPortsAFGComboBox.addItems(self.instrumentsList)
+        self.USBPortsOscilloComboBox.addItems(self.instrumentsList)
 
-    def connect_oscillo(self):
+    def connect_instruments(self):
         log.debug("Connection to oscilloscope")
-        #self.myOscillo = TektronixScope(str(self.USBPortsComboBox.currentText()))
+        self.myOscillo = (str(self.USBPortsOscilloComboBox.currentText()))
+        self.myAFG = str(self.USBPortsAFGComboBox.currentText())
 
     def get_data(self, channel):
         #self.myOscillo.read_data_one_channel(channel, x_axis_out=False)
+        pass
+
+    def inject_parameters(self):
         pass
