@@ -9,7 +9,6 @@ from tools.pyqtWorker import Worker
 from PyTektronixScope import TektronixScope
 import logging
 
-
 log = logging.getLogger(__name__)
 
 optionsViewUiPath = os.path.dirname(os.path.realpath(__file__)) + "{0}optionsViewUI.ui".format(os.sep)
@@ -27,6 +26,8 @@ class OptionsView(QWidget, Ui_optionsView):
 
         self.rm = visa.ResourceManager()
         self.instrumentsList = None
+        self.myOscilloStr = ""
+        self.myAFGStr = ""
 
         self.update_comboBox()
         self.connect_instruments()
@@ -34,7 +35,7 @@ class OptionsView(QWidget, Ui_optionsView):
         self.myAFG = None
         self.USBPortsAFGComboBox.currentTextChanged.connect(self.connect_instruments)
         self.USBPortsOscilloComboBox.currentTextChanged.connect(self.connect_instruments)
-#        self.create_threads()
+        #self.create_threads()
 
         log.debug("Connecting optionsView gui Widgets")
 
@@ -56,11 +57,20 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def connect_instruments(self):
         log.debug("Connection to oscilloscope")
-        self.myOscillo = (str(self.USBPortsOscilloComboBox.currentText()))
-        self.myAFG = str(self.USBPortsAFGComboBox.currentText())
+        self.myOscilloStr = (str(self.USBPortsOscilloComboBox.currentText()))
+        try:
+            self.myOscillo = self.rm.open_resource(self.myOscilloStr)
+        except:
+            pass
+
+        self.myAFGStr = str(self.USBPortsAFGComboBox.currentText())
+        try:
+            self.myAFG = self.rm.open_resource(self.myAFGStr)
+        except:
+            pass
 
     def get_data(self, channel):
-        #self.myOscillo.read_data_one_channel(channel, x_axis_out=False)
+        # self.myOscillo.read_data_one_channel(channel, x_axis_out=False)
         pass
 
     def inject_parameters(self):

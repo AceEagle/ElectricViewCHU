@@ -109,11 +109,9 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
 
     def stop_data(self):
         self.LaunchDataPButton.setEnabled(False)
-        self.LaunchDataPButton.setText("Resume")
+        self.LaunchDataPButton.setText("Start")
         pass
         self.LaunchDataPButton.clicked.disconnect()
-        self.LaunchDataPButton.clicked.connect(self.resume_data)
+        self.LaunchDataPButton.clicked.connect(self.launch_data)
         self.LaunchDataPButton.setEnabled(True)
 
-    def resume_data(self):
-        pass

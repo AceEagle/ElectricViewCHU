@@ -185,7 +185,7 @@
          <item row="13" column="0">
           <widget class="QPushButton" name="LaunchDataPButton">
            <property name="text">
-            <string>Launch Data Acquisition</string>
+            <string>Start</string>
            </property>
           </widget>
          </item>
