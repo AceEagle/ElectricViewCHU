@@ -10,13 +10,13 @@ class Data:
                                "parameter5": globalParameters["parameter5"],
                                "parameter6": globalParameters["parameter6"],
                                "parameter7": globalParameters["parameter7"],
-                               "parameter8": globalParameters["parameter8"],}
+                               "parameter8": globalParameters["parameter8"]}
 
         self.graphics = {"graph0": 1,
-                               "graph1": 0,
-                               "graph2": 0,
-                               "graph3": 0,
-                               "graph4": 0,
-                               "graph5": 0,
-                               "graph6": 0,}
+                         "graph1": 0,
+                         "graph2": 0,
+                         "graph3": 0,
+                         "graph4": 0,
+                         "graph5": 0,
+                         "graph6": 0}
 

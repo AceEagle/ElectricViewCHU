@@ -93,4 +93,3 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
 
     def lissajous_filter(self, tension, charge):
         pass
-                
