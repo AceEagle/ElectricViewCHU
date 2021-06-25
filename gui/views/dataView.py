@@ -36,6 +36,8 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
 
     def connect_buttons(self):
         self.LaunchDataPButton.clicked.connect(self.launch_data)
+        self.SaveDataPButton.clicked.connect()
+        self.SaveDataToolButton.clickes.connect()
         log.info("Connecting dataView GUI")
 
     def connect_checkbox(self):
