@@ -36,7 +36,7 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="14" column="0">
-          <widget class="QPushButton" name="ResetPButton">
+          <widget class="QPushButton" name="ResetDataPButton">
            <property name="text">
             <string>Reset</string>
            </property>
@@ -150,7 +150,7 @@
           </spacer>
          </item>
          <item row="13" column="0">
-          <widget class="QPushButton" name="LaunchDataPButton">
+          <widget class="QFlashButton" name="LaunchDataFButton">
            <property name="text">
             <string>Start</string>
            </property>
@@ -218,6 +218,11 @@
    <extends>QWidget</extends>
    <header>pyqtgraph</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QFlashButton</class>
+   <extends>QPushButton</extends>
+   <header>/gui/widgets/QFlashButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

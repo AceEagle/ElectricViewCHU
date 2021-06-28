@@ -7,6 +7,7 @@ from pydispatch import dispatcher
 import math
 from Data import Data
 from pyqtgraph import PlotItem
+from gui.widgets.QFlashButton import QFlashButton
 
 log = logging.getLogger(__name__)
 
@@ -34,9 +35,9 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         log.info("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
     def connect_buttons(self):
-        self.LaunchDataPButton.clicked.connect(self.launch_data)
+        self.LaunchDataFButton.clicked.connect(self.launch_data)
         self.SaveDataPButton.clicked.connect(self.search_file)
-        self.ResetPButton.clicked.connect(self.reset_saved_data)
+        self.ResetDataPButton.clicked.connect(self.reset_data)
         log.info("Connecting dataView GUI")
 
     def connect_checkbox(self):
@@ -49,9 +50,6 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
 
     def connect_signals(self):
         pass
-
-    def reset_saved_data(self):
-        self.saved_data = None
 
     def search_file(self):
         name = QFileDialog.getSaveFileName(self, 'Save File', '', 'Txt Files (*.txt);;All Files (*)',
@@ -120,18 +118,29 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         pass
 
     def launch_data(self):
-        self.LaunchDataPButton.setEnabled(False)
-        self.LaunchDataPButton.clicked.disconnect()
-        self.LaunchDataPButton.clicked.connect(self.stop_data)
-        self.LaunchDataPButton.setText("Stop")
-        self.LaunchDataPButton.setEnabled(True)
+        self.LaunchDataFButton.start_flash()
+        self.LaunchDataFButton.clicked.disconnect()
+        self.LaunchDataFButton.clicked.connect(self.stop_data)
+        self.LaunchDataFButton.setText("Stop")
+        self.LaunchDataFButton.setEnabled(True)
+        self.ResetDataPButton.setStyleSheet("background-color : red")
 
     def stop_data(self):
-        self.LaunchDataPButton.setEnabled(False)
-        self.LaunchDataPButton.setText("Start")
+        self.LaunchDataFButton.stop_flash()
+        self.LaunchDataFButton.setEnabled(False)
+        self.LaunchDataFButton.setText("Resume")
         pass
-        self.LaunchDataPButton.clicked.disconnect()
-        self.LaunchDataPButton.clicked.connect(self.launch_data)
-        self.LaunchDataPButton.setEnabled(True)
+        self.LaunchDataFButton.clicked.disconnect()
+        self.LaunchDataFButton.clicked.connect(self.launch_data)
+        self.LaunchDataFButton.setEnabled(True)
 
+    def reset_data(self):
+        self.saved_data = None
+        self.LaunchDataFButton.stop_flash()
+        self.LaunchDataFButton.setEnabled(False)
+        self.LaunchDataFButton.setText("Start")
+        self.LaunchDataFButton.clicked.disconnect()
+        self.LaunchDataFButton.clicked.connect(self.launch_data)
+        self.LaunchDataFButton.setEnabled(True)
+        self.ResetDataPButton.setStyleSheet("background-color : None")
 
