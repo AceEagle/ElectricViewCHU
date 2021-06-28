@@ -8,6 +8,7 @@ import math
 from Data import Data
 from pyqtgraph import PlotItem
 from gui.widgets.QFlashButton import QFlashButton
+from tools.pyqtWorker import Worker
 
 log = logging.getLogger(__name__)
 

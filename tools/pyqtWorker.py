@@ -1,5 +1,6 @@
-from PyQt5.QtCore import QRunnable, QThreadPool, QThread, pyqtSlot
+from PyQt5.QtCore import QRunnable, QThreadPool, QThread, pyqtSlot, QObject, pyqtSignal
 import os
+import traceback, sys
 import logging
 import time
 
@@ -13,7 +14,27 @@ class Worker(QRunnable):
         self.fn = fn
         self.args = args
         self.kwargs = kwargs
+        self.signals = WorkerSignals()
+
+        self.kwargs['progress_callback'] = self.signals.progress
 
     @pyqtSlot()
     def run(self):
-        self.fn(*self.args, *self.kwargs)
+        try:
+            result = self.fn(*self.args, **self.kwargs)
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.error.emit((exctype, value, traceback.format_exc()))
+        else:
+            self.signals.result.emit(result)  # Return the result of the processing
+        finally:
+            self.signals.finished.emit()  # Done
+
+
+class WorkerSignals(QObject):
+
+    finished = pyqtSignal()
+    error = pyqtSignal(tuple)
+    result = pyqtSignal(object)
+    progress = pyqtSignal(int)
