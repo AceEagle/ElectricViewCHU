@@ -128,7 +128,6 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         self.LaunchDataPButton.setText("Stop")
         self.LaunchDataPButton.setEnabled(True)
 
-
     def stop_data(self):
         self.LaunchDataPButton.setEnabled(False)
         self.LaunchDataPButton.setText("Start")
@@ -136,4 +135,5 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         self.LaunchDataPButton.clicked.disconnect()
         self.LaunchDataPButton.clicked.connect(self.launch_data)
         self.LaunchDataPButton.setEnabled(True)
+
 

@@ -279,22 +279,6 @@
          <string>Oscillator Parameters</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="3" column="2">
-          <widget class="QSlider" name="TriggerLevelSlider">
-           <property name="maximumSize">
-            <size>
-             <width>406</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="minimum">
-            <number>-99</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
          <item row="3" column="0">
           <widget class="QLabel" name="TriggerLevelLabel">
            <property name="maximumSize">
@@ -408,6 +392,28 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item row="3" column="2">
+          <widget class="QSlider" name="TriggerLevelSlider">
+           <property name="maximumSize">
+            <size>
+             <width>406</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="minimum">
+            <number>-10</number>
+           </property>
+           <property name="maximum">
+            <number>10</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
