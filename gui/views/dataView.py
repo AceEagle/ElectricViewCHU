@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QCheckBox, QGraphicsView, QGroupBox, QGridLayout
+from PyQt5.QtWidgets import QWidget, QCheckBox, QGraphicsView, QGroupBox, QGridLayout, QFileDialog
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread, QThreadPool
 from PyQt5 import uic, QtMultimedia
 import logging
@@ -36,8 +36,7 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
 
     def connect_buttons(self):
         self.LaunchDataPButton.clicked.connect(self.launch_data)
-        self.SaveDataPButton.clicked.connect()
-        self.SaveDataToolButton.clickes.connect()
+        self.SaveDataPButton.clicked.connect(self.search_file)
         log.info("Connecting dataView GUI")
 
     def connect_checkbox(self):
@@ -50,6 +49,22 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
 
     def connect_signals(self):
         pass
+
+    def search_file(self):
+        name = QFileDialog.getSaveFileName(self, 'Save File', '', 'Txt Files (*.txt);;All Files (*)',
+                                           options=QFileDialog.DontUseNativeDialog)
+        if name[0] == '':
+            log.debug("File is not good")
+
+        if name[1] == 'Txt Files (*.txt)' and name[0][-3:] != '.txt':
+            name = name[0] + '.txt'
+        else:
+            name = name[0]
+
+        lines = "test1 lmao"
+
+        with open(name, 'w') as fp:
+            fp.writelines(lines)
 
     def initiate_graph(self, graphic, caller=None):
         if caller.checkState() == 2:
