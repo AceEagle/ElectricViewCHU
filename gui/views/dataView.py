@@ -1,14 +1,12 @@
-from PyQt5.QtWidgets import QWidget, QCheckBox, QGraphicsView, QGroupBox, QGridLayout, QFileDialog
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread, QThreadPool
-from PyQt5 import uic, QtMultimedia
+from PyQt5.QtWidgets import QWidget, QFileDialog
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThreadPool
+from PyQt5 import uic
 import logging
 import os
 from pydispatch import dispatcher
 import math
-from gui.views.data import Data
-from pyqtgraph import PlotItem, widgets
-from tools.pyqtWorker import Worker
-
+from Data import Data
+from pyqtgraph import PlotItem
 
 log = logging.getLogger(__name__)
 
