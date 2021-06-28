@@ -35,6 +35,7 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         self.create_plots()
         self.threadpool = QThreadPool()
         self.saved_data = None
+        self.initialize_view()
         log.info("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
     def connect_buttons(self):
@@ -53,6 +54,9 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
 
     def connect_signals(self):
         pass
+
+    def initialize_view(self):
+        self.G1CheckBox.setChecked(True)
 
     def search_file(self):
         name = QFileDialog.getSaveFileName(self, 'Save File', '', 'Txt Files (*.txt);;All Files (*)',
