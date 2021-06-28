@@ -52,6 +52,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def connect_buttons(self):
         self.helpAction.triggered.connect(self.show_helpDialog)
         self.actionChange_Theme.triggered.connect(lambda: self.toggle_stylesheet(os.path.dirname(os.path.realpath(__file__)) + '\\..\\themes\\darkstyle\\darkstyle.qss'))
+        self.actionSave_Parameters.triggered.connect(self.save_parameters)
 
     def connect_signals(self):
         self.helpDialog.s_windowClose.connect(lambda: self.setEnabled(True))
@@ -60,6 +61,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def change_status_message(self, message):
         self.statusbarMessage.setText(message)
+
+    def save_parameters(self):
+        pass
 
     def show_helpDialog(self):
         log.info('Help Dialog Opened')
