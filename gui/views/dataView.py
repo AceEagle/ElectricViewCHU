@@ -32,11 +32,13 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         self.allPlotsDict = {}
         self.create_plots()
         self.threadpool = QThreadPool()
+        self.saved_data = None
         log.debug("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
     def connect_buttons(self):
         self.LaunchDataPButton.clicked.connect(self.launch_data)
         self.SaveDataPButton.clicked.connect(self.search_file)
+        self.ResetPButton.clicked.connect(self.reset_saved_data)
         log.info("Connecting dataView GUI")
 
     def connect_checkbox(self):
@@ -49,6 +51,9 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
 
     def connect_signals(self):
         pass
+
+    def reset_saved_data(self):
+        self.saved_data = None
 
     def search_file(self):
         name = QFileDialog.getSaveFileName(self, 'Save File', '', 'Txt Files (*.txt);;All Files (*)',
