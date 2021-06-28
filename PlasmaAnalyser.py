@@ -12,11 +12,11 @@ log = logging.getLogger(__name__)
 
 SIGNAL_PLOT_TOGGLED = "plot.toggled.indicator"
 
-class VirusSimulator(QObject):
+class PlasmaAnalyser(QObject):
     s_data_changed = pyqtSignal(dict)
 
     def __init__(self):
-        super(VirusSimulator, self).__init__()
+        super(PlasmaAnalyser, self).__init__()
         self.timeNow = 0
         self.timePast = 0
         self.day = 0
@@ -137,25 +137,3 @@ class VirusSimulator(QObject):
         self.parameters = parametersFile[0]
         return self.parameters
 
-    @staticmethod
-    def give_gaussian_parameters(parameters):
-        randomizedParameters = {"knownEncounteredPerDay": None,
-                                "probabilityOfInfection": None,
-                                "timeOfIncubation": None,
-                                "timeBeforeNonInfectious": None,
-                                "timeBeforeInfectious": None,
-                                "timeOfPeakSymptoms": None,
-                                "timeOfRecuperation": None,
-                                "probabilityOfDying": None}
-        # print(parameters)
-        parameters.pop("percentageOfPopulation", None)
-
-        for parameter in parameters:
-            randomizedParameters[parameter] = np.random.normal(loc=parameters[parameter]["mean"],
-                                                               scale=parameters[parameter]["sd"])
-
-        return randomizedParameters
-
-    def handle_plot_toggled(self, sender, **kwargs):
-        log.info("Handled a plot toggle")
-        self.selectedIndicators.append(kwargs["indicator"])

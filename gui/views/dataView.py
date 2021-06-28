@@ -31,7 +31,7 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         self.create_plots()
         self.threadpool = QThreadPool()
         self.saved_data = None
-        log.debug("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
+        log.info("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
     def connect_buttons(self):
         self.LaunchDataPButton.clicked.connect(self.launch_data)
@@ -57,7 +57,7 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         name = QFileDialog.getSaveFileName(self, 'Save File', '', 'Txt Files (*.txt);;All Files (*)',
                                            options=QFileDialog.DontUseNativeDialog)
         if name[0] == '':
-            log.debug("File is not good")
+            log.info("File is not good")
 
         if name[1] == 'Txt Files (*.txt)' and name[0][-3:] != '.txt':
             name = name[0] + '.txt'
