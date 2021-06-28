@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QMessageBox, QCheckBox, QFileDialog, QComboBox
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThreadPool, QThread
 import copy
 import os
 from pyqtgraph import LinearRegionItem, mkBrush, mkPen, SignalProxy, InfiniteLine, TextItem, ArrowItem
@@ -8,7 +8,6 @@ import pyvisa as visa
 from tools.pyqtWorker import Worker
 from PyTektronixScope import TektronixScope
 import logging
-
 log = logging.getLogger(__name__)
 
 optionsViewUiPath = os.path.dirname(os.path.realpath(__file__)) + "{0}optionsViewUI.ui".format(os.sep)
@@ -23,19 +22,19 @@ class OptionsView(QWidget, Ui_optionsView):
         super(OptionsView, self).__init__()
         self.model = model
         self.setupUi(self)
-
+        self.threadpool = QThreadPool()
         self.rm = visa.ResourceManager()
         self.instrumentsList = None
         self.myOscilloStr = ""
         self.myAFGStr = ""
 
         self.update_comboBox()
-        self.connect_instruments()
+        self.connect_instruments_thread()
         self.myOscillo = None
         self.myAFG = None
-        self.USBPortsAFGComboBox.currentTextChanged.connect(self.connect_instruments)
-        self.USBPortsOscilloComboBox.currentTextChanged.connect(self.connect_instruments)
-        #self.create_threads()
+        self.USBPortsAFGComboBox.currentTextChanged.connect(self.connect_instruments_thread)
+        self.USBPortsOscilloComboBox.currentTextChanged.connect(self.connect_instruments_thread)
+
 
         log.debug("Connecting optionsView gui Widgets")
 
@@ -55,7 +54,11 @@ class OptionsView(QWidget, Ui_optionsView):
         self.USBPortsAFGComboBox.addItems(self.instrumentsList)
         self.USBPortsOscilloComboBox.addItems(self.instrumentsList)
 
-    def connect_instruments(self):
+    def connect_instruments_thread(self):
+        worker = Worker(self.connect_instruments)
+        self.threadpool.start(worker)
+
+    def connect_instruments(self, progress_callback):
         log.debug("Connection to oscilloscope")
         self.myOscilloStr = (str(self.USBPortsOscilloComboBox.currentText()))
         try:
