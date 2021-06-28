@@ -1,3 +1,5 @@
+import time
+
 from PyQt5.QtWidgets import QWidget, QFileDialog
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThreadPool
 from PyQt5 import uic
@@ -67,6 +69,15 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
 
         with open(name, 'w') as fp:
             fp.writelines(lines)
+
+    def crash_the_app_thread(self):
+        worker = Worker(self.crash_the_app)
+        self.threadpool.start(worker)
+
+    def crash_the_app(self, progress_callback):
+        for x in range(51):
+            time.sleep(1)
+            print("x")
 
     def initiate_graph(self, graphic, caller=None):
         if caller.checkState() == 2:
