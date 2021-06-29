@@ -27,13 +27,13 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         super(DataView, self).__init__()
         self.setupUi(self)
         self.model = model
+        self.threadpool = QThreadPool()
         self.plotItem = None
         self.dataPlotItem = None
         self.connect_checkbox()
         self.connect_buttons()
         self.allPlotsDict = {}
         self.create_plots()
-        self.threadpool = QThreadPool()
         self.saved_data = None
         self.initialize_view()
         log.info("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
@@ -41,7 +41,7 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
     def connect_buttons(self):
         self.LaunchDataFButton.clicked.connect(self.launch_data)
         self.SaveDataPButton.clicked.connect(self.search_file)
-        self.ResetDataPButton.clicked.connect(self.reset_data)
+        self.ResetDataPButton.clicked.connect(self.crash_the_app_thread)
         log.info("Connecting dataView GUI")
 
     def connect_checkbox(self):
@@ -79,9 +79,10 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         self.threadpool.start(worker)
 
     def crash_the_app(self, progress_callback):
-        for x in range(51):
+        for x in range(3):
             time.sleep(1)
             print("x")
+        log.info("BONJOUR TEST")
 
     def initiate_graph(self, graphic, caller=None):
         if caller.checkState() == 2:
