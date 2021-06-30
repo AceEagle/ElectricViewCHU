@@ -3,7 +3,7 @@ import time
 
 rm = pyvisa.ResourceManager()
 print(rm.list_resources())
-my_instr = rm.open_resource('USB0::0x0699::0x0408::C049429::0::INSTR')
+my_instr = rm.open_resource('USB0::0x0699::0x03A3::C020282::0::INSTR')
 #print(my_instr.query("*IDN?"))
 #print(my_instr.query("HOR:SCA?"))
 #print(my_instr.query("MEASU?"))
@@ -14,6 +14,8 @@ my_instr = rm.open_resource('USB0::0x0699::0x0408::C049429::0::INSTR')
 
 #-------------------------------------------------------------
 
-my_instr.write("SINGle")
-print(my_instr.query("*OPC?"))
-print(my_instr.query("CHAN:DATA？"))
+values = my_instr.query_ascii_values('CURV?')
+print(values)
+my_instr.write('CURV?', encoding='latin1')
+values = my_instr.read_raw()
+print(values)
