@@ -10,7 +10,7 @@ from Data import Data
 
 log = logging.getLogger(__name__)
 
-SIGNAL_PLOT_TOGGLED = "plot.toggled.indicator"
+SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
 class PlasmaAnalyser(QObject):
     s_data_changed = pyqtSignal(dict)
@@ -20,7 +20,7 @@ class PlasmaAnalyser(QObject):
         self.timeNow = 0
         self.timePast = 0
         self.day = 0
-        self.selectedIndicators = []
+        self.selectedgraphics = []
         self.population = []
         self.parameters = {}
         self.savedStatusDataDict = {}
@@ -30,10 +30,9 @@ class PlasmaAnalyser(QObject):
         self.connect_to_signals()
 
     def create_empty_savedStatusDataDict(self):
-        for indicator in Data().indicators:
-            self.savedStatusDataDict[indicator] = {}
-            for ageGroup in Data().ageGroupsList:
-                self.savedStatusDataDict[indicator][ageGroup] = {"x":[], "y":[]}
+        for graphic in Data().graphics:
+            self.savedStatusDataDict[graphic] = {}
+            self.savedStatusDataDict[graphic]["data"] = {"x":[], "y":[]}
         # print(self.savedStatusDataDict)
 
     def connect_to_signals(self):
@@ -49,20 +48,20 @@ class PlasmaAnalyser(QObject):
         self.initialize_infection(nbOfInfected=1)
         self.launch_propagation(time)
 
-    def plot_results(self, indicator):
+    def plot_results(self, graphic):
         fig, ax1 = plt.subplots(figsize=(4, 4))
         xdata = range(len(self.savedStatusDataDict))
 
         for ageKey in self.savedStatusDataDict[0].keys():
             data2plot = []
             for dayKey in self.savedStatusDataDict.keys():
-                data2plot.append(self.savedStatusDataDict[int(dayKey)][ageKey][indicator])
+                data2plot.append(self.savedStatusDataDict[int(dayKey)][ageKey][graphic])
             ax1.plot(xdata, data2plot, label=ageKey)
 
         ax1.legend()
         plt.show()
 
-    def send_data_to_plot(self, indicators=None):
+    def send_data_to_plot(self, graphics=None):
         self.s_data_changed.emit(self.savedStatusDataDict)
 
     def launch_propagation(self, nbOfDays):
@@ -80,7 +79,7 @@ class PlasmaAnalyser(QObject):
 
     def meet_people(self):
         log.info("DAY {} :: BEGIN INDEXING".format(self.day))
-        personListIndex = [i if x.indicators["isInfected"] == 1 else -1 for i, x in enumerate(self.population)]
+        personListIndex = [i if x.graphics["isInfected"] == 1 else -1 for i, x in enumerate(self.population)]
         personListIndex = list(filter((-1).__ne__, personListIndex))
         log.info("DAY {} :: END INDEXING".format(self.day))
 
@@ -88,27 +87,27 @@ class PlasmaAnalyser(QObject):
         liste = [self.population[i] for i in personListIndex]
         for person in liste:
             person.update_own_status()
-            if person.indicators["isInfectious"]:
+            if person.graphics["isInfectious"]:
                 for metPerson in range(int(person.parameters["knownEncounteredPerDay"])):
                     person.interact(random.choice(person.listOfRelatives))
         log.info("DAY {} :: END MEETING PERSONS".format(self.day))
 
     def save_status(self):
-        """{"indicator":{"[0-9]":{"x":[], "y":[]}, "[10-19]":{"x"}:[], "y":[]}, ...}
-        For it is   Dictionnary[Indicator][ageGroup]["x"] --> Days data
-                    Dictionnary[Indicator][ageGroup]["y"] --> Number of case data
+        """{"graphic":{"[0-9]":{"x":[], "y":[]}, "[10-19]":{"x"}:[], "y":[]}, ...}
+        For it is   Dictionnary[graphic][ageGroup]["x"] --> Days data
+                    Dictionnary[graphic][ageGroup]["y"] --> Number of case data
         """
-        for indicator in Data().indicators:
+        for graphic in Data().graphics:
             for ageKey in list(self.parameters.keys()):
-                self.savedStatusDataDict[indicator][ageKey]["x"].append(self.day)
-                self.savedStatusDataDict[indicator][ageKey]["y"].append (
-                    sum(p.indicators[indicator] == 1 and p.tag == ageKey for p in self.population))
+                self.savedStatusDataDict[graphic][ageKey]["x"].append(self.day)
+                self.savedStatusDataDict[graphic][ageKey]["y"].append (
+                    sum(p.graphics[graphic] == 1 and p.tag == ageKey for p in self.population))
 
     def initialize_infection(self, nbOfInfected=1):
         try:
             indexes = random.choices(range(len(self.population)), k=nbOfInfected)
             for index in indexes:
-                self.population[index].indicators["isInfected"] = 1
+                self.population[index].graphics["isInfected"] = 1
         except Exception as e:
             log.error(e)
 
