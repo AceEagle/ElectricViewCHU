@@ -78,3 +78,6 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def inject_parameters(self):
         pass
+
+    def give_AFG_and_Oscillo(self):
+        return self.myAFG, self.myOscillo
