@@ -13,12 +13,13 @@ log = logging.getLogger(__name__)
 optionsViewUiPath = os.path.dirname(os.path.realpath(__file__)) + "{0}optionsViewUI.ui".format(os.sep)
 Ui_optionsView, QtBaseClass = uic.loadUiType(optionsViewUiPath)
 
+SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
+
 
 class OptionsView(QWidget, Ui_optionsView):
-    s_data_changed = pyqtSignal(dict)
-    s_data_acquisition_done = pyqtSignal()
+    instruments_changed = pyqtSignal()
 
-    def __init__(self, model=None):
+    def __init__(self, model=None, controller=None):
         super(OptionsView, self).__init__()
         self.model = model
         self.setupUi(self)
@@ -36,7 +37,7 @@ class OptionsView(QWidget, Ui_optionsView):
         self.USBPortsOscilloComboBox.currentTextChanged.connect(self.connect_instruments_thread)
 
 
-        log.debug("Connecting optionsView gui Widgets")
+        log.info("Connecting optionsView GUI Widgets")
 
     # def create_threads(self, *args):
     #    self.acqWorker = Worker(self.manage_data_flow, *args)
@@ -45,6 +46,9 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def connect_buttons(self):
         self.RefreshPButton.clicked.connect(self.update_combobox)
+
+    def connect_signals(self):
+        pass
 
     def update_comboBox(self):
         log.debug("Updating USBPortsList")
@@ -61,16 +65,8 @@ class OptionsView(QWidget, Ui_optionsView):
     def connect_instruments(self, progress_callback):
         log.debug("Connection to oscilloscope")
         self.myOscilloStr = (str(self.USBPortsOscilloComboBox.currentText()))
-        try:
-            self.myOscillo = self.rm.open_resource(self.myOscilloStr)
-        except:
-            pass
-
         self.myAFGStr = str(self.USBPortsAFGComboBox.currentText())
-        try:
-            self.myAFG = self.rm.open_resource(self.myAFGStr)
-        except:
-            pass
+        self.myAFG, self.myOscillo = self.model.simulatorObject.connect_AFG_and_Oscillo(self.myAFGstr, self.myOscilloStr)
 
     def get_data(self, channel):
         # self.myOscillo.read_data_one_channel(channel, x_axis_out=False)

@@ -7,6 +7,7 @@ import datetime
 import logging
 from pydispatch import dispatcher
 from Data import Data
+import pyvisa as visa
 
 log = logging.getLogger(__name__)
 
@@ -14,6 +15,7 @@ SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
 class PlasmaAnalyser(QObject):
     s_data_changed = pyqtSignal(dict)
+    instruments_connected = pyqtSignal(list)
 
     def __init__(self):
         super(PlasmaAnalyser, self).__init__()
@@ -28,6 +30,14 @@ class PlasmaAnalyser(QObject):
         self.data2plot = {}
         self.healthcareSystemLimit = 50000
         self.connect_to_signals()
+        self.rm = visa.ResourceManager()
+
+    def connect_AFG_and_Oscillo(self, AFGStr, OscilloStr):
+        self.myOscillo = self.rm.open_resource(OscilloStr)
+        self.myAFG = self.rm.open_resource(AFGStr)
+        self.instrumentsList = [self.myAFG, self.myOscillo]
+        return self.myAFG, self.myOscillo
+
 
     def create_empty_savedStatusDataDict(self):
         for graphic in Data().graphics:
