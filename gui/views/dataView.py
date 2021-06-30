@@ -11,6 +11,7 @@ from Data import Data
 from pyqtgraph import PlotItem
 from gui.widgets.QFlashButton import QFlashButton
 from tools.pyqtWorker import Worker
+from gui.views.optionsView import OptionsView
 
 log = logging.getLogger(__name__)
 
@@ -36,6 +37,7 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         self.create_plots()
         self.saved_data = None
         self.initialize_view()
+        self.optionsInstance = OptionsView()
         log.info("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
     def connect_buttons(self):
@@ -77,6 +79,9 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
     def crash_the_app_thread(self):
         worker = Worker(self.crash_the_app)
         self.threadpool.start(worker)
+
+    def get_instruments(self):
+        self.myOscillo, self.myAFG = self.optionsInstance.connect_instruments_thread()
 
     def crash_the_app(self, progress_callback):
         for x in range(3):

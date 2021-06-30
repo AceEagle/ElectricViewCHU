@@ -62,13 +62,17 @@ class OptionsView(QWidget, Ui_optionsView):
         self.myOscilloStr = (str(self.USBPortsOscilloComboBox.currentText()))
         try:
             self.myOscillo = self.rm.open_resource(self.myOscilloStr)
+            return self.myOscillo
         except:
+            log.info("Error, couldnt connect to oscillo")
             pass
 
         self.myAFGStr = str(self.USBPortsAFGComboBox.currentText())
         try:
             self.myAFG = self.rm.open_resource(self.myAFGStr)
+            return self.myAFG
         except:
+            log.info("Error, couldnt connect the AAFG")
             pass
 
     def get_data(self, channel):
