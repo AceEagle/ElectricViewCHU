@@ -1,5 +1,4 @@
 import time
-
 from PyQt5.QtWidgets import QWidget, QFileDialog
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThreadPool
 from PyQt5 import uic
@@ -19,7 +18,8 @@ Ui_dataView, QtBaseClass = uic.loadUiType(lensViewUiPath)
 
 SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
-class DataView(QWidget, Ui_dataView):  # type: QWidget
+
+class DataView(QWidget, Ui_dataView):
     SIGNAL_toggled_plot_graphic = "graphic"
     s_lens_data_changed = pyqtSignal(dict)
 
@@ -53,7 +53,8 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
         self.G6CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph6" , caller=self.G6CheckBox))
 
     def connect_signals(self):
-        pass
+        log.info("Connecting dataView Signals...")
+        self.model.simulatorObject.s_data_changed.connect(self.upgrade_graph)
 
     def initialize_view(self):
         self.G1CheckBox.setChecked(True)
