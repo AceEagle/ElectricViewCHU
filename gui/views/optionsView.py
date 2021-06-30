@@ -15,8 +15,7 @@ Ui_optionsView, QtBaseClass = uic.loadUiType(optionsViewUiPath)
 
 
 class OptionsView(QWidget, Ui_optionsView):
-    s_data_changed = pyqtSignal(dict)
-    s_data_acquisition_done = pyqtSignal()
+    instruments_connected = pyqtSignal()
 
     def __init__(self, model=None):
         super(OptionsView, self).__init__()
