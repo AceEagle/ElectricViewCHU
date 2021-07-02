@@ -52,11 +52,14 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def update_comboBox(self):
         log.debug("Updating USBPortsList")
-        self.instrumentsList = self.rm.list_resources()
-        self.USBPortsAFGComboBox.clear()
-        self.USBPortsOscilloComboBox.clear()
-        self.USBPortsAFGComboBox.addItems(self.instrumentsList)
-        self.USBPortsOscilloComboBox.addItems(self.instrumentsList)
+        try:
+            self.instrumentsList = self.rm.list_resources()
+            self.USBPortsAFGComboBox.clear()
+            self.USBPortsOscilloComboBox.clear()
+            self.USBPortsAFGComboBox.addItems(self.instrumentsList)
+            self.USBPortsOscilloComboBox.addItems(self.instrumentsList)
+        except:
+            pass
 
     def connect_instruments_thread(self):
         worker = Worker(self.connect_instruments)
