@@ -47,11 +47,15 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def update_comboBox(self):
         log.debug("Updating USBPortsList")
-        self.instrumentsList = self.rm.list_resources()
-        self.USBPortsAFGComboBox.clear()
-        self.USBPortsOscilloComboBox.clear()
-        self.USBPortsAFGComboBox.addItems(self.instrumentsList)
-        self.USBPortsOscilloComboBox.addItems(self.instrumentsList)
+        try:
+            self.rm = visa.ResourceManager()
+            self.instrumentsList = self.rm.list_resources()
+            self.USBPortsAFGComboBox.clear()
+            self.USBPortsOscilloComboBox.clear()
+            self.USBPortsAFGComboBox.addItems(self.instrumentsList)
+            self.USBPortsOscilloComboBox.addItems(self.instrumentsList)
+        except:
+            pass
 
     def connect_instruments_thread(self):
         worker = Worker(self.connect_instruments)
@@ -66,7 +70,6 @@ class OptionsView(QWidget, Ui_optionsView):
         except:
             log.info("Error, couldnt connect to oscillo")
             pass
-
         self.myAFGStr = str(self.USBPortsAFGComboBox.currentText())
         try:
             self.myAFG = self.rm.open_resource(self.myAFGStr)
@@ -74,6 +77,7 @@ class OptionsView(QWidget, Ui_optionsView):
         except:
             log.info("Error, couldnt connect the AAFG")
             pass
+        print(self.myAFG, self.myOscillo)
 
     def get_data(self, channel):
         # self.myOscillo.read_data_one_channel(channel, x_axis_out=False)

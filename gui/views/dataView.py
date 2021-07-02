@@ -43,7 +43,7 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
     def connect_buttons(self):
         self.LaunchDataFButton.clicked.connect(self.launch_data)
         self.SaveDataPButton.clicked.connect(self.search_file)
-        self.ResetDataPButton.clicked.connect(self.reset_data)
+        self.ResetDataPButton.clicked.connect(self.get_instruments)
         log.info("Connecting dataView GUI")
 
     def connect_checkbox(self):
@@ -82,6 +82,8 @@ class DataView(QWidget, Ui_dataView):  # type: QWidget
 
     def get_instruments(self):
         self.myOscillo, self.myAFG = self.optionsInstance.connect_instruments_thread()
+        self.optionsInstance.update_comboBox()
+        print(self.myAFG, self.myOscillo)
 
     def crash_the_app(self, progress_callback):
         for x in range(3):
