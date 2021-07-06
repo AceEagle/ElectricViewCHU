@@ -7,6 +7,7 @@ import datetime
 import logging
 from pydispatch import dispatcher
 from Data import Data
+import pyvisa as visa
 
 log = logging.getLogger(__name__)
 
@@ -14,6 +15,7 @@ SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
 class PlasmaAnalyser(QObject):
     s_data_changed = pyqtSignal(dict)
+    instruments_connected = pyqtSignal(list)
 
     def __init__(self):
         super(PlasmaAnalyser, self).__init__()
@@ -81,6 +83,7 @@ class PlasmaAnalyser(QObject):
     def send_data_to_plot(self, graphics=None):
         self.s_data_changed.emit(self.savedStatusDataDict)
 
+
     def launch_propagation(self, nbOfDays):
         self.launch_state = True
         while self.launch_state is True:
@@ -111,6 +114,8 @@ class PlasmaAnalyser(QObject):
                 for metPerson in range(int(person.parameters["knownEncounteredPerDay"])):
                     person.interact(random.choice(person.listOfRelatives))
         log.info("DAY {} :: END MEETING PERSONS".format(self.day))
+
+
 
     def save_status(self):
         """{"graphic":{"[0-9]":{"x":[], "y":[]}, "[10-19]":{"x"}:[], "y":[]}, ...}
