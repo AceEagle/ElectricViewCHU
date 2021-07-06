@@ -84,15 +84,10 @@ class PlasmaAnalyser(QObject):
         self.s_data_changed.emit(self.savedStatusDataDict)
 
 
-    def launch_propagation(self, nbOfDays):
+    def launch_propagation(self, progress_callback):
         self.launch_state = True
         while self.launch_state is True:
-            self.day = d
-            log.info("Simulation Day: {} on {} ({}%)".format(d, nbOfDays-1, d * 100 / nbOfDays-1))
-            self.meet_people()
-            log.info("DAY {} :: BEGIN SAVE STATUS".format(d))
             self.save_status()
-            log.info("DAY {} :: END SAVE STATUS".format(d))
             self.send_data_to_plot()
 
         log.info("=== === === SIMULATION COMPLETE === === ===")
@@ -100,31 +95,10 @@ class PlasmaAnalyser(QObject):
     def stop_propagation(self):
         self.launch_state = False
 
-    def meet_people(self):
-        log.info("DAY {} :: BEGIN INDEXING".format(self.day))
-        personListIndex = [i if x.graphics["isInfected"] == 1 else -1 for i, x in enumerate(self.population)]
-        personListIndex = list(filter((-1).__ne__, personListIndex))
-        log.info("DAY {} :: END INDEXING".format(self.day))
-
-        log.info("DAY {} :: BEGIN MEETING PERSONS".format(self.day))
-        liste = [self.population[i] for i in personListIndex]
-        for person in liste:
-            person.update_own_status()
-            if person.graphics["isInfectious"]:
-                for metPerson in range(int(person.parameters["knownEncounteredPerDay"])):
-                    person.interact(random.choice(person.listOfRelatives))
-        log.info("DAY {} :: END MEETING PERSONS".format(self.day))
-
-
-
     def save_status(self):
-        """{"graphic":{"[0-9]":{"x":[], "y":[]}, "[10-19]":{"x"}:[], "y":[]}, ...}
-        For it is   Dictionnary[graphic][ageGroup]["x"] --> Days data
-                    Dictionnary[graphic][ageGroup]["y"] --> Number of case data
-        """
         for graphic in Data().graphics:
-            self.savedStatusDataDict[graphic][graphic]["x"].append(self.day)
-            self.savedStatusDataDict[graphic][graphic]["y"].append (
+            self.savedStatusDataDict[graphic]["data"]["x"].append(self.day)
+            self.savedStatusDataDict[graphic]["data"]["y"].append (
                 sum(p.graphics[graphic] == 1 and p.tag == ageKey for p in self.population))
 
     def initialize_infection(self, nbOfInfected=1):
