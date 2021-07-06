@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from gui.windows.mainWindow import MainWindow
-from tools.mainModel import MainModel
+from PlasmaAnalyser import PlasmaAnalyser
 import sys
 import ctypes
 import logging
@@ -30,7 +30,7 @@ class App(QApplication):
         self.setAttribute(Qt.AA_EnableHighDpiScaling)
         self.setStyle("Fusion")
 
-        self.mainModel = MainModel()
+        self.mainModel = PlasmaAnalyser()
         self.mainWindow = MainWindow(model=self.mainModel)
         self.mainWindow.setWindowTitle("PGDLive")
         self.mainWindow.show()

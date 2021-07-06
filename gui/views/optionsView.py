@@ -48,29 +48,23 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def update_comboBox(self):
         log.debug("Updating USBPortsList")
-        self.instrumentsList = self.rm.list_resources()
-        self.USBPortsAFGComboBox.clear()
-        self.USBPortsOscilloComboBox.clear()
-        self.USBPortsAFGComboBox.addItems(self.instrumentsList)
-        self.USBPortsOscilloComboBox.addItems(self.instrumentsList)
+        self.rm = visa.ResourceManager()
+        try:
+            self.instrumentsList = self.rm.list_resources()
+            self.USBPortsAFGComboBox.clear()
+            self.USBPortsOscilloComboBox.clear()
+            self.USBPortsAFGComboBox.addItems(self.instrumentsList)
+            self.USBPortsOscilloComboBox.addItems(self.instrumentsList)
+        except:
+            self.USBPortsAFGComboBox.clear()
+            self.USBPortsOscilloComboBox.clear()
+
 
     def connect_instruments_thread(self):
-        worker = Worker(self.connect_instruments)
+        myOscilloStr = (str(self.USBPortsOscilloComboBox.currentText()))
+        myAFGStr = str(self.USBPortsAFGComboBox.currentText())
+        worker = Worker(self.model.connect_instruments, myOscilloStr, myAFGStr)
         self.threadpool.start(worker)
-
-    def connect_instruments(self, progress_callback):
-        log.debug("Connection to oscilloscope")
-        self.myOscilloStr = (str(self.USBPortsOscilloComboBox.currentText()))
-        try:
-            self.myOscillo = self.rm.open_resource(self.myOscilloStr)
-        except:
-            pass
-
-        self.myAFGStr = str(self.USBPortsAFGComboBox.currentText())
-        try:
-            self.myAFG = self.rm.open_resource(self.myAFGStr)
-        except:
-            pass
 
     def get_data(self, channel):
         # self.myOscillo.read_data_one_channel(channel, x_axis_out=False)

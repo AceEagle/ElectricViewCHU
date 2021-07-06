@@ -28,6 +28,22 @@ class PlasmaAnalyser(QObject):
         self.data2plot = {}
         self.healthcareSystemLimit = 50000
         self.connect_to_signals()
+        self.myOscillo = None
+        self.myAFG = None
+
+    def connect_instruments(self, oscilloStr, afgStr, progress_callback):
+        log.info("Connection to instruments")
+        try:
+            self.myOscillo = self.rm.open_resource(oscilloStr)
+            self.myAFG = self.rm.open_resource(afgStr)
+        except:
+            pass
+
+    def get_oscillo(self):
+        return self.myOscillo
+
+    def get_afg(self):
+        return self.myAFG
 
     def create_empty_savedStatusDataDict(self):
         for graphic in Data().graphics:
@@ -36,7 +52,8 @@ class PlasmaAnalyser(QObject):
         # print(self.savedStatusDataDict)
 
     def connect_to_signals(self):
-        dispatcher.connect(self.handle_plot_toggled, signal=SIGNAL_PLOT_TOGGLED)
+        #dispatcher.connect(self.handle_plot_toggled, signal=SIGNAL_PLOT_TOGGLED)
+        pass
 
     def simulate_from_gui(self, *args, **kwargs):
         self.create_population(args[0])
@@ -65,7 +82,8 @@ class PlasmaAnalyser(QObject):
         self.s_data_changed.emit(self.savedStatusDataDict)
 
     def launch_propagation(self, nbOfDays):
-        for d in range(nbOfDays):
+        self.launch_state = True
+        while self.launch_state is True:
             self.day = d
             log.info("Simulation Day: {} on {} ({}%)".format(d, nbOfDays-1, d * 100 / nbOfDays-1))
             self.meet_people()
@@ -74,8 +92,10 @@ class PlasmaAnalyser(QObject):
             log.info("DAY {} :: END SAVE STATUS".format(d))
             self.send_data_to_plot()
 
-
         log.info("=== === === SIMULATION COMPLETE === === ===")
+
+    def stop_propagation(self):
+        self.launch_state = False
 
     def meet_people(self):
         log.info("DAY {} :: BEGIN INDEXING".format(self.day))
