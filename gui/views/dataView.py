@@ -32,6 +32,7 @@ class DataView(QWidget, Ui_dataView):
         self.dataPlotItem = None
         self.connect_checkbox()
         self.connect_buttons()
+        self.connect_signals()
         self.allPlotsDict = {}
         self.create_plots()
         self.saved_data = None
@@ -54,7 +55,7 @@ class DataView(QWidget, Ui_dataView):
 
     def connect_signals(self):
         log.info("Connecting dataView Signals...")
-        self.model.simulatorObject.s_data_changed.connect(self.upgrade_graph)
+        self.model.s_data_changed.connect(self.update_graph)
 
     def initialize_view(self):
         self.G1CheckBox.setChecked(True)
@@ -127,7 +128,8 @@ class DataView(QWidget, Ui_dataView):
     def update_graph(self, simPlotData):
         for graphic in Data().graphics:
             try:
-                kwargs = simPlotData[graphic]
+                kwargs = simPlotData[graphic]['data']
+                print(kwargs)
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except:
                 log.info("null")

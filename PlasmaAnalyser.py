@@ -1,8 +1,11 @@
 import random
+import time
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 import json
-from PyQt5.QtCore import pyqtSignal, QObject
+from tools.pyqtWorker import Worker
+from PyQt5.QtCore import pyqtSignal, QObject, QThreadPool
 import datetime
 import logging
 from pydispatch import dispatcher
@@ -19,6 +22,8 @@ class PlasmaAnalyser(QObject):
 
     def __init__(self):
         super(PlasmaAnalyser, self).__init__()
+        self.newX1, self.newY1, self.newX2, self.newY2 = -1, -1, -1, -1
+        self.threadpool = QThreadPool()
         self.savedStatusDataDict = {}
         self.create_empty_savedStatusDataDict()
         self.connect_to_signals()
@@ -74,19 +79,69 @@ class PlasmaAnalyser(QObject):
         self.launch_state = True
         while self.launch_state is True:
             self.save_status()
+            time.sleep(0.1)
             self.send_data_to_plot()
 
         log.info("=== === === SIMULATION COMPLETE === === ===")
 
-    def stop_propagation(self):
+    def stop_propagation(self, progress_callback):
         self.launch_state = False
 
-    def reset_save_status(self):
+    def reset_save_status(self, progress_callback):
         self.create_empty_savedStatusDataDict()
 
     def save_status(self):
-        for graphic in Data().graphics:
-            self.savedStatusDataDict[graphic]["data"]["x"].append(self.day)
-            self.savedStatusDataDict[graphic]["data"]["y"].append (
-                sum(p.graphics[graphic] == 1 and p.tag == ageKey for p in self.population))
+        worker1 = Worker(self.calcul_graph1)
+        worker2 = Worker(self.calcul_graph2)
+        worker3 = Worker(self.calcul_graph3)
+        worker4 = Worker(self.calcul_graph4)
+        worker5 = Worker(self.calcul_graph5)
+        worker6 = Worker(self.calcul_graph6)
 
+        self.threadpool.start(worker1)
+        self.threadpool.start(worker2)
+        self.threadpool.start(worker3)
+        self.threadpool.start(worker4)
+        self.threadpool.start(worker5)
+        self.threadpool.start(worker6)
+
+        #for graphic in Data().graphics:
+         #   self.savedStatusDataDict[graphic]["data"]["x"].append(self.day)
+          #  self.savedStatusDataDict[graphic]["data"]["y"].append (
+           #     sum(p.graphics[graphic] == 1 and p.tag == ageKey for p in self.population))
+
+    def calcul_graph1(self, progress_callback):
+        self.newX1 += 1
+        self.newY1 += 1
+        self.savedStatusDataDict["graph1"]["data"]["x"].append(self.newX1)
+        self.savedStatusDataDict["graph1"]["data"]["y"].append(self.newY1)
+
+    def calcul_graph2(self, progress_callback):
+        self.newX2 += 1
+        self.newY2 += 1
+        self.savedStatusDataDict["graph2"]["data"]["x"].append(self.newX2)
+        self.savedStatusDataDict["graph2"]["data"]["y"].append(math.sin(self.newY2))
+
+    def calcul_graph3(self, progress_callback):
+        newX = 0
+        newY = 0
+        self.savedStatusDataDict["graph3"]["data"]["x"].append(newY)
+        self.savedStatusDataDict["graph3"]["data"]["y"].append(newX)
+
+    def calcul_graph4(self, progress_callback):
+        newX = 0
+        newY = 0
+        self.savedStatusDataDict["graph4"]["data"]["x"].append(newY)
+        self.savedStatusDataDict["graph4"]["data"]["y"].append(newX)
+
+    def calcul_graph5(self, progress_callback):
+        newX = 0
+        newY = 0
+        self.savedStatusDataDict["graph5"]["data"]["x"].append(newY)
+        self.savedStatusDataDict["graph5"]["data"]["y"].append(newX)
+
+    def calcul_graph6(self, progress_callback):
+        newX = 0
+        newY = 0
+        self.savedStatusDataDict["graph6"]["data"]["x"].append(newY)
+        self.savedStatusDataDict["graph6"]["data"]["y"].append(newX)
