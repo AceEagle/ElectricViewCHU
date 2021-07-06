@@ -142,6 +142,8 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.setText("Stop")
         self.LaunchDataFButton.setEnabled(True)
         self.ResetDataPButton.setStyleSheet("background-color : red")
+        worker = Worker(self.model.launch_propagation)
+        self.threadpool.start(worker)
 
     def stop_data(self):
         self.LaunchDataFButton.stop_flash()

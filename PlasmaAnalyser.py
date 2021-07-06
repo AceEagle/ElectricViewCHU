@@ -123,10 +123,9 @@ class PlasmaAnalyser(QObject):
                     Dictionnary[graphic][ageGroup]["y"] --> Number of case data
         """
         for graphic in Data().graphics:
-            for ageKey in list(self.parameters.keys()):
-                self.savedStatusDataDict[graphic][ageKey]["x"].append(self.day)
-                self.savedStatusDataDict[graphic][ageKey]["y"].append (
-                    sum(p.graphics[graphic] == 1 and p.tag == ageKey for p in self.population))
+            self.savedStatusDataDict[graphic][graphic]["x"].append(self.day)
+            self.savedStatusDataDict[graphic][graphic]["y"].append (
+                sum(p.graphics[graphic] == 1 and p.tag == ageKey for p in self.population))
 
     def initialize_infection(self, nbOfInfected=1):
         try:
