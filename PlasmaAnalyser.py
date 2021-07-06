@@ -83,7 +83,6 @@ class PlasmaAnalyser(QObject):
     def send_data_to_plot(self, graphics=None):
         self.s_data_changed.emit(self.savedStatusDataDict)
 
-
     def launch_propagation(self, progress_callback):
         self.launch_state = True
         while self.launch_state is True:
@@ -94,6 +93,11 @@ class PlasmaAnalyser(QObject):
 
     def stop_propagation(self):
         self.launch_state = False
+
+    def reset_save_status(self):
+        for graphic in Data().graphics:
+            self.savedStatusDataDict[graphic]["data"]["x"] = []
+            self.savedStatusDataDict[graphic]["data"]["y"] = []
 
     def save_status(self):
         for graphic in Data().graphics:

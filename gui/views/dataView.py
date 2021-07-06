@@ -153,6 +153,8 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.clicked.disconnect()
         self.LaunchDataFButton.clicked.connect(self.launch_data)
         self.LaunchDataFButton.setEnabled(True)
+        worker = Worker(self.model.stop_propagation)
+        self.threadpool.start(worker)
 
     def reset_data(self):
         self.saved_data = None
@@ -163,4 +165,6 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.clicked.connect(self.launch_data)
         self.LaunchDataFButton.setEnabled(True)
         self.ResetDataPButton.setStyleSheet("background-color : None")
+        worker = Worker(self.model.reset_save_status)
+        self.threadpool.start(worker)
 
