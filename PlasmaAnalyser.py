@@ -30,14 +30,22 @@ class PlasmaAnalyser(QObject):
         self.data2plot = {}
         self.healthcareSystemLimit = 50000
         self.connect_to_signals()
-        self.rm = visa.ResourceManager()
+        self.myOscillo = None
+        self.myAFG = None
 
-    def connect_AFG_and_Oscillo(self, AFGStr, OscilloStr):
-        self.myOscillo = self.rm.open_resource(OscilloStr)
-        self.myAFG = self.rm.open_resource(AFGStr)
-        self.instrumentsList = [self.myAFG, self.myOscillo]
-        return self.myAFG, self.myOscillo
+    def connect_instruments(self, oscilloStr, afgStr, progress_callback):
+        log.info("Connection to instruments")
+        try:
+            self.myOscillo = self.rm.open_resource(oscilloStr)
+            self.myAFG = self.rm.open_resource(afgStr)
+        except:
+            pass
 
+    def get_oscillo(self):
+        return self.myOscillo
+
+    def get_afg(self):
+        return self.myAFG
 
     def create_empty_savedStatusDataDict(self):
         for graphic in Data().graphics:
@@ -46,7 +54,8 @@ class PlasmaAnalyser(QObject):
         # print(self.savedStatusDataDict)
 
     def connect_to_signals(self):
-        dispatcher.connect(self.handle_plot_toggled, signal=SIGNAL_PLOT_TOGGLED)
+        #dispatcher.connect(self.handle_plot_toggled, signal=SIGNAL_PLOT_TOGGLED)
+        pass
 
     def simulate_from_gui(self, *args, **kwargs):
         self.create_population(args[0])
@@ -74,27 +83,39 @@ class PlasmaAnalyser(QObject):
     def send_data_to_plot(self, graphics=None):
         self.s_data_changed.emit(self.savedStatusDataDict)
 
-    def start_propagation(self):
-        self.launch_propagation_state = True
-        self.propagation()
 
-    def stop_propagation(self):
-        self.launch_propagation_state = False
-
-    def propagation(self):
-        while self.launch_propagation_state is True:
-            self.get_data()
-            self.filter_data()
+    def launch_propagation(self, nbOfDays):
+        self.launch_state = True
+        while self.launch_state is True:
+            self.day = d
+            log.info("Simulation Day: {} on {} ({}%)".format(d, nbOfDays-1, d * 100 / nbOfDays-1))
+            self.meet_people()
+            log.info("DAY {} :: BEGIN SAVE STATUS".format(d))
+            self.save_status()
+            log.info("DAY {} :: END SAVE STATUS".format(d))
             self.send_data_to_plot()
-
 
         log.info("=== === === SIMULATION COMPLETE === === ===")
 
-    def get_data(self):
-        pass
+    def stop_propagation(self):
+        self.launch_state = False
 
-    def filter_data(self):
-        pass
+    def meet_people(self):
+        log.info("DAY {} :: BEGIN INDEXING".format(self.day))
+        personListIndex = [i if x.graphics["isInfected"] == 1 else -1 for i, x in enumerate(self.population)]
+        personListIndex = list(filter((-1).__ne__, personListIndex))
+        log.info("DAY {} :: END INDEXING".format(self.day))
+
+        log.info("DAY {} :: BEGIN MEETING PERSONS".format(self.day))
+        liste = [self.population[i] for i in personListIndex]
+        for person in liste:
+            person.update_own_status()
+            if person.graphics["isInfectious"]:
+                for metPerson in range(int(person.parameters["knownEncounteredPerDay"])):
+                    person.interact(random.choice(person.listOfRelatives))
+        log.info("DAY {} :: END MEETING PERSONS".format(self.day))
+
+
 
     def save_status(self):
         """{"graphic":{"[0-9]":{"x":[], "y":[]}, "[10-19]":{"x"}:[], "y":[]}, ...}
