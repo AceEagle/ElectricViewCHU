@@ -12,6 +12,15 @@ rm = visa.ResourceManager()
 a = rm.list_resources()
 instrumentObject = rm.open_resource(a[0])
 
+instrumentObject.write("DATa:SOUrce CH1, DATa:START 1, DATa:STOP 1000")
+nrpt = instrumentObject.query(":WFMOutpre:NR_pt?")
+xunit = instrumentObject.query(':WFMOutpre:XUNit?')
+xzero = instrumentObject.query(":WFMOutpre:XZEro?")
+xincr = instrumentObject.query(":WFMOutpre:XINcr?")
+yunit = instrumentObject.query(":WFMOutpre:YUNit?")
+yzero = instrumentObject.query(":WFMOutpre:YZEro?")
+print(nrpt, xunit, xzero, xincr, yunit, yzero)
+
 
 """"
 x_increment = instrumentObject.query_ascii_values(":WAVeform:XINCrement?")
@@ -38,8 +47,8 @@ f.close()
 print("Waveform format BYTE data written to waveform_data.csv.")
 """
 #instrumentObject.write('DATa:RESOlution FULL, DATa:COMPosition SINGULAR_YT, DATa:DESTination 5000, DATa:STARt 1, DATa:ENCdg ASCIi')
-a = instrumentObject.query_binary_values("WAVFrm?")
-print(a)
+#a = instrumentObject.query_binary_values("WAVFrm?")
+#print(a)
 #x_origin =  instrumentObject.query_ascii_values(":WAVeform:XORigin?")
 #y_increment =  instrumentObject.query_ascii_values(":WAVeform:YINCrement?")
 #y_origin =  instrumentObject.query_ascii_values(":WAVeform:YORigin?")
