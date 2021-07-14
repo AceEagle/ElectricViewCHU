@@ -12,7 +12,6 @@ import os
 
 log = logging.getLogger(__name__)
 
-
 if getattr(sys, 'frozen', False):
     application_path = sys._MEIPASS
 else:

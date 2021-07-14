@@ -5,23 +5,32 @@ import array
 import pyvisa
 import struct
 import os
+import numpy
+from PyTektronixScope import TektronixScope as ts
 
-import visa
+scope = ts("USB0::0x0699::0x03A3::C020282::0::INSTR")
+X, Y = scope.read_data_one_channel('CH1', t0=0, DeltaT=1E-6, x_axis_out=True)
+print(X, Y)
+#rm = visa.ResourceManager()
+#a = rm.list_resources()
+#instrumentObject = rm.open_resource(a[0])
+#instrumentObject.timeout = 5000
+#trye = instrumentObject.query_binary_values("CURVe?")
+#print(trye)
 
-rm = visa.ResourceManager()
-a = rm.list_resources()
-instrumentObject = rm.open_resource(a[0])
+#curve = instrumentObject.query_binary_values("CURV?")
+#print(curve)
+#instrumentObject.write(":WAVeform:DATA?")
+#sData = instrumentObject.read_bytes(50000)
+#print(sData)
 
-instrumentObject.write("DATa:SOUrce CH1, DATa:START 1, DATa:STOP 1000")
-nrpt = instrumentObject.query(":WFMOutpre:NR_pt?")
-xunit = instrumentObject.query(':WFMOutpre:XUNit?')
-xzero = instrumentObject.query(":WFMOutpre:XZEro?")
-xincr = instrumentObject.query(":WFMOutpre:XINcr?")
-yunit = instrumentObject.query(":WFMOutpre:YUNit?")
-yzero = instrumentObject.query(":WFMOutpre:YZEro?")
-print(nrpt, xunit, xzero, xincr, yunit, yzero)
-
-
+#nrpt = instrumentObject.query(":WFMOutpre:NR_pt?")
+#xunit = instrumentObject.query(':WFMOutpre:XUNit?')
+#xzero = instrumentObject.query(":WFMOutpre:XZEro?")
+#xincr = instrumentObject.query(":WFMOutpre:XINcr?")
+#yunit = instrumentObject.query(":WFMOutpre:YUNit?")
+#yzero = instrumentObject.query(":WFMOutpre:YZEro?")
+#print(nrpt, xunit, xzero, xincr, yunit, yzero)
 """"
 x_increment = instrumentObject.query_ascii_values(":WAVeform:XINCrement?")
 x_origin =  instrumentObject.query_ascii_values(":WAVeform:XORigin?")
