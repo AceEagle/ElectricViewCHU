@@ -6,17 +6,15 @@ import pyvisa
 import struct
 import os
 import numpy
-from PyTektronixScope import TektronixScope as ts
+#from PyTektronixScope import TektronixScope as ts
 
-scope = ts("USB0::0x0699::0x03A3::C020282::0::INSTR")
-X, Y = scope.read_data_one_channel('CH1', t0=0, DeltaT=1E-6, x_axis_out=True)
-print(X, Y)
-#rm = visa.ResourceManager()
-#a = rm.list_resources()
-#instrumentObject = rm.open_resource(a[0])
-#instrumentObject.timeout = 5000
-#trye = instrumentObject.query_binary_values("CURVe?")
-#print(trye)
+rm = pyvisa.ResourceManager()
+liste = rm.list_resources()
+instrumentObject = rm.open_resource(liste[1])
+instrumentObject.timeout = 5000
+print(instrumentObject.write(":DATa:SOUrce CH1;:DATa:ENCdg ASCIi;"))
+print(instrumentObject.read_ascii_values(":WFMOutpre?"))
+print(instrumentObject.query("CURVe?"))
 
 #curve = instrumentObject.query_binary_values("CURV?")
 #print(curve)
