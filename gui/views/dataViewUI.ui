@@ -58,7 +58,7 @@
          <item row="5" column="0">
           <widget class="QCheckBox" name="G3CheckBox">
            <property name="text">
-            <string>Graph3</string>
+            <string>Puissance (1t)</string>
            </property>
           </widget>
          </item>
@@ -78,14 +78,14 @@
          <item row="1" column="0">
           <widget class="QCheckBox" name="G1CheckBox">
            <property name="text">
-            <string>Graph1</string>
+            <string>Tension</string>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
           <widget class="QCheckBox" name="G2CheckBox">
            <property name="text">
-            <string>Graph2</string>
+            <string>Puissance (Full)</string>
            </property>
           </widget>
          </item>
@@ -105,7 +105,7 @@
          <item row="7" column="0">
           <widget class="QCheckBox" name="G4CheckBox">
            <property name="text">
-            <string>Graph4</string>
+            <string>Lissajoue</string>
            </property>
           </widget>
          </item>

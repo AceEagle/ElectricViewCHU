@@ -46,10 +46,10 @@ class DataView(QWidget, Ui_dataView):
         log.info("Connecting dataView GUI")
 
     def connect_checkbox(self):
-        self.G1CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph1" , caller=self.G1CheckBox))
-        self.G2CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph2" , caller=self.G2CheckBox))
-        self.G3CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph3" , caller=self.G3CheckBox))
-        self.G4CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph4" , caller=self.G4CheckBox))
+        self.G1CheckBox.stateChanged.connect(lambda: self.initiate_graph("Tension" , caller=self.G1CheckBox))
+        self.G2CheckBox.stateChanged.connect(lambda: self.initiate_graph("Puissance (Full)" , caller=self.G2CheckBox))
+        self.G3CheckBox.stateChanged.connect(lambda: self.initiate_graph("Puissance (1t)" , caller=self.G3CheckBox))
+        self.G4CheckBox.stateChanged.connect(lambda: self.initiate_graph("Lissajoue" , caller=self.G4CheckBox))
         self.G5CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph5" , caller=self.G5CheckBox))
         self.G6CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph6" , caller=self.G6CheckBox))
 

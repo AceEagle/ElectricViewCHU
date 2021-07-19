@@ -12,10 +12,10 @@ class Data:
                                "parameter7": globalParameters["parameter7"],
                                "parameter8": globalParameters["parameter8"]}
 
-        self.graphics = {"graph1": 1,
-                         "graph2": 0,
-                         "graph3": 0,
-                         "graph4": 0,
+        self.graphics = {"Tension": 1,
+                         "Puissance (Full)": 0,
+                         "Puissance (1t)": 0,
+                         "Lissajoue": 0,
                          "graph5": 0,
                          "graph6": 0,}
 

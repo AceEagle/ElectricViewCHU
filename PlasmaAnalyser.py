@@ -79,7 +79,7 @@ class PlasmaAnalyser(QObject):
         self.launch_state = True
         while self.launch_state is True:
             self.save_status()
-            time.sleep(0.1)
+            time.sleep(1)
             self.send_data_to_plot()
 
         log.info("=== === === SIMULATION COMPLETE === === ===")
@@ -114,26 +114,26 @@ class PlasmaAnalyser(QObject):
     def calcul_graph1(self, progress_callback):
         self.newX1 += 1
         self.newY1 += 1
-        self.savedStatusDataDict["graph1"]["data"]["x"].append(self.newX1)
-        self.savedStatusDataDict["graph1"]["data"]["y"].append(self.newY1)
+        self.savedStatusDataDict["Tension"]["data"]["x"].append(self.newX1)
+        self.savedStatusDataDict["Tension"]["data"]["y"].append(self.newY1)
 
     def calcul_graph2(self, progress_callback):
         self.newX2 += 1
         self.newY2 += 1
-        self.savedStatusDataDict["graph2"]["data"]["x"].append(self.newX2)
-        self.savedStatusDataDict["graph2"]["data"]["y"].append(math.sin(self.newY2))
+        self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].append(self.newX2)
+        self.savedStatusDataDict["Puissance (Full)"]["data"]["y"].append(math.sin(self.newY2))
 
     def calcul_graph3(self, progress_callback):
         newX = 0
         newY = 0
-        self.savedStatusDataDict["graph3"]["data"]["x"].append(newY)
-        self.savedStatusDataDict["graph3"]["data"]["y"].append(newX)
+        self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].append(newY)
+        self.savedStatusDataDict["Puissance (1t)"]["data"]["y"].append(newX)
 
     def calcul_graph4(self, progress_callback):
         newX = 0
         newY = 0
-        self.savedStatusDataDict["graph4"]["data"]["x"].append(newY)
-        self.savedStatusDataDict["graph4"]["data"]["y"].append(newX)
+        self.savedStatusDataDict["Lissajoue"]["data"]["x"].append(newY)
+        self.savedStatusDataDict["Lissajoue"]["data"]["y"].append(newX)
 
     def calcul_graph5(self, progress_callback):
         newX = 0
