@@ -89,6 +89,7 @@ class PlasmaAnalyser(QObject):
 
     def reset_save_status(self, progress_callback):
         self.create_empty_savedStatusDataDict()
+        self.send_data_to_plot()
 
     def save_status(self):
         worker1 = Worker(self.calcul_graph1)

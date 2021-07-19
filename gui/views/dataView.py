@@ -159,6 +159,7 @@ class DataView(QWidget, Ui_dataView):
         self.threadpool.start(worker)
 
     def reset_data(self):
+        self.stop_data()
         self.saved_data = None
         self.LaunchDataFButton.stop_flash()
         self.LaunchDataFButton.setEnabled(False)
