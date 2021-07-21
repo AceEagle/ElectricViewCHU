@@ -12,21 +12,30 @@ rm = pyvisa.ResourceManager()
 liste = rm.list_resources()
 instrumentObject = rm.open_resource("USB0::0x0699::0x0408::C049429::0::INSTR")
 instrumentObject.timeout = 5000
-print(instrumentObject.write(":DATa:SOUrce CH1;:DATa:ENCdg ASCIi;:DATa:STARt 1;:DATa:STOP 1000"))
+#print(instrumentObject.write(":DATa:SOUrce CH1;:DATa:ENCdg ASCIi;:DATa:STARt 1;:DATa:STOP 100000"))
 #À tester:
 #nrpt, xunit, xzero, xincr, yunit, yzero, ymult, bytnr = instrumentObject.query(":WFMOutpre:NR_pt?;:WFMOutpre:XUNit?;:WFMOutpre:XZEro?;:WFMOutpre:XINcr?;:WFMOutpre:YUNit?;:WFMOutpre:YZEro?;:WFMOutpre:YMUlt?;:WFMOutpre:BYT_nr?")
-general = instrumentObject.query(":WFMOutpre?")
-nrpt = instrumentObject.query(":WFMOutpre:NR_pt?")
-xunit = instrumentObject.query(':WFMOutpre:XUNit?')
-xzero = instrumentObject.query(":WFMOutpre:XZEro?")
-xincr = instrumentObject.query(":WFMOutpre:XINcr?")
-yunit = instrumentObject.query(":WFMOutpre:YUNit?")
-yzero = instrumentObject.query(":WFMOutpre:YZEro?")
-ymult = instrumentObject.query(":WFMOutpre:YMUlt?")
-bytnr = instrumentObject.query(":WFMOutpre:BYT_nr?")
-print(general)
-print(nrpt, xunit, xzero, xincr, yunit, yzero, ymult, bytnr)
+#general = instrumentObject.query(":WFMOutpre?")
+#nrpt = instrumentObject.query(":WFMOutpre:NR_pt?")
+#xunit = instrumentObject.query(':WFMOutpre:XUNit?')
+#xzero = instrumentObject.query(":WFMOutpre:XZEro?")
+#xincr = instrumentObject.query(":WFMOutpre:XINcr?")
+#yunit = instrumentObject.query(":WFMOutpre:YUNit?")
+#yzero = instrumentObject.query(":WFMOutpre:YZEro?")
+#ymult = instrumentObject.query(":WFMOutpre:YMUlt?")
+#bytnr = instrumentObject.query(":WFMOutpre:BYT_nr?")
+#print(general)
+#print(nrpt, xunit, xzero, xincr, yunit, yzero, ymult, bytnr)
+#print(instrumentObject.query("CURVe?"))
+
+print(instrumentObject.write("HORizontal:DELay:MODe OFF"))
+print(instrumentObject.write("HORizontal:POSition 0"))
+print(instrumentObject.query("HORizontal:POSition?"))
+#HORizontal:RECOrdlength is for the number of points (10M, 10k, etc...)
+
+print(instrumentObject.write(":DATa:SOUrce CH1;:DATa:ENCdg ASCIi;:DATa:STARt 1;:DATa:STOP 100000"))
 print(instrumentObject.query("CURVe?"))
+
 
 
 """"
