@@ -31,6 +31,11 @@ class PlasmaAnalyser(QObject):
         self.myOscillo = None
         self.myAFG = None
 
+    def new_resource_manager(self):
+        log.info("New Resource Manager")
+        self.rm.close()
+        self.rm = visa.ResourceManager()
+
     def connect_instruments(self, oscilloStr, afgStr, progress_callback):
         log.info("Connection to instruments")
         try:

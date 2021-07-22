@@ -29,34 +29,7 @@
       <string>Communication</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="2" column="0">
-       <widget class="QLabel" name="USBPortsAFGLabel">
-        <property name="text">
-         <string>Choose AFG USB Port</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="USBPortsOscilloComboBox">
-        <property name="minimumSize">
-         <size>
-          <width>351</width>
-          <height>0</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="USBPortsOscilloLabel">
-        <property name="text">
-         <string>Choose Oscilloscope USB Port</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="USBPortsAFGComboBox"/>
-      </item>
-      <item row="2" column="4">
+      <item row="2" column="3">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -69,14 +42,7 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="3">
-       <widget class="QPushButton" name="RefreshPButton">
-        <property name="text">
-         <string>Refresh</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="5">
+      <item row="2" column="4">
        <widget class="QPushButton" name="InjectButton">
         <property name="minimumSize">
          <size>
@@ -90,17 +56,38 @@
        </widget>
       </item>
       <item row="2" column="2">
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+       <widget class="QPushButton" name="RefreshPButton">
+        <property name="text">
+         <string>Refresh</string>
         </property>
-        <property name="sizeHint" stdset="0">
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="USBPortsOscilloLabel">
+        <property name="text">
+         <string>Choose Oscilloscope USB Port</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="USBPortsAFGComboBox"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="USBPortsOscilloComboBox">
+        <property name="minimumSize">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>351</width>
+          <height>0</height>
          </size>
         </property>
-       </spacer>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="USBPortsAFGLabel">
+        <property name="text">
+         <string>Choose AFG USB Port</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -129,34 +116,12 @@
          <string>AFG Parameters</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
-         <item row="2" column="1">
-          <widget class="QComboBox" name="AFGModeComboBox"/>
-         </item>
-         <item row="8" column="1">
-          <widget class="QSpinBox" name="AFGPercentageSpinBox"/>
-         </item>
-         <item row="4" column="1">
-          <widget class="QDoubleSpinBox" name="AFGFrequencyDSpinBox"/>
-         </item>
-         <item row="10" column="0">
-          <widget class="QLabel" name="TriggerIntervalLabel">
+         <item row="6" column="0">
+          <widget class="QLabel" name="AFGWaveFormLabel">
            <property name="text">
-            <string>Trigger Interval</string>
+            <string>Wave Form</string>
            </property>
           </widget>
-         </item>
-         <item row="3" column="1">
-          <spacer name="verticalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
          </item>
          <item row="7" column="1">
           <spacer name="verticalSpacer_3">
@@ -184,6 +149,13 @@
            </property>
           </spacer>
          </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="AFGModeLabel">
+           <property name="text">
+            <string>Mode</string>
+           </property>
+          </widget>
+         </item>
          <item row="5" column="1">
           <spacer name="verticalSpacer_4">
            <property name="orientation">
@@ -197,24 +169,39 @@
            </property>
           </spacer>
          </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="AFGWaveFormLabel">
-           <property name="text">
-            <string>Wave Form</string>
+         <item row="6" column="3">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="AFGModeLabel">
-           <property name="text">
-            <string>Mode</string>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
            </property>
-          </widget>
+          </spacer>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="AFGFrequencyLabel">
+         <item row="11" column="1">
+          <spacer name="verticalSpacer_12">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="10" column="1">
+          <widget class="QDoubleSpinBox" name="TriggerIntervalDSpinBox"/>
+         </item>
+         <item row="8" column="0">
+          <widget class="QLabel" name="AFGPercentageLabel">
            <property name="text">
-            <string>Frequency</string>
+            <string>Cycle Percentage</string>
            </property>
           </widget>
          </item>
@@ -231,21 +218,21 @@
            </property>
           </spacer>
          </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="AFGPercentageLabel">
-           <property name="text">
-            <string>Cycle Percentage</string>
-           </property>
-          </widget>
-         </item>
          <item row="6" column="1">
           <widget class="QComboBox" name="AFGWaveFormComboBox"/>
          </item>
-         <item row="10" column="1">
-          <widget class="QDoubleSpinBox" name="TriggerIntervalDSpinBox"/>
+         <item row="4" column="0">
+          <widget class="QLabel" name="AFGFrequencyLabel">
+           <property name="text">
+            <string>Frequency</string>
+           </property>
+          </widget>
          </item>
-         <item row="11" column="1">
-          <spacer name="verticalSpacer_12">
+         <item row="2" column="1">
+          <widget class="QComboBox" name="AFGModeComboBox"/>
+         </item>
+         <item row="3" column="1">
+          <spacer name="verticalSpacer_5">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -257,18 +244,25 @@
            </property>
           </spacer>
          </item>
-         <item row="6" column="2">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item row="10" column="0">
+          <widget class="QLabel" name="TriggerIntervalLabel">
+           <property name="text">
+            <string>Trigger Interval</string>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
+          </widget>
+         </item>
+         <item row="8" column="1">
+          <widget class="QSpinBox" name="AFGPercentageSpinBox"/>
+         </item>
+         <item row="4" column="1">
+          <widget class="QDoubleSpinBox" name="AFGFrequencyDSpinBox"/>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>KHz</string>
            </property>
-          </spacer>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -414,6 +408,19 @@
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
+         </item>
+         <item row="2" column="3">
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>
