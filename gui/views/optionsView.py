@@ -31,7 +31,7 @@ class OptionsView(QWidget, Ui_optionsView):
         self.modeList = ["Continuous", "Sweep", "Modulation", "Burst"]
         self.waveformList = ["Sine", "Square", "Ramp", "Pulse", "Arb"]
 
-        self.update_communication_combobox()
+        self.update_combobox()
         self.connect_instruments_thread()
         self.myOscillo = None
         self.myAFG = None
@@ -54,17 +54,18 @@ class OptionsView(QWidget, Ui_optionsView):
     def connect_signals(self):
         pass
 
-    def update_communication_combobox(self):
-        log.debug("Updating USBPortsList")
-        self.rm = visa.ResourceManager()
-
+    def update_combobox(self):
+        self.AFGModeComboBox.additems(self.modeList)
+        self.AFGWaveFormComboBox.additems(self.waveformList)
         try:
-            self.instrumentsList = self.rm.list_resources()
+            log.debug("Updating USBPortsList")
+            self.instrumentsList = self.model.rm.list_resources()
             self.USBPortsAFGComboBox.clear()
             self.USBPortsOscilloComboBox.clear()
             self.USBPortsAFGComboBox.addItems(self.instrumentsList)
             self.USBPortsOscilloComboBox.addItems(self.instrumentsList)
         except:
+            log.debug("Updating USBPortsList")
             self.USBPortsAFGComboBox.clear()
             self.USBPortsOscilloComboBox.clear()
 

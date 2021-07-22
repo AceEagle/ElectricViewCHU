@@ -24,6 +24,7 @@ class PlasmaAnalyser(QObject):
         super(PlasmaAnalyser, self).__init__()
         self.newX1, self.newY1, self.newX2, self.newY2 = -1, -1, -1, -1
         self.threadpool = QThreadPool()
+        self.rm = visa.ResourceManager()
         self.savedStatusDataDict = {}
         self.create_empty_savedStatusDataDict()
         self.connect_to_signals()
