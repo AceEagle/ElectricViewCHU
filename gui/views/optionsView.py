@@ -99,8 +99,8 @@ class OptionsView(QWidget, Ui_optionsView):
         # self.myOscillo.read_data_one_channel(channel, x_axis_out=False)
         pass
 
-    def inject_parameters_thread(self, mode, freq, wave, cycle, trigInt, nbData, trigLevel):
-        worker = Worker(self.inject_parameters, mode, freq, wave, cycle, trigInt, nbData, trigLevel)
+    def inject_parameters_thread(self):
+        worker = Worker(self.inject_parameters, self.mode, self.freq, self.wave, self.cycle, self.trigInt, self.nbData, self.trigLevel)
         self.threadpool.start(worker)
 
     def inject_parameters(self, mode, freq, wave, cycle, trigInt, nbData, trigLevel, progress_callback):

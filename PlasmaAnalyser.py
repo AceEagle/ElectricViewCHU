@@ -84,6 +84,7 @@ class PlasmaAnalyser(QObject):
     def launch_propagation(self, progress_callback):
         self.launch_state = True
         while self.launch_state is True:
+            self.get_data()
             self.save_status()
             time.sleep(1)
             self.send_data_to_plot()
@@ -96,6 +97,16 @@ class PlasmaAnalyser(QObject):
     def reset_save_status(self, progress_callback):
         self.create_empty_savedStatusDataDict()
         self.send_data_to_plot()
+
+    def get_data(self):
+        self.myOscillo.write("DATa:SOURce CH1")
+        self.dataCH1 = self.myOscillo.query("CURVe?")
+        self.myOscillo.write("DATa:SOURce CH2")
+        self.dataCH2 = self.myOscillo.query("CURVe?")
+        self.myOscillo.write("DATa:SOURce CH3")
+        self.dataCH3 = self.myOscillo.query("CURVe?")
+        self.myOscillo.write("DATa:SOURce CH4")
+        self.dataCH4 = self.myOscillo.query("CURVe?")
 
     def save_status(self):
         worker1 = Worker(self.calcul_graph1)
@@ -118,10 +129,8 @@ class PlasmaAnalyser(QObject):
            #     sum(p.graphics[graphic] == 1 and p.tag == ageKey for p in self.population))
 
     def calcul_graph1(self, progress_callback):
-        self.newX1 += 1
-        self.newY1 += 1
-        self.savedStatusDataDict["Tension"]["data"]["x"].append(self.newX1)
-        self.savedStatusDataDict["Tension"]["data"]["y"].append(self.newY1)
+        self.savedStatusDataDict["Tension"]["data"]["x"].append(self.dataCH1)
+        self.savedStatusDataDict["Tension"]["data"]["y"].append(self.dataCH1)
 
     def calcul_graph2(self, progress_callback):
         self.newX2 += 1
@@ -136,8 +145,6 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict["Puissance (1t)"]["data"]["y"].append(newX)
 
     def calcul_graph4(self, progress_callback):
-        newX = 0
-        newY = 0
         self.savedStatusDataDict["Lissajoue"]["data"]["x"].append(newY)
         self.savedStatusDataDict["Lissajoue"]["data"]["y"].append(newX)
 
