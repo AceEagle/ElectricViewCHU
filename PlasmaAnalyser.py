@@ -30,6 +30,8 @@ class PlasmaAnalyser(QObject):
         self.connect_to_signals()
         self.myOscillo = None
         self.myAFG = None
+        self.xList = []
+        self.timeList = []
 
     def new_resource_manager(self):
         log.info("New Resource Manager")
@@ -99,6 +101,10 @@ class PlasmaAnalyser(QObject):
         self.send_data_to_plot()
 
     def get_data(self):
+        self.timeDivision = float(self.myOscillo.query("HORizontal:SCAle?")[-10:])
+        self.nbData = int(self.myOscillo.query("HORizontal:RECOrdlength?")[25:])
+        for i in range(self.nbData):
+            self.xList.append(i)
         self.myOscillo.write("DATa:SOURce CH1")
         self.dataCH1 = self.myOscillo.query("CURVe?")
         self.myOscillo.write("DATa:SOURce CH2")
@@ -129,33 +135,25 @@ class PlasmaAnalyser(QObject):
            #     sum(p.graphics[graphic] == 1 and p.tag == ageKey for p in self.population))
 
     def calcul_graph1(self, progress_callback):
-        self.savedStatusDataDict["Tension"]["data"]["x"].append(self.dataCH1)
+        self.savedStatusDataDict["Tension"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["Tension"]["data"]["y"].append(self.dataCH1)
 
     def calcul_graph2(self, progress_callback):
-        self.newX2 += 1
-        self.newY2 += 1
-        self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].append(self.newX2)
-        self.savedStatusDataDict["Puissance (Full)"]["data"]["y"].append(math.sin(self.newY2))
+        self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].append(self.xList)
+        self.savedStatusDataDict["Puissance (Full)"]["data"]["y"].append(math.sin(self.dataCH2))
 
     def calcul_graph3(self, progress_callback):
-        newX = 0
-        newY = 0
-        self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].append(newY)
-        self.savedStatusDataDict["Puissance (1t)"]["data"]["y"].append(newX)
+        self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].append(self.xList)
+        self.savedStatusDataDict["Puissance (1t)"]["data"]["y"].append(self.dataCH3)
 
     def calcul_graph4(self, progress_callback):
-        self.savedStatusDataDict["Lissajoue"]["data"]["x"].append(newY)
-        self.savedStatusDataDict["Lissajoue"]["data"]["y"].append(newX)
+        self.savedStatusDataDict["Lissajoue"]["data"]["x"].append(self.dataCH1)
+        self.savedStatusDataDict["Lissajoue"]["data"]["y"].append(self.dataCH3)
 
     def calcul_graph5(self, progress_callback):
-        newX = 0
-        newY = 0
-        self.savedStatusDataDict["graph5"]["data"]["x"].append(newY)
-        self.savedStatusDataDict["graph5"]["data"]["y"].append(newX)
+        self.savedStatusDataDict["graph5"]["data"]["x"].append(self.xList)
+        self.savedStatusDataDict["graph5"]["data"]["y"].append(self.dataCH5)
 
     def calcul_graph6(self, progress_callback):
-        newX = 0
-        newY = 0
-        self.savedStatusDataDict["graph6"]["data"]["x"].append(newY)
-        self.savedStatusDataDict["graph6"]["data"]["y"].append(newX)
+        self.savedStatusDataDict["graph6"]["data"]["x"].append(self.xList)
+        self.savedStatusDataDict["graph6"]["data"]["y"].append(self.dataCH6)
