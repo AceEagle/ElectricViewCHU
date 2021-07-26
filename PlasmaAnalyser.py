@@ -101,8 +101,11 @@ class PlasmaAnalyser(QObject):
         self.send_data_to_plot()
 
     def get_data(self):
+        workerch1 = Worker(self.convert_strlist_to_intlist)
+        workerch2 = Worker(self.convert_strlist_to_intlist)
+        workerch3 = Worker(self.convert_strlist_to_intlist)
         self.timeDivision = float(self.myOscillo.query("HORizontal:SCAle?")[-10:])
-        self.nbData = int(self.myOscillo.query("HORizontal:RECOrdlength?")[25:])
+        self.nbData = int(self.myOscillo.query("HORizontal:RECOrdlength?"))
         for i in range(self.nbData):
             self.xList.append(i)
         self.myOscillo.write("DATa:SOURce CH1")
@@ -113,6 +116,25 @@ class PlasmaAnalyser(QObject):
         self.dataCH3 = self.myOscillo.query("CURVe?")
         #self.myOscillo.write("DATa:SOURce CH4")
         #self.dataCH4 = self.myOscillo.query("CURVe?")
+
+        workerch1 = Worker(self.convert_strlist_to_intlist, self.dataCH1)
+        workerch2 = Worker(self.convert_strlist_to_intlist, self.dataCH2)
+        workerch3 = Worker(self.convert_strlist_to_intlist, self.dataCH3)
+        workerch1.signals.result.connect(self.change_ch1)
+        self.threadpool.start(workerch1)
+        self.threadpool.start(workerch3)
+        self.threadpool.start(workerch3)
+        workerch1
+
+    def change_ch1(self):
+        self.dataCH1
+    def change_ch2(self):
+
+    def change_ch3(self):
+
+    def convert_strlist_to_intlist(self, string):
+        converted = list(map(int, list(string.split(","))))
+        return converted
 
     def save_status(self):
         worker1 = Worker(self.calcul_graph1)
@@ -140,7 +162,7 @@ class PlasmaAnalyser(QObject):
 
     def calcul_graph2(self, progress_callback):
         self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].append(self.xList)
-        self.savedStatusDataDict["Puissance (Full)"]["data"]["y"].append(math.sin(self.dataCH2))
+        self.savedStatusDataDict["Puissance (Full)"]["data"]["y"].append(self.dataCH2)
 
     def calcul_graph3(self, progress_callback):
         self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].append(self.xList)
@@ -160,7 +182,7 @@ class PlasmaAnalyser(QObject):
 
     def inject_AFG(self, mode, freq, wave, cycle, trigInt):
         pass
-    
+
     def inject_Oscillo(self, nbData, trigLevel):
         pass
 

@@ -129,7 +129,6 @@ class DataView(QWidget, Ui_dataView):
         for graphic in Data().graphics:
             try:
                 kwargs = simPlotData[graphic]['data']
-                print(kwargs)
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except:
                 log.info("null")
