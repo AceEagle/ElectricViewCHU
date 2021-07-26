@@ -111,8 +111,8 @@ class PlasmaAnalyser(QObject):
         self.dataCH2 = self.myOscillo.query("CURVe?")
         self.myOscillo.write("DATa:SOURce CH3")
         self.dataCH3 = self.myOscillo.query("CURVe?")
-        self.myOscillo.write("DATa:SOURce CH4")
-        self.dataCH4 = self.myOscillo.query("CURVe?")
+        #self.myOscillo.write("DATa:SOURce CH4")
+        #self.dataCH4 = self.myOscillo.query("CURVe?")
 
     def save_status(self):
         worker1 = Worker(self.calcul_graph1)
@@ -128,7 +128,7 @@ class PlasmaAnalyser(QObject):
         self.threadpool.start(worker4)
         self.threadpool.start(worker5)
         self.threadpool.start(worker6)
-
+        self.threadNb = self.threadpool.activeThreadCount()
         #for graphic in Data().graphics:
          #   self.savedStatusDataDict[graphic]["data"]["x"].append(self.day)
           #  self.savedStatusDataDict[graphic]["data"]["y"].append (
@@ -148,12 +148,12 @@ class PlasmaAnalyser(QObject):
 
     def calcul_graph4(self, progress_callback):
         self.savedStatusDataDict["Lissajoue"]["data"]["x"].append(self.dataCH1)
-        self.savedStatusDataDict["Lissajoue"]["data"]["y"].append(self.dataCH3)
+        self.savedStatusDataDict["Lissajoue"]["data"]["y"].append(self.dataCH2)
 
     def calcul_graph5(self, progress_callback):
         self.savedStatusDataDict["graph5"]["data"]["x"].append(self.xList)
-        self.savedStatusDataDict["graph5"]["data"]["y"].append(self.dataCH5)
+        self.savedStatusDataDict["graph5"]["data"]["y"].append(self.dataCH1)
 
     def calcul_graph6(self, progress_callback):
         self.savedStatusDataDict["graph6"]["data"]["x"].append(self.xList)
-        self.savedStatusDataDict["graph6"]["data"]["y"].append(self.dataCH6)
+        self.savedStatusDataDict["graph6"]["data"]["y"].append(self.dataCH1)
