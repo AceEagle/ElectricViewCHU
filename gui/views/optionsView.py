@@ -35,8 +35,6 @@ class OptionsView(QWidget, Ui_optionsView):
         self.update_communication_combobox()
         self.initialise_combobox()
         self.connect_combobox_signals()
-        self.myOscillo = None
-        self.myAFG = None
 
         log.info("Connecting optionsView GUI Widgets")
 
@@ -94,11 +92,6 @@ class OptionsView(QWidget, Ui_optionsView):
         worker = Worker(self.model.connect_instruments, myOscilloStr, myAFGStr)
         self.threadpool.start(worker)
 
-
-    def get_data(self, channel):
-        # self.myOscillo.read_data_one_channel(channel, x_axis_out=False)
-        pass
-
     def inject_parameters_thread(self):
         worker = Worker(self.inject_parameters, self.mode, self.freq, self.wave, self.cycle, self.trigInt, self.nbData, self.trigLevel)
         self.threadpool.start(worker)
@@ -108,4 +101,4 @@ class OptionsView(QWidget, Ui_optionsView):
         self.model.inject_Oscillo(nbData, trigLevel)
 
     def give_AFG_and_Oscillo(self):
-        return self.myAFG, self.myOscillo
+        return self.model.myAFG, self.model.myOscillo

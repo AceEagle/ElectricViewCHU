@@ -157,3 +157,10 @@ class PlasmaAnalyser(QObject):
     def calcul_graph6(self, progress_callback):
         self.savedStatusDataDict["graph6"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["graph6"]["data"]["y"].append(self.dataCH1)
+
+    def inject_AFG(self, mode, freq, wave, cycle, trigInt):
+        pass
+    
+    def inject_Oscillo(self, nbData, trigLevel):
+        pass
+
