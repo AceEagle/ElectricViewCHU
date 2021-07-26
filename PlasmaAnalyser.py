@@ -83,13 +83,14 @@ class PlasmaAnalyser(QObject):
     def send_data_to_plot(self, graphics=None):
         self.s_data_changed.emit(self.savedStatusDataDict)
 
+
     def launch_propagation(self, progress_callback):
         self.launch_state = True
         while self.launch_state is True:
             self.get_data()
-            self.save_status()
-            time.sleep(1)
-            self.send_data_to_plot()
+            #self.save_status()
+            time.sleep(3)
+            #self.send_data_to_plot()
 
         log.info("=== === === SIMULATION COMPLETE === === ===")
 
@@ -101,9 +102,6 @@ class PlasmaAnalyser(QObject):
         self.send_data_to_plot()
 
     def get_data(self):
-        workerch1 = Worker(self.convert_strlist_to_intlist)
-        workerch2 = Worker(self.convert_strlist_to_intlist)
-        workerch3 = Worker(self.convert_strlist_to_intlist)
         self.timeDivision = float(self.myOscillo.query("HORizontal:SCAle?")[-10:])
         self.nbData = int(self.myOscillo.query("HORizontal:RECOrdlength?"))
         for i in range(self.nbData):
@@ -117,40 +115,42 @@ class PlasmaAnalyser(QObject):
         #self.myOscillo.write("DATa:SOURce CH4")
         #self.dataCH4 = self.myOscillo.query("CURVe?")
 
-        workerch1 = Worker(self.convert_strlist_to_intlist, self.dataCH1)
-        workerch2 = Worker(self.convert_strlist_to_intlist, self.dataCH2)
-        workerch3 = Worker(self.convert_strlist_to_intlist, self.dataCH3)
-        workerch1.signals.result.connect(self.change_ch1)
+        workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
+        workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
+        workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
         self.threadpool.start(workerch1)
+        self.threadpool.start(workerch2)
         self.threadpool.start(workerch3)
-        self.threadpool.start(workerch3)
-        workerch1
+        workerch3.signals.finished.connect(self.save_status)
 
-    def change_ch1(self):
-        self.dataCH1
-    def change_ch2(self):
-
-    def change_ch3(self):
-
-    def convert_strlist_to_intlist(self, string):
+    def convert_strlist_to_intlist1(self, string, progress_callback):
         converted = list(map(int, list(string.split(","))))
-        return converted
+        self.dataCH1 = converted
+
+    def convert_strlist_to_intlist2(self, string, progress_callback):
+        converted = list(map(int, list(string.split(","))))
+        self.dataCH2 = converted
+
+    def convert_strlist_to_intlist3(self, string, progress_callback):
+        converted = list(map(int, list(string.split(","))))
+        self.dataCH3 = converted
 
     def save_status(self):
         worker1 = Worker(self.calcul_graph1)
         worker2 = Worker(self.calcul_graph2)
         worker3 = Worker(self.calcul_graph3)
         worker4 = Worker(self.calcul_graph4)
-        worker5 = Worker(self.calcul_graph5)
-        worker6 = Worker(self.calcul_graph6)
+        #worker5 = Worker(self.calcul_graph5)
+        #worker6 = Worker(self.calcul_graph6)
 
         self.threadpool.start(worker1)
         self.threadpool.start(worker2)
         self.threadpool.start(worker3)
         self.threadpool.start(worker4)
-        self.threadpool.start(worker5)
-        self.threadpool.start(worker6)
-        self.threadNb = self.threadpool.activeThreadCount()
+        worker4.signals.finished.connect(self.send_data_to_plot)
+        #self.threadpool.start(worker5)
+        #self.threadpool.start(worker6)
+        #self.threadNb = self.threadpool.activeThreadCount()
         #for graphic in Data().graphics:
          #   self.savedStatusDataDict[graphic]["data"]["x"].append(self.day)
           #  self.savedStatusDataDict[graphic]["data"]["y"].append (
