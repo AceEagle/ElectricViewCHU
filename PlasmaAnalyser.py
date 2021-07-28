@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 from tools.pyqtWorker import Worker
-from PyQt5.QtCore import pyqtSignal, QObject, QThreadPool
+from PyQt5.QtCore import pyqtSignal, QObject, QThreadPool, QMutex
 import datetime
 import logging
 from pydispatch import dispatcher
@@ -25,6 +25,7 @@ class PlasmaAnalyser(QObject):
         self.newX1, self.newY1, self.newX2, self.newY2 = -1, -1, -1, -1
         self.threadpool = QThreadPool()
         self.rm = visa.ResourceManager()
+        self.mutex = QMutex
         self.savedStatusDataDict = {}
         self.create_empty_savedStatusDataDict()
         self.connect_to_signals()
@@ -87,10 +88,14 @@ class PlasmaAnalyser(QObject):
     def launch_propagation(self, progress_callback):
         self.launch_state = True
         while self.launch_state is True:
-            self.get_data()
-            #self.save_status()
-            time.sleep(3)
-            #self.send_data_to_plot()
+            self.get_data_thread()
+            self.mutex.lock()
+            self.mutex.unlock()
+            self.save_status()
+            self.mutex.lock()
+            self.mutex.unlock()
+            #time.sleep(3)
+            self.send_data_to_plot()
 
         log.info("=== === === SIMULATION COMPLETE === === ===")
 
@@ -101,19 +106,15 @@ class PlasmaAnalyser(QObject):
         self.create_empty_savedStatusDataDict()
         self.send_data_to_plot()
 
-    def get_data(self):
+    def get_data_thread(self):
         self.timeDivision = float(self.myOscillo.query("HORizontal:SCAle?")[-10:])
         self.nbData = int(self.myOscillo.query("HORizontal:RECOrdlength?"))
-        for i in range(self.nbData):
-            self.xList.append(i)
         self.myOscillo.write("DATa:SOURce CH1")
         self.dataCH1 = self.myOscillo.query("CURVe?")
         self.myOscillo.write("DATa:SOURce CH2")
         self.dataCH2 = self.myOscillo.query("CURVe?")
         self.myOscillo.write("DATa:SOURce CH3")
         self.dataCH3 = self.myOscillo.query("CURVe?")
-        #self.myOscillo.write("DATa:SOURce CH4")
-        #self.dataCH4 = self.myOscillo.query("CURVe?")
 
         workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
         workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
@@ -121,7 +122,6 @@ class PlasmaAnalyser(QObject):
         self.threadpool.start(workerch1)
         self.threadpool.start(workerch2)
         self.threadpool.start(workerch3)
-        workerch3.signals.finished.connect(self.save_status)
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
         converted = list(map(int, list(string.split(","))))
@@ -147,7 +147,6 @@ class PlasmaAnalyser(QObject):
         self.threadpool.start(worker2)
         self.threadpool.start(worker3)
         self.threadpool.start(worker4)
-        worker4.signals.finished.connect(self.send_data_to_plot)
         #self.threadpool.start(worker5)
         #self.threadpool.start(worker6)
         #self.threadNb = self.threadpool.activeThreadCount()
@@ -157,15 +156,15 @@ class PlasmaAnalyser(QObject):
            #     sum(p.graphics[graphic] == 1 and p.tag == ageKey for p in self.population))
 
     def calcul_graph1(self, progress_callback):
-        self.savedStatusDataDict["Tension"]["data"]["x"].append(self.xList)
+        #self.savedStatusDataDict["Tension"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["Tension"]["data"]["y"].append(self.dataCH1)
 
     def calcul_graph2(self, progress_callback):
-        self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].append(self.xList)
+        #self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["Puissance (Full)"]["data"]["y"].append(self.dataCH2)
 
     def calcul_graph3(self, progress_callback):
-        self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].append(self.xList)
+        #self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["Puissance (1t)"]["data"]["y"].append(self.dataCH3)
 
     def calcul_graph4(self, progress_callback):
@@ -173,11 +172,11 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict["Lissajoue"]["data"]["y"].append(self.dataCH2)
 
     def calcul_graph5(self, progress_callback):
-        self.savedStatusDataDict["graph5"]["data"]["x"].append(self.xList)
+        #self.savedStatusDataDict["graph5"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["graph5"]["data"]["y"].append(self.dataCH1)
 
     def calcul_graph6(self, progress_callback):
-        self.savedStatusDataDict["graph6"]["data"]["x"].append(self.xList)
+        #self.savedStatusDataDict["graph6"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["graph6"]["data"]["y"].append(self.dataCH1)
 
     def inject_AFG(self, mode, freq, wave, cycle, trigInt):

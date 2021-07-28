@@ -16,11 +16,11 @@ Ui_optionsView, QtBaseClass = uic.loadUiType(optionsViewUiPath)
 SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
 
-class OptionsView(QWidget, Ui_optionsView):
+class CalculView(QWidget, Ui_optionsView):
     instruments_changed = pyqtSignal()
 
     def __init__(self, model=None, controller=None):
-        super(OptionsView, self).__init__()
+        super(CalculView, self).__init__()
         self.model = model
         self.setupUi(self)
         self.threadpool = QThreadPool()
