@@ -56,7 +56,6 @@ class CalculView(QWidget, Ui_optionsView):
         self.USBPortsAFGComboBox.currentIndexChanged.connect(self.connect_instruments_thread)
         self.USBPortsOscilloComboBox.currentIndexChanged.connect(self.connect_instruments_thread)
 
-
     def initialise_combobox(self):
         self.AFGModeComboBox.addItems(self.modeList)
         self.AFGWaveFormComboBox.addItems(self.waveformList)
