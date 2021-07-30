@@ -109,7 +109,7 @@ class PlasmaAnalyser(QObject):
     def get_data_thread(self):
         self.timeDivision = float(self.myOscillo.query("HORizontal:SCAle?")[-10:])
         self.nbData = int(self.myOscillo.query("HORizontal:RECOrdlength?"))
-        self.myOscillo.write("DATa:SOURce CH1")
+        self.myOscillo.write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
         self.dataCH1 = self.myOscillo.query("CURVe?")
         self.myOscillo.write("DATa:SOURce CH2")
         self.dataCH2 = self.myOscillo.query("CURVe?")
