@@ -55,7 +55,7 @@ class DataView(QWidget, Ui_dataView):
 
     def connect_signals(self):
         log.info("Connecting dataView Signals...")
-        self.model.s_data_changed.connect(self.update_gph)
+        self.model.s_data_changed.connect(self.update_graph)
 
     def initialize_view(self):
         self.G1CheckBox.setChecked(True)

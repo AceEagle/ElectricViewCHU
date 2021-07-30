@@ -1,7 +1,6 @@
 from gui.dialog.helpDialog import HelpDialog
 from gui.views.optionsView import OptionsView
 from gui.views.dataView import DataView
-from gui.views.calculView import CalculView
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QVBoxLayout, QTabWidget, QAction, QApplication
 from PyQt5.QtCore import Qt, pyqtSlot, QFile, QTextStream
 import logging
@@ -35,7 +34,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setCentralWidget(self.tabWidget)
         self.tabWidget.addTab(self.optionsView, "Options")
         self.tabWidget.addTab(self.dataView, "Data")
-        self.tabWidget.addTab(self.calculView, "Processing")
 
     def setup_menuBar(self):
         self.helpAction = QAction(self)
@@ -50,7 +48,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.helpDialog = HelpDialog()
         self.optionsView = OptionsView(model=self.model)
         self.dataView = DataView(model=self.model)
-        self.calculView = CalculView(model=self.model)
 
     def connect_buttons(self):
         self.helpAction.triggered.connect(self.show_helpDialog)
