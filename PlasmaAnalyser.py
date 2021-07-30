@@ -60,8 +60,7 @@ class PlasmaAnalyser(QObject):
         # print(self.savedStatusDataDict)
 
     def connect_to_signals(self):
-        #dispatcher.connect(self.handle_plot_toggled, signal=SIGNAL_PLOT_TOGGLED)
-        pass
+        #pass
 
     def simulate_from_gui(self, *args, **kwargs):
         self.create_population(args[0])
@@ -83,7 +82,6 @@ class PlasmaAnalyser(QObject):
 
     def send_data_to_plot(self, graphics=None):
         self.s_data_changed.emit(self.savedStatusDataDict)
-
 
     def launch_propagation(self, progress_callback):
         self.launch_state = True
@@ -149,11 +147,6 @@ class PlasmaAnalyser(QObject):
         self.threadpool.start(worker4)
         #self.threadpool.start(worker5)
         #self.threadpool.start(worker6)
-        #self.threadNb = self.threadpool.activeThreadCount()
-        #for graphic in Data().graphics:
-         #   self.savedStatusDataDict[graphic]["data"]["x"].append(self.day)
-          #  self.savedStatusDataDict[graphic]["data"]["y"].append (
-           #     sum(p.graphics[graphic] == 1 and p.tag == ageKey for p in self.population))
 
     def calcul_graph1(self, progress_callback):
         #self.savedStatusDataDict["Tension"]["data"]["x"].append(self.xList)

@@ -1,12 +1,7 @@
-from PyQt5.QtWidgets import QWidget, QMessageBox, QCheckBox, QFileDialog, QComboBox
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThreadPool, QThread
-import copy
+from PyQt5.QtWidgets import QWidget, QFileDialog
+from PyQt5.QtCore import pyqtSignal, QThreadPool
 import os
-from pyqtgraph import LinearRegionItem, mkBrush, mkPen, SignalProxy, InfiniteLine, TextItem, ArrowItem
 from PyQt5 import uic
-import pyvisa as visa
-from tools.pyqtWorker import Worker
-from PyTektronixScope import TektronixScope
 import logging
 log = logging.getLogger(__name__)
 
@@ -27,29 +22,24 @@ class CalculView(QWidget, Ui_calculView):
 
         self.connect_buttons()
 
-
-    # def create_threads(self, *args):
-    #    self.acqWorker = Worker(self.manage_data_flow, *args)
-    #   self.acqWorker.moveToThread(self.acqThread)
-    #  self.acqThread.started.connect(self.acqWorker.run)
-
     def connect_buttons(self):
-        self.OpenPButton.clicked.connect(self.search_file)
-        #self.OverwritePButton.clicked.connect(self.inject_parameters_thread)
+        self.OpenPButton.clicked.connect(self.open_file)
+        self.OverwritePButton.clicked.connect(self.save_file)
 
     def connect_signals(self):
         pass
 
-    def search_file(self):
+    def open_file(self):
         name = QFileDialog.getOpenFileName(self, 'Open File', '', 'Txt Files (*.txt);;All Files (*)',
                                            options=QFileDialog.DontUseNativeDialog)
         if name[0] == '':
             log.info("File is not good")
 
-        #if name[1] == 'Txt Files (*.txt)' and name[0][-3:] != '.txt':
-        #    name = name[0] + '.txt'
         else:
             name = name[0]
 
-        text=open(name).read()
+        text = open(name).read()
         self.PlainTextEdit.setPlainText(text)
+
+    def save_file(self):
+        pass

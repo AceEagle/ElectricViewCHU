@@ -76,16 +76,6 @@ class DataView(QWidget, Ui_dataView):
         with open(name, 'w') as fp:
             fp.writelines(lines)
 
-    def crash_the_app_thread(self):
-        worker = Worker(self.crash_the_app)
-        self.threadpool.start(worker)
-
-    def crash_the_app(self, progress_callback):
-        for x in range(3):
-            time.sleep(1)
-            print("x")
-        log.info("BONJOUR TEST")
-
     def initiate_graph(self, graphic, caller=None):
         if caller.checkState() == 2:
             self.allPlotsDict[graphic]["displayed"] = 1
@@ -132,9 +122,6 @@ class DataView(QWidget, Ui_dataView):
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except:
                 log.info("null")
-
-    def lissajous_filter(self, tension, charge):
-        pass
 
     def launch_data(self):
         self.LaunchDataFButton.start_flash()

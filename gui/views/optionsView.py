@@ -1,12 +1,8 @@
-from PyQt5.QtWidgets import QWidget, QMessageBox, QCheckBox, QFileDialog, QComboBox
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThreadPool, QThread
-import copy
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import pyqtSignal, QThreadPool
 import os
-from pyqtgraph import LinearRegionItem, mkBrush, mkPen, SignalProxy, InfiniteLine, TextItem, ArrowItem
 from PyQt5 import uic
-import pyvisa as visa
 from tools.pyqtWorker import Worker
-from PyTektronixScope import TektronixScope
 import logging
 log = logging.getLogger(__name__)
 
@@ -29,6 +25,8 @@ class OptionsView(QWidget, Ui_optionsView):
         self.myAFGStr = ""
         self.modeList = ["Continuous", "Sweep", "Modulation", "Burst"]
         self.waveformList = ["Sine", "Square", "Ramp", "Pulse", "Arb"]
+        self.mode = ""
+        self.waveForm = ""
 
         self.connect_buttons()
         self.update_communication_combobox()
@@ -36,11 +34,6 @@ class OptionsView(QWidget, Ui_optionsView):
         self.connect_combobox_signals()
 
         log.info("Connecting optionsView GUI Widgets")
-
-    # def create_threads(self, *args):
-    #    self.acqWorker = Worker(self.manage_data_flow, *args)
-    #   self.acqWorker.moveToThread(self.acqThread)
-    #  self.acqThread.started.connect(self.acqWorker.run)
 
     def connect_buttons(self):
         self.RefreshPButton.clicked.connect(self.update_communication_combobox)
@@ -55,7 +48,6 @@ class OptionsView(QWidget, Ui_optionsView):
         self.USBPortsAFGComboBox.currentIndexChanged.connect(self.connect_instruments_thread)
         self.USBPortsOscilloComboBox.currentIndexChanged.connect(self.connect_instruments_thread)
 
-
     def initialise_combobox(self):
         self.AFGModeComboBox.addItems(self.modeList)
         self.AFGWaveFormComboBox.addItems(self.waveformList)
@@ -68,7 +60,6 @@ class OptionsView(QWidget, Ui_optionsView):
         self.mode = self.AFGModeComboBox.currentText()
         self.waveForm = self.AFGWaveFormComboBox.currentText()
         print(self.mode, self.waveForm)
-
 
     def update_communication_combobox(self):
         self.model.new_resource_manager()
@@ -101,3 +92,4 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def give_AFG_and_Oscillo(self):
         return self.model.myAFG, self.model.myOscillo
+
