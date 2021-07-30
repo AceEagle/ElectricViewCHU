@@ -60,7 +60,7 @@ class PlasmaAnalyser(QObject):
         # print(self.savedStatusDataDict)
 
     def connect_to_signals(self):
-        #pass
+        pass
 
     def simulate_from_gui(self, *args, **kwargs):
         self.create_population(args[0])
