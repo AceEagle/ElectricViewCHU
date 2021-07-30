@@ -25,13 +25,15 @@ class PlasmaAnalyser(QObject):
         self.newX1, self.newY1, self.newX2, self.newY2 = -1, -1, -1, -1
         self.threadpool = QThreadPool()
         self.rm = visa.ResourceManager()
-        self.mutex = QMutex
+        self.mutex = QMutex()
         self.savedStatusDataDict = {}
         self.create_empty_savedStatusDataDict()
         self.connect_to_signals()
         self.myOscillo = None
         self.myAFG = None
         self.xList = []
+        for x in range(100000):
+            self.xList.append(x)
         self.timeList = []
 
     def new_resource_manager(self):
@@ -82,6 +84,7 @@ class PlasmaAnalyser(QObject):
 
     def send_data_to_plot(self, graphics=None):
         self.s_data_changed.emit(self.savedStatusDataDict)
+        print("sending data")
 
     def launch_propagation(self, progress_callback):
         self.launch_state = True
@@ -111,19 +114,21 @@ class PlasmaAnalyser(QObject):
         self.dataCH1 = self.myOscillo.query("CURVe?")
         self.myOscillo.write("DATa:SOURce CH2")
         self.dataCH2 = self.myOscillo.query("CURVe?")
-        self.myOscillo.write("DATa:SOURce CH3")
-        self.dataCH3 = self.myOscillo.query("CURVe?")
+        #self.myOscillo.write("DATa:SOURce CH3")
+        #self.dataCH3 = self.myOscillo.query("CURVe?")
 
         workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
         workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
-        workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
+        #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
         self.threadpool.start(workerch1)
         self.threadpool.start(workerch2)
-        self.threadpool.start(workerch3)
+        #self.threadpool.start(workerch3)
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
         converted = list(map(int, list(string.split(","))))
         self.dataCH1 = converted
+        #print(len(self.dataCH1))
+        #print(type(self.dataCH1))
 
     def convert_strlist_to_intlist2(self, string, progress_callback):
         converted = list(map(int, list(string.split(","))))
@@ -134,42 +139,42 @@ class PlasmaAnalyser(QObject):
         self.dataCH3 = converted
 
     def save_status(self):
-        worker1 = Worker(self.calcul_graph1)
-        worker2 = Worker(self.calcul_graph2)
-        worker3 = Worker(self.calcul_graph3)
+        #worker1 = Worker(self.calcul_graph1)
+        #worker2 = Worker(self.calcul_graph2)
+        #worker3 = Worker(self.calcul_graph3)
         worker4 = Worker(self.calcul_graph4)
         #worker5 = Worker(self.calcul_graph5)
         #worker6 = Worker(self.calcul_graph6)
 
-        self.threadpool.start(worker1)
-        self.threadpool.start(worker2)
-        self.threadpool.start(worker3)
+        #self.threadpool.start(worker1)
+        #self.threadpool.start(worker2)
+        #self.threadpool.start(worker3)
         self.threadpool.start(worker4)
         #self.threadpool.start(worker5)
         #self.threadpool.start(worker6)
 
     def calcul_graph1(self, progress_callback):
-        #self.savedStatusDataDict["Tension"]["data"]["x"].append(self.xList)
+        self.savedStatusDataDict["Tension"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["Tension"]["data"]["y"].append(self.dataCH1)
 
     def calcul_graph2(self, progress_callback):
-        #self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].append(self.xList)
+        self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["Puissance (Full)"]["data"]["y"].append(self.dataCH2)
 
     def calcul_graph3(self, progress_callback):
-        #self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].append(self.xList)
+        self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["Puissance (1t)"]["data"]["y"].append(self.dataCH3)
 
     def calcul_graph4(self, progress_callback):
         self.savedStatusDataDict["Lissajoue"]["data"]["x"].append(self.dataCH1)
         self.savedStatusDataDict["Lissajoue"]["data"]["y"].append(self.dataCH2)
-
+        print("calcul")
     def calcul_graph5(self, progress_callback):
-        #self.savedStatusDataDict["graph5"]["data"]["x"].append(self.xList)
+        self.savedStatusDataDict["graph5"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["graph5"]["data"]["y"].append(self.dataCH1)
 
     def calcul_graph6(self, progress_callback):
-        #self.savedStatusDataDict["graph6"]["data"]["x"].append(self.xList)
+        self.savedStatusDataDict["graph6"]["data"]["x"].append(self.xList)
         self.savedStatusDataDict["graph6"]["data"]["y"].append(self.dataCH1)
 
     def inject_AFG(self, mode, freq, wave, cycle, trigInt):
