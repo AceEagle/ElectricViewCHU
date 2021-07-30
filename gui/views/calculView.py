@@ -46,8 +46,8 @@ class CalculView(QWidget, Ui_calculView):
         if name[0] == '':
             log.info("File is not good")
 
-        if name[1] == 'Txt Files (*.txt)' and name[0][-3:] != '.txt':
-            name = name[0] + '.txt'
+        #if name[1] == 'Txt Files (*.txt)' and name[0][-3:] != '.txt':
+        #    name = name[0] + '.txt'
         else:
             name = name[0]
 
