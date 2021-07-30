@@ -24,7 +24,6 @@ class OptionsView(QWidget, Ui_optionsView):
         self.model = model
         self.setupUi(self)
         self.threadpool = QThreadPool()
-        self.rm = visa.ResourceManager()
         self.instrumentsList = None
         self.myOscilloStr = ""
         self.myAFGStr = ""

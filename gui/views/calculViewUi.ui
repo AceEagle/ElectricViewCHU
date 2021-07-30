@@ -30,9 +30,9 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="1" column="2">
-       <widget class="QPushButton" name="SavePButton">
+       <widget class="QPushButton" name="OverwritePButton">
         <property name="text">
-         <string>Save</string>
+         <string>Overwrite</string>
         </property>
        </widget>
       </item>
@@ -78,7 +78,7 @@
        <enum>QLayout::SetMaximumSize</enum>
       </property>
       <item>
-       <widget class="QPlainTextEdit" name="plainTextEdit"/>
+       <widget class="QPlainTextEdit" name="PlainTextEdit"/>
       </item>
      </layout>
     </widget>
