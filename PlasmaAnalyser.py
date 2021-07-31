@@ -154,28 +154,28 @@ class PlasmaAnalyser(QObject):
         #self.threadpool.start(worker6)
 
     def calcul_graph1(self, progress_callback):
-        self.savedStatusDataDict["Tension"]["data"]["x"].append(self.xList)
-        self.savedStatusDataDict["Tension"]["data"]["y"].append(self.dataCH1)
+        self.savedStatusDataDict["Tension"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Tension"]["data"]["y"].extend(self.dataCH1)
 
     def calcul_graph2(self, progress_callback):
-        self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].append(self.xList)
-        self.savedStatusDataDict["Puissance (Full)"]["data"]["y"].append(self.dataCH2)
+        self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Puissance (Full)"]["data"]["y"].extend(self.dataCH2)
 
     def calcul_graph3(self, progress_callback):
-        self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].append(self.xList)
-        self.savedStatusDataDict["Puissance (1t)"]["data"]["y"].append(self.dataCH3)
+        self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Puissance (1t)"]["data"]["y"].extend(self.dataCH3)
 
     def calcul_graph4(self, progress_callback):
-        self.savedStatusDataDict["Lissajoue"]["data"]["x"].append(self.dataCH1)
-        self.savedStatusDataDict["Lissajoue"]["data"]["y"].append(self.dataCH2)
+        self.savedStatusDataDict["Lissajoue"]["data"]["x"].extend(self.dataCH1)
+        self.savedStatusDataDict["Lissajoue"]["data"]["y"].extend(self.dataCH2)
         print("calcul")
     def calcul_graph5(self, progress_callback):
-        self.savedStatusDataDict["graph5"]["data"]["x"].append(self.xList)
-        self.savedStatusDataDict["graph5"]["data"]["y"].append(self.dataCH1)
+        self.savedStatusDataDict["graph5"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["graph5"]["data"]["y"].extend(self.dataCH1)
 
     def calcul_graph6(self, progress_callback):
-        self.savedStatusDataDict["graph6"]["data"]["x"].append(self.xList)
-        self.savedStatusDataDict["graph6"]["data"]["y"].append(self.dataCH1)
+        self.savedStatusDataDict["graph6"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["graph6"]["data"]["y"].extend(self.dataCH1)
 
     def inject_AFG(self, mode, freq, wave, cycle, trigInt):
         pass
