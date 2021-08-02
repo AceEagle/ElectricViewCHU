@@ -140,12 +140,12 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
 
     def calcul_graph2(self, progress_callback):
-        self.savedStatusDataDict["Puissance (m)"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["Puissance (m)"]["data"]["y"].extend(self.dataCH2)
+        self.savedStatusDataDict["Power (m)"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Power (m)"]["data"]["y"].extend(self.dataCH2)
 
     def calcul_graph3(self, progress_callback):
-        self.savedStatusDataDict["Puissance (t)"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["Puissance (t)"]["data"]["y"].extend(self.dataCH3)
+        self.savedStatusDataDict["Power (t)"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Power (t)"]["data"]["y"].extend(self.dataCH3)
 
     def calcul_graph4(self, progress_callback):
         self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(self.dataCH1)

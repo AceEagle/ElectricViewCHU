@@ -12,10 +12,10 @@ class Data:
                                "parameter7": globalParameters["parameter7"],
                                "parameter8": globalParameters["parameter8"]}
 
-        self.graphics = {"Tension": 1,
-                         "Puissance (Full)": 0,
-                         "Puissance (1t)": 0,
-                         "Lissajoue": 0,
-                         "graph5": 0,
-                         "graph6": 0,}
+        self.graphics = {"Voltage": 1,
+                         "Power (m)": 0,
+                         "Power (t)": 0,
+                         "Lissajous": 0,
+                         "Lissajous asymetria": 0,
+                         "Voltage asymetria": 0,}
 

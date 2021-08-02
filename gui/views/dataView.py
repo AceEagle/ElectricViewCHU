@@ -47,15 +47,15 @@ class DataView(QWidget, Ui_dataView):
 
     def connect_checkbox(self):
         self.VoltageCheckBox.stateChanged.connect(lambda: self.initiate_graph("Voltage" , caller=self.VoltageCheckBox))
-        self.PuissanceMCheckBox.stateChanged.connect(lambda: self.initiate_graph("Puissance (m)" , caller=self.PuissanceMCheckBox))
-        self.PuissanceTCheckBox.stateChanged.connect(lambda: self.initiate_graph("Puissance (t)" , caller=self.PuissanceTCheckBox))
+        self.PowerMCheckBox.stateChanged.connect(lambda: self.initiate_graph("Power (m)" , caller=self.PowerMCheckBox))
+        self.PowerTCheckBox.stateChanged.connect(lambda: self.initiate_graph("Power (t)" , caller=self.PowerTCheckBox))
         self.LissajousCheckBox.stateChanged.connect(lambda: self.initiate_graph("Lissajous" , caller=self.LissajousCheckBox))
         self.LissajousAsyCheckBox.stateChanged.connect(lambda: self.initiate_graph("Lissajous asymetria" , caller=self.LissajousAsyCheckBox))
         self.VoltageAsyCheckBox.stateChanged.connect(lambda: self.initiate_graph("Voltage asymetria" , caller=self.VoltageAsyCheckBox))
 
     def connect_signals(self):
         log.info("Connecting dataView Signals...")
-        self.model.s_data_changed.connect(self.update_graph)
+        self.model.s_data_changed.connect(self.update_data)
 
     def initialize_view(self):
         self.VoltageCheckBox.setChecked(True)
@@ -115,13 +115,17 @@ class DataView(QWidget, Ui_dataView):
                     pass
 
     @pyqtSlot(dict)
-    def update_graph(self, simPlotData):
+    def update_data(self, simPlotData, frequency, lissajousAsyRatio, ChargeAsyRatio, VoltageCurrentPhaseShift):
         for graphic in Data().graphics:
             try:
                 kwargs = simPlotData[graphic]['data']
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except:
                 log.info("null")
+        self.lcdNumber_2.display(frequency)
+        self.lcdNumber_5.display(lissajousAsyRatio)
+        self.lcdNumber_6(ChargeAsyRatio)
+        self.lcdNumber_9(VoltageCurrentPhaseShift)
 
     def launch_data(self):
         self.LaunchDataFButton.start_flash()
