@@ -56,9 +56,9 @@
           </spacer>
          </item>
          <item row="5" column="0">
-          <widget class="QCheckBox" name="G3CheckBox">
+          <widget class="QCheckBox" name="PuissanceTCheckBox">
            <property name="text">
-            <string>Puissance (1t)</string>
+            <string>Puissance (t)</string>
            </property>
           </widget>
          </item>
@@ -76,16 +76,16 @@
           </spacer>
          </item>
          <item row="1" column="0">
-          <widget class="QCheckBox" name="G1CheckBox">
+          <widget class="QCheckBox" name="VoltageCheckBox">
            <property name="text">
-            <string>Tension</string>
+            <string>Voltage</string>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QCheckBox" name="G2CheckBox">
+          <widget class="QCheckBox" name="PuissanceMCheckBox">
            <property name="text">
-            <string>Puissance (Full)</string>
+            <string>Puissance (m)</string>
            </property>
           </widget>
          </item>
@@ -103,9 +103,9 @@
           </spacer>
          </item>
          <item row="7" column="0">
-          <widget class="QCheckBox" name="G4CheckBox">
+          <widget class="QCheckBox" name="LissajousCheckBox">
            <property name="text">
-            <string>Lissajoue</string>
+            <string>Lissajous</string>
            </property>
           </widget>
          </item>
@@ -123,16 +123,16 @@
           </spacer>
          </item>
          <item row="11" column="0">
-          <widget class="QCheckBox" name="G6CheckBox">
+          <widget class="QCheckBox" name="VoltageAsyCheckBox">
            <property name="text">
-            <string>Graph6</string>
+            <string>Voltage asymetria</string>
            </property>
           </widget>
          </item>
          <item row="9" column="0">
-          <widget class="QCheckBox" name="G5CheckBox">
+          <widget class="QCheckBox" name="LissajousAsyCheckBox">
            <property name="text">
-            <string>Graph5</string>
+            <string>Lissajous asymetria</string>
            </property>
           </widget>
          </item>
@@ -182,7 +182,7 @@
       <item>
        <widget class="QGroupBox" name="GraphGroupBox">
         <property name="title">
-         <string>Data Appreciation</string>
+         <string>Graphical Data</string>
         </property>
         <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="1">
@@ -202,6 +202,13 @@
              </spacer>
             </item>
            </layout>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
+            <string>Numerical Data</string>
+           </property>
           </widget>
          </item>
         </layout>

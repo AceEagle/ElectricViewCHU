@@ -46,19 +46,19 @@ class DataView(QWidget, Ui_dataView):
         log.info("Connecting dataView GUI")
 
     def connect_checkbox(self):
-        self.G1CheckBox.stateChanged.connect(lambda: self.initiate_graph("Tension" , caller=self.G1CheckBox))
-        self.G2CheckBox.stateChanged.connect(lambda: self.initiate_graph("Puissance (Full)" , caller=self.G2CheckBox))
-        self.G3CheckBox.stateChanged.connect(lambda: self.initiate_graph("Puissance (1t)" , caller=self.G3CheckBox))
-        self.G4CheckBox.stateChanged.connect(lambda: self.initiate_graph("Lissajoue" , caller=self.G4CheckBox))
-        self.G5CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph5" , caller=self.G5CheckBox))
-        self.G6CheckBox.stateChanged.connect(lambda: self.initiate_graph("graph6" , caller=self.G6CheckBox))
+        self.VoltageCheckBox.stateChanged.connect(lambda: self.initiate_graph("Voltage" , caller=self.VoltageCheckBox))
+        self.PuissanceMCheckBox.stateChanged.connect(lambda: self.initiate_graph("Puissance (m)" , caller=self.PuissanceMCheckBox))
+        self.PuissanceTCheckBox.stateChanged.connect(lambda: self.initiate_graph("Puissance (t)" , caller=self.PuissanceTCheckBox))
+        self.LissajousCheckBox.stateChanged.connect(lambda: self.initiate_graph("Lissajous" , caller=self.LissajousCheckBox))
+        self.LissajousAsyCheckBox.stateChanged.connect(lambda: self.initiate_graph("Lissajous asymetria" , caller=self.LissajousAsyCheckBox))
+        self.VoltageAsyCheckBox.stateChanged.connect(lambda: self.initiate_graph("Voltage asymetria" , caller=self.VoltageAsyCheckBox))
 
     def connect_signals(self):
         log.info("Connecting dataView Signals...")
         self.model.s_data_changed.connect(self.update_graph)
 
     def initialize_view(self):
-        self.G1CheckBox.setChecked(True)
+        self.VoltageCheckBox.setChecked(True)
 
     def search_file(self):
         name = QFileDialog.getSaveFileName(self, 'Save File', '', 'Txt Files (*.txt);;All Files (*)',

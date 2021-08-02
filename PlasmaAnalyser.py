@@ -64,24 +64,6 @@ class PlasmaAnalyser(QObject):
     def connect_to_signals(self):
         pass
 
-    def simulate_from_gui(self, *args, **kwargs):
-        self.create_population(args[0])
-        self.initialize_infection(nbOfInfected=args[1])
-        self.launch_propagation(args[2])
-
-    def plot_results(self, graphic):
-        fig, ax1 = plt.subplots(figsize=(4, 4))
-        xdata = range(len(self.savedStatusDataDict))
-
-        for ageKey in self.savedStatusDataDict[0].keys():
-            data2plot = []
-            for dayKey in self.savedStatusDataDict.keys():
-                data2plot.append(self.savedStatusDataDict[int(dayKey)][ageKey][graphic])
-            ax1.plot(xdata, data2plot, label=ageKey)
-
-        ax1.legend()
-        plt.show()
-
     def send_data_to_plot(self, graphics=None):
         self.s_data_changed.emit(self.savedStatusDataDict)
         print("sending data")
@@ -154,28 +136,28 @@ class PlasmaAnalyser(QObject):
         #self.threadpool.start(worker6)
 
     def calcul_graph1(self, progress_callback):
-        self.savedStatusDataDict["Tension"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["Tension"]["data"]["y"].extend(self.dataCH1)
+        self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
 
     def calcul_graph2(self, progress_callback):
-        self.savedStatusDataDict["Puissance (Full)"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["Puissance (Full)"]["data"]["y"].extend(self.dataCH2)
+        self.savedStatusDataDict["Puissance (m)"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Puissance (m)"]["data"]["y"].extend(self.dataCH2)
 
     def calcul_graph3(self, progress_callback):
-        self.savedStatusDataDict["Puissance (1t)"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["Puissance (1t)"]["data"]["y"].extend(self.dataCH3)
+        self.savedStatusDataDict["Puissance (t)"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Puissance (t)"]["data"]["y"].extend(self.dataCH3)
 
     def calcul_graph4(self, progress_callback):
-        self.savedStatusDataDict["Lissajoue"]["data"]["x"].extend(self.dataCH1)
-        self.savedStatusDataDict["Lissajoue"]["data"]["y"].extend(self.dataCH2)
+        self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(self.dataCH1)
+        self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH2)
         print("calcul")
     def calcul_graph5(self, progress_callback):
-        self.savedStatusDataDict["graph5"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["graph5"]["data"]["y"].extend(self.dataCH1)
+        self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"].extend(self.dataCH1)
 
     def calcul_graph6(self, progress_callback):
-        self.savedStatusDataDict["graph6"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["graph6"]["data"]["y"].extend(self.dataCH1)
+        self.savedStatusDataDict["Voltage asymetria"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Voltage asymetria"]["data"]["y"].extend(self.dataCH1)
 
     def inject_AFG(self, mode, freq, wave, cycle, trigInt):
         pass
