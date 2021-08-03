@@ -115,17 +115,22 @@ class DataView(QWidget, Ui_dataView):
                     pass
 
     @pyqtSlot(dict)
-    def update_data(self, simPlotData, frequency, lissajousAsyRatio, ChargeAsyRatio, VoltageCurrentPhaseShift):
+    def update_data(self, simPlotData, ch1list, frequency, lissajousAsyRatio, ChargeAsyRatio, VoltageCurrentPhaseShift):
         for graphic in Data().graphics:
             try:
                 kwargs = simPlotData[graphic]['data']
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except:
                 log.info("null")
+        #self.lcdNumber.display()
         self.lcdNumber_2.display(frequency)
+        self.lcdNumber_3.display(self.allPlotsDict["Power (m)"]["data"]["y"][-1])
+        self.lcdNumber_4.display(self.allPlotsDict["Power (m)"]["data"]["y"][-1])
         self.lcdNumber_5.display(lissajousAsyRatio)
-        self.lcdNumber_6(ChargeAsyRatio)
-        self.lcdNumber_9(VoltageCurrentPhaseShift)
+        self.lcdNumber_6.display(ChargeAsyRatio)
+        self.lcdNumber_7.display(min(ch1list))
+        self.lcdNumber_8.display(max(ch1list))
+        self.lcdNumber_9.display(VoltageCurrentPhaseShift)
 
     def launch_data(self):
         self.LaunchDataFButton.start_flash()
