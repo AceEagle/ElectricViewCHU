@@ -51,7 +51,7 @@ class DataView(QWidget, Ui_dataView):
         self.PowerTCheckBox.stateChanged.connect(lambda: self.initiate_graph("Power (t)" , caller=self.PowerTCheckBox))
         self.LissajousCheckBox.stateChanged.connect(lambda: self.initiate_graph("Lissajous" , caller=self.LissajousCheckBox))
         self.LissajousAsyCheckBox.stateChanged.connect(lambda: self.initiate_graph("Lissajous asymetria" , caller=self.LissajousAsyCheckBox))
-        self.VoltageAsyCheckBox.stateChanged.connect(lambda: self.initiate_graph("Voltage asymetria" , caller=self.VoltageAsyCheckBox))
+        self.ChargeAsyCheckBox.stateChanged.connect(lambda: self.initiate_graph("Charge asymetria" , caller=self.ChargeAsyCheckBox))
 
     def connect_signals(self):
         log.info("Connecting dataView Signals...")
@@ -115,7 +115,7 @@ class DataView(QWidget, Ui_dataView):
                     pass
 
     @pyqtSlot(dict)
-    def update_data(self, simPlotData, ch1list, frequency, lissajousAsyRatio, ChargeAsyRatio, VoltageCurrentPhaseShift):
+    def update_data(self, simPlotData, ch1list, frequency, VoltageCurrentPhaseShift):
         for graphic in Data().graphics:
             try:
                 kwargs = simPlotData[graphic]['data']
@@ -125,9 +125,9 @@ class DataView(QWidget, Ui_dataView):
         #self.lcdNumber.display()
         self.lcdNumber_2.display(frequency)
         self.lcdNumber_3.display(self.allPlotsDict["Power (m)"]["data"]["y"][-1])
-        self.lcdNumber_4.display(self.allPlotsDict["Power (m)"]["data"]["y"][-1])
-        self.lcdNumber_5.display(lissajousAsyRatio)
-        self.lcdNumber_6.display(ChargeAsyRatio)
+        self.lcdNumber_4.display(self.allPlotsDict["Power (t)"]["data"]["y"][-1])
+        self.lcdNumber_5.display(self.allPlotsDict["Lissajous asymetria"]["data"]["y"][-1])
+        self.lcdNumber_6.display(self.allPlotsDict["Charge asymetria"]["data"]["y"][-1])
         self.lcdNumber_7.display(min(ch1list))
         self.lcdNumber_8.display(max(ch1list))
         self.lcdNumber_9.display(VoltageCurrentPhaseShift)

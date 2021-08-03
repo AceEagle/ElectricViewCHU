@@ -151,13 +151,14 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(self.dataCH1)
         self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH2)
         print("calcul")
+
     def calcul_graph5(self, progress_callback):
         self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"].extend(self.xList)
         self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"].extend(self.dataCH1)
 
     def calcul_graph6(self, progress_callback):
-        self.savedStatusDataDict["Voltage asymetria"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["Voltage asymetria"]["data"]["y"].extend(self.dataCH1)
+        self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH1)
 
     def inject_AFG(self, mode, freq, wave, cycle, trigInt):
         pass
