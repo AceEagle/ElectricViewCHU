@@ -11,6 +11,7 @@ import logging
 from pydispatch import dispatcher
 from Data import Data
 import pyvisa as visa
+from scipy import integrate
 
 log = logging.getLogger(__name__)
 
@@ -139,18 +140,22 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList)
         self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
 
-    def calcul_graph2(self, progress_callback):
-        self.savedStatusDataDict["Power (m)"]["data"]["x"].extend(self.xList)
+    def calcul_graph2(self, frequency, surface, progress_callback):
+        multiplied = self.dataCH1 * self.dataCH2
+        ptlist = frequency * integrate.trapezoid(multiplied) / surface
         self.savedStatusDataDict["Power (m)"]["data"]["y"].extend(self.dataCH2)
 
-    def calcul_graph3(self, progress_callback):
+    def calcul_graph3(self, frequency, cycles, surface, progress_callback):
+        multiplied = self.dataCH1*self.dataCH2
+        ptlist = frequency * integrate.trapezoid(multiplied) / (surface * cycles)
         self.savedStatusDataDict["Power (t)"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["Power (t)"]["data"]["y"].extend(self.dataCH3)
+        self.savedStatusDataDict["Power (t)"]["data"]["y"].extend(ptlist)
+        print("calcul 3")
 
     def calcul_graph4(self, progress_callback):
         self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(self.dataCH1)
         self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH2)
-        print("calcul")
+        print("calcul 4")
 
     def calcul_graph5(self, progress_callback):
         self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"].extend(self.xList)
