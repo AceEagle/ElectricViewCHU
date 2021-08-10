@@ -43,7 +43,7 @@
        </spacer>
       </item>
       <item row="2" column="4">
-       <widget class="QPushButton" name="InjectButton">
+       <widget class="QPushButton" name="InjectPButton">
         <property name="minimumSize">
          <size>
           <width>350</width>
@@ -52,13 +52,6 @@
         </property>
         <property name="text">
          <string>Inject Prameters</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QPushButton" name="RefreshPButton">
-        <property name="text">
-         <string>Refresh</string>
         </property>
        </widget>
       </item>
@@ -86,6 +79,20 @@
        <widget class="QLabel" name="USBPortsAFGLabel">
         <property name="text">
          <string>Choose AFG USB Port</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="RefreshPButton">
+        <property name="text">
+         <string>Refresh</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="ConnectToInstrumentsPButton">
+        <property name="text">
+         <string>Connect To Instruments</string>
         </property>
        </widget>
       </item>

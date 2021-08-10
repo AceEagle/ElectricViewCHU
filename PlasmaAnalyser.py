@@ -30,8 +30,7 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict = {}
         self.create_empty_savedStatusDataDict()
         self.connect_to_signals()
-        self.myOscillo = None
-        self.myAFG = None
+        self.instrumentsDict = {"myOscillo": None, "myAFG": None}
         self.xList = []
         for x in range(100000):
             self.xList.append(x)
@@ -42,19 +41,21 @@ class PlasmaAnalyser(QObject):
         self.rm.close()
         self.rm = visa.ResourceManager()
 
-    def connect_instruments(self, oscilloStr, afgStr, progress_callback):
+    def connect_oscillo(self, oscilloStr, progress_callback):
         log.info("Connection to instruments")
-        try:
-            self.myOscillo = self.rm.open_resource(oscilloStr)
-            self.myAFG = self.rm.open_resource(afgStr)
-        except:
-            pass
+        self.instrumentsDict["myOscillo"] = self.rm.open_resource(oscilloStr)
+        log.info(print(self.instrumentsDict["myOscillo"]))
+
+    def connect_afg(self, afgStr, progress_callback):
+        log.info("Connection to instruments")
+        self.instrumentsDict["myAFG"] = self.rm.open_resource(afgStr)
+        log.info(print(self.instrumentsDict["myAFG"]))
 
     def get_oscillo(self):
-        return self.myOscillo
+        return self.self.instrumentsDict["myOscillo"]
 
     def get_afg(self):
-        return self.myAFG
+        return self.self.instrumentsDict["myAFG"]
 
     def create_empty_savedStatusDataDict(self):
         for graphic in Data().graphics:
@@ -91,21 +92,21 @@ class PlasmaAnalyser(QObject):
         self.send_data_to_plot()
 
     def get_data_thread(self):
-        self.timeDivision = float(self.myOscillo.query("HORizontal:SCAle?")[-10:])
-        self.nbData = int(self.myOscillo.query("HORizontal:RECOrdlength?"))
-        self.myOscillo.write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
-        self.dataCH1 = self.myOscillo.query("CURVe?")
-        self.myOscillo.write("DATa:SOURce CH2")
-        self.dataCH2 = self.myOscillo.query("CURVe?")
-        #self.myOscillo.write("DATa:SOURce CH3")
-        #self.dataCH3 = self.myOscillo.query("CURVe?")
+        self.timeDivision = float(self.instrumentsDict["myOscillo"].query("HORizontal:SCAle?")[-10:])
+        self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
+        self.instrumentsDict["myOscillo"].write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
+        self.dataCH1 = self.instrumentsDict["myOscillo"].query("CURVe?")
+        self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
+        self.dataCH2 = self.instrumentsDict["myOscillo"].query("CURVe?")
+        self.instrumentsDict["myOscillo"].write("DATa:SOURce CH3")
+        self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
         workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
         workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
-        #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
+        workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
         self.threadpool.start(workerch1)
         self.threadpool.start(workerch2)
-        #self.threadpool.start(workerch3)
+        self.threadpool.start(workerch3)
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
         converted = list(map(int, list(string.split(","))))
@@ -122,19 +123,19 @@ class PlasmaAnalyser(QObject):
         self.dataCH3 = converted
 
     def save_status(self):
-        #worker1 = Worker(self.calcul_graph1)
-        #worker2 = Worker(self.calcul_graph2)
-        #worker3 = Worker(self.calcul_graph3)
+        worker1 = Worker(self.calcul_graph1)
+        worker2 = Worker(self.calcul_graph2)
+        worker3 = Worker(self.calcul_graph3)
         worker4 = Worker(self.calcul_graph4)
-        #worker5 = Worker(self.calcul_graph5)
-        #worker6 = Worker(self.calcul_graph6)
+        worker5 = Worker(self.calcul_graph5)
+        worker6 = Worker(self.calcul_graph6)
 
-        #self.threadpool.start(worker1)
-        #self.threadpool.start(worker2)
-        #self.threadpool.start(worker3)
+        self.threadpool.start(worker1)
+        self.threadpool.start(worker2)
+        self.threadpool.start(worker3)
         self.threadpool.start(worker4)
-        #self.threadpool.start(worker5)
-        #self.threadpool.start(worker6)
+        self.threadpool.start(worker5)
+        self.threadpool.start(worker6)
 
     def calcul_graph1(self, progress_callback):
         self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList)
