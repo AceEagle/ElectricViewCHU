@@ -139,7 +139,7 @@ class PlasmaAnalyser(QObject):
         self.dataCH3 = converted
 
     def save_status(self):
-        self.frequency = self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?")
+        self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
         cycles = self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?")
         worker1 = Worker(self.calcul_graph1)
         worker2 = Worker(self.calcul_graph2, self.surface)
