@@ -32,6 +32,7 @@ class PlasmaAnalyser(QObject):
         self.connect_to_signals()
         self.instrumentsDict = {"myOscillo": None, "myAFG": None}
         self.xList = []
+        self.surface = 0
         for x in range(100000):
             self.xList.append(x)
         self.timeList = []
@@ -50,6 +51,20 @@ class PlasmaAnalyser(QObject):
         log.info("Connection to instruments")
         self.instrumentsDict["myAFG"] = self.rm.open_resource(afgStr)
         print(self.instrumentsDict["myAFG"])
+
+    def inject_AFG(self, mode, freq, wave, cycle):
+        self.instrumentsDict["myAFG"].write(f"SOURce1:{mode}:MODE")
+        self.instrumentsDict["myAFG"].write(f":SOURCE:FREQUENCY {freq}KHZ")
+        self.instrumentsDict["myAFG"].write(f"SOURce1:FUNCtion:{wave}")
+        if cycle is not 0:
+            self.instrumentsDict["myAFG"].write(f"SOURce1:BURSt:NCYCles {cycle}")
+
+    def inject_Oscillo(self, nbData):
+        self.instrumentsDict["myOscillo"].write(f"HORizontal:RECOrdlength {nbData}")
+
+    def change_surface_and_trigInt(self, surface, trigInt):
+        self.surface = surface
+        self.trigInterval = trigInt
 
     def get_oscillo(self):
         return self.self.instrumentsDict["myOscillo"]
@@ -72,6 +87,7 @@ class PlasmaAnalyser(QObject):
 
     def launch_propagation(self, progress_callback):
         self.launch_state = True
+        log.info("=== === === SIMULATION STARTED === === ===")
         while self.launch_state is True:
             self.get_data_thread()
             self.mutex.lock()
@@ -82,14 +98,14 @@ class PlasmaAnalyser(QObject):
             #time.sleep(3)
             self.send_data_to_plot()
 
-        log.info("=== === === SIMULATION COMPLETE === === ===")
-
     def stop_propagation(self, progress_callback):
         self.launch_state = False
+        log.info("=== === === SIMULATION STOPPED === === ===")
 
     def reset_save_status(self, progress_callback):
         self.create_empty_savedStatusDataDict()
         self.send_data_to_plot()
+        log.info("=== === === SIMULATION RESETED === === ===")
 
     def get_data_thread(self):
         self.timeDivision = float(self.instrumentsDict["myOscillo"].query("HORizontal:SCAle?")[-10:])
@@ -123,12 +139,11 @@ class PlasmaAnalyser(QObject):
         self.dataCH3 = converted
 
     def save_status(self):
-        #frequency = self.instrumentsDict["myAFG"].read("")
-        #surface = self.
-        #cycles = self.instrumentsDict["myOscillo"].read("")
+        frequency = self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?")
+        cycles = self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?")
         worker1 = Worker(self.calcul_graph1)
-        worker2 = Worker(self.calcul_graph2)
-        worker3 = Worker(self.calcul_graph3)
+        worker2 = Worker(self.calcul_graph2, frequency, self.surface)
+        worker3 = Worker(self.calcul_graph3, frequency, cycles, self.surface, )
         worker4 = Worker(self.calcul_graph4)
         worker5 = Worker(self.calcul_graph5)
         worker6 = Worker(self.calcul_graph6)
@@ -147,7 +162,7 @@ class PlasmaAnalyser(QObject):
     def calcul_graph2(self, frequency, surface, progress_callback):
         multiplied = self.dataCH1 * self.dataCH2
         ptlist = frequency * integrate.trapezoid(multiplied) / surface
-        self.savedStatusDataDict["Power (m)"]["data"]["y"].extend(self.dataCH2)
+        self.savedStatusDataDict["Power (m)"]["data"]["y"].extend(ptlist)
 
     def calcul_graph3(self, frequency, cycles, surface, progress_callback):
         multiplied = self.dataCH1*self.dataCH2
@@ -168,10 +183,4 @@ class PlasmaAnalyser(QObject):
     def calcul_graph6(self, progress_callback):
         self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.xList)
         self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH1)
-
-    def inject_AFG(self, mode, freq, wave, cycle, trigInt):
-        pass
-
-    def inject_Oscillo(self, nbData, trigLevel):
-        pass
 
