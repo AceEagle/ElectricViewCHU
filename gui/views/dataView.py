@@ -133,7 +133,7 @@ class DataView(QWidget, Ui_dataView):
         self.lcdNumber_6.display(self.allPlotsDict["Charge asymetria"]["data"]["y"][-1])
         self.lcdNumber_7.display(min(ch1list))
         self.lcdNumber_8.display(max(ch1list))
-        self.lcdNumber_9.display(VoltageCurrentPhaseShift)
+        #self.lcdNumber_9.display(VoltageCurrentPhaseShift)
 
     def launch_data(self):
         self.LaunchDataFButton.start_flash()

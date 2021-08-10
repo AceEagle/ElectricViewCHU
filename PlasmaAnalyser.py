@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
 class PlasmaAnalyser(QObject):
-    s_data_changed = pyqtSignal(dict)
+    s_data_changed = pyqtSignal(dict, list, int)
     instruments_connected = pyqtSignal(list)
 
     def __init__(self):
@@ -82,7 +82,7 @@ class PlasmaAnalyser(QObject):
         pass
 
     def send_data_to_plot(self, graphics=None):
-        self.s_data_changed.emit(self.savedStatusDataDict)
+        self.s_data_changed.emit(self.savedStatusDataDict, self.dataCH1, self.frequency)
         print("sending data")
 
     def launch_propagation(self, progress_callback):
@@ -139,11 +139,11 @@ class PlasmaAnalyser(QObject):
         self.dataCH3 = converted
 
     def save_status(self):
-        frequency = self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?")
+        self.frequency = self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?")
         cycles = self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?")
         worker1 = Worker(self.calcul_graph1)
-        worker2 = Worker(self.calcul_graph2, frequency, self.surface)
-        worker3 = Worker(self.calcul_graph3, frequency, cycles, self.surface, )
+        worker2 = Worker(self.calcul_graph2, self.surface)
+        worker3 = Worker(self.calcul_graph3, cycles, self.surface, )
         worker4 = Worker(self.calcul_graph4)
         worker5 = Worker(self.calcul_graph5)
         worker6 = Worker(self.calcul_graph6)
@@ -159,14 +159,14 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList)
         self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
 
-    def calcul_graph2(self, frequency, surface, progress_callback):
-        multiplied = self.dataCH1 * self.dataCH2
-        ptlist = frequency * integrate.trapezoid(multiplied) / surface
+    def calcul_graph2(self, surface, progress_callback):
+        multiplied = np.multiply(self.dataCH1, self.dataCH2)
+        ptlist = self.frequency * integrate.trapezoid(multiplied) / surface
         self.savedStatusDataDict["Power (m)"]["data"]["y"].extend(ptlist)
 
-    def calcul_graph3(self, frequency, cycles, surface, progress_callback):
-        multiplied = self.dataCH1*self.dataCH2
-        ptlist = frequency * integrate.trapezoid(multiplied) / (surface * cycles)
+    def calcul_graph3(self, cycles, surface, progress_callback):
+        multiplied = np.multiply(self.dataCH1, self.dataCH2)
+        ptlist = self.frequency * integrate.trapezoid(multiplied) / (surface * cycles)
         self.savedStatusDataDict["Power (t)"]["data"]["x"].extend(self.xList)
         self.savedStatusDataDict["Power (t)"]["data"]["y"].extend(ptlist)
         print("calcul 3")
