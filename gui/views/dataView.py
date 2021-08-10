@@ -27,6 +27,7 @@ class DataView(QWidget, Ui_dataView):
         super(DataView, self).__init__()
         self.setupUi(self)
         self.model = model
+        print(self.model)
         self.threadpool = QThreadPool()
         self.plotItem = None
         self.dataPlotItem = None
@@ -38,6 +39,7 @@ class DataView(QWidget, Ui_dataView):
         self.saved_data = None
         self.initialize_view()
         log.info("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
+
 
     def connect_buttons(self):
         self.LaunchDataFButton.clicked.connect(self.launch_data)
@@ -77,6 +79,7 @@ class DataView(QWidget, Ui_dataView):
             fp.writelines(lines)
 
     def initiate_graph(self, graphic, caller=None):
+        print(self.model.instrumentsDict["myAFG"])
         if caller.checkState() == 2:
             self.allPlotsDict[graphic]["displayed"] = 1
             self.update_plots_position()

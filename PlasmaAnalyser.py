@@ -41,15 +41,15 @@ class PlasmaAnalyser(QObject):
         self.rm.close()
         self.rm = visa.ResourceManager()
 
-    def connect_oscillo(self, oscilloStr, progress_callback):
+    def connect_oscillo(self, oscilloStr):
         log.info("Connection to instruments")
         self.instrumentsDict["myOscillo"] = self.rm.open_resource(oscilloStr)
-        log.info(print(self.instrumentsDict["myOscillo"]))
+        print(self.instrumentsDict["myOscillo"])
 
-    def connect_afg(self, afgStr, progress_callback):
+    def connect_afg(self, afgStr):
         log.info("Connection to instruments")
         self.instrumentsDict["myAFG"] = self.rm.open_resource(afgStr)
-        log.info(print(self.instrumentsDict["myAFG"]))
+        print(self.instrumentsDict["myAFG"])
 
     def get_oscillo(self):
         return self.self.instrumentsDict["myOscillo"]
@@ -98,15 +98,15 @@ class PlasmaAnalyser(QObject):
         self.dataCH1 = self.instrumentsDict["myOscillo"].query("CURVe?")
         self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
         self.dataCH2 = self.instrumentsDict["myOscillo"].query("CURVe?")
-        self.instrumentsDict["myOscillo"].write("DATa:SOURce CH3")
-        self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
+        #self.instrumentsDict["myOscillo"].write("DATa:SOURce CH3")
+        #self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
         workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
         workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
-        workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
+        #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
         self.threadpool.start(workerch1)
         self.threadpool.start(workerch2)
-        self.threadpool.start(workerch3)
+        #self.threadpool.start(workerch3)
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
         converted = list(map(int, list(string.split(","))))

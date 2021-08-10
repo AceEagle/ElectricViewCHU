@@ -18,6 +18,7 @@ class OptionsView(QWidget, Ui_optionsView):
     def __init__(self, model=None, controller=None):
         super(OptionsView, self).__init__()
         self.model = model
+        print(self.model)
         self.setupUi(self)
         self.threadpool = QThreadPool()
         self.instrumentsList = None
@@ -32,11 +33,10 @@ class OptionsView(QWidget, Ui_optionsView):
         self.update_communication_combobox()
         self.initialise_combobox()
         self.connect_combobox_signals()
-
         log.info("Connecting optionsView GUI Widgets")
 
     def connect_buttons(self):
-        self.ConnectToInstrumentsPButton.clicked.connect(self.connect_instruments_thread)
+        self.ConnectToInstrumentsPButton.clicked.connect(self.connect_instruments)
         self.RefreshPButton.clicked.connect(self.update_communication_combobox)
         self.InjectPButton.clicked.connect(self.inject_parameters_thread)
 
@@ -58,7 +58,7 @@ class OptionsView(QWidget, Ui_optionsView):
     def update_buttons_values(self, progress_callback):
         self.mode = self.AFGModeComboBox.currentText()
         self.waveForm = self.AFGWaveFormComboBox.currentText()
-        print(self.mode, self.waveForm)
+        #print(self.mode, self.waveForm)
 
     def update_communication_combobox(self):
         self.model.new_resource_manager()
@@ -74,13 +74,20 @@ class OptionsView(QWidget, Ui_optionsView):
             self.USBPortsAFGComboBox.clear()
             self.USBPortsOscilloComboBox.clear()
 
-    def connect_instruments_thread(self):
+    def connect_instruments(self):
         myOscilloStr = (str(self.USBPortsOscilloComboBox.currentText()))
         myAFGStr = str(self.USBPortsAFGComboBox.currentText())
-        worker1 = Worker(self.model.connect_oscillo, myOscilloStr)
-        worker2 = Worker(self.model.connect_afg, myAFGStr)
-        self.threadpool.start(worker1)
-        self.threadpool.start(worker2)
+        self.model.connect_oscillo(myOscilloStr)
+        self.model.connect_afg(myAFGStr)
+
+    # def connect_instruments_thread(self):
+    #     myOscilloStr = (str(self.USBPortsOscilloComboBox.currentText()))
+    #     myAFGStr = str(self.USBPortsAFGComboBox.currentText())
+    #     worker1 = Worker(self.model.connect_oscillo, myOscilloStr)
+    #     worker2 = Worker(self.model.connect_afg, myAFGStr)
+    #     self.threadpool.start(worker1)
+    #     self.threadpool.start(worker2)
+    #     print(self.model.instrumentsDict["myAFG"])
 
     def inject_parameters_thread(self):
         worker = Worker(self.inject_parameters, self.AFGModeComboBox.currentText(), self.AFGFrequencyDSpinBox.value(), self.AFGWaveFormComboBox.currentText(), self.cycle, self.trigInt, self.nbData, self.trigLevel)
