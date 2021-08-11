@@ -16,6 +16,11 @@ instrumentObject.timeout = 5000
 
 print(instrumentObject.write(":DATa:SOUrce CH1;:DATa:ENCdg ASCIi;:DATa:STARt 1;:DATa:STOP 100000"))
 print(instrumentObject.query(":WFMOutpre:WFMTYPe?"))
+print(instrumentObject.write("HORizontal:DELay:MODe OFF"))
+print(instrumentObject.write("HORizontal:POSition 0"))
+a = instrumentObject.query("CURVe?")
+b = len(a)//2
+print(a[:b])
 #À tester:
 #nrpt, xunit, xzero, xincr, yunit, yzero, ymult, bytnr = instrumentObject.query(":WFMOutpre:NR_pt?;:WFMOutpre:XUNit?;:WFMOutpre:XZEro?;:WFMOutpre:XINcr?;:WFMOutpre:YUNit?;:WFMOutpre:YZEro?;:WFMOutpre:YMUlt?;:WFMOutpre:BYT_nr?")
 #general = instrumentObject.query(":WFMOutpre?")
@@ -37,7 +42,7 @@ print(instrumentObject.query(":WFMOutpre:WFMTYPe?"))
 #HORizontal:RECOrdlength is for the number of points (10M, 10k, etc...)
 
 #print(instrumentObject.write(":DATa:SOUrce CH1;:DATa:ENCdg ASCIi;:DATa:STARt 1;:DATa:STOP 100000"))
-#print(instrumentObject.query("CURVe?"))
+print(instrumentObject.query("CURVe?"))
 
 
 

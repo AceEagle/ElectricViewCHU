@@ -20,7 +20,8 @@ SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
 # noinspection PyUnresolvedReferences
 class PlasmaAnalyser(QObject):
-    s_data_changed = pyqtSignal(dict, list, int)
+    #s_data_changed = pyqtSignal(dict, list, int)
+    s_data_changed = pyqtSignal(dict)
     instruments_connected = pyqtSignal(list)
 
     def __init__(self):
@@ -63,6 +64,7 @@ class PlasmaAnalyser(QObject):
             self.instrumentsDict["myAFG"].write(f"SOURce1:BURSt:NCYCles {cycle}")
 
     def inject_Oscillo(self, nbData):
+        print(f"HORizontal:RECOrdlength {nbData}")
         self.instrumentsDict["myOscillo"].write(f"HORizontal:RECOrdlength {nbData}")
 
     def change_surface_and_trigInt(self, surface, trigInt):
@@ -85,8 +87,9 @@ class PlasmaAnalyser(QObject):
         pass
 
     def send_data_to_plot(self, graphics=None):
-        self.s_data_changed.emit(self.savedStatusDataDict, self.dataCH1, self.frequency)
-        print("sending data")
+        #self.s_data_changed.emit(self.savedStatusDataDict, self.dataCH1, self.frequency)
+        self.s_data_changed.emit(self.savedStatusDataDict)
+        log.info("sending data")
 
     def launch_propagation(self, progress_callback):
         self.launch_state = True
@@ -111,25 +114,26 @@ class PlasmaAnalyser(QObject):
         log.info("=== === === SIMULATION RESETED === === ===")
 
     def get_data_thread(self):
-        self.timeDivision = float(self.instrumentsDict["myOscillo"].query("HORizontal:SCAle?")[-10:])
-        self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
+        #self.timeDivision = float(self.instrumentsDict["myOscillo"].query("HORizontal:SCAle?")[-10:])
+        #self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
         self.instrumentsDict["myOscillo"].write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
         self.dataCH1 = self.instrumentsDict["myOscillo"].query("CURVe?")
-        self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
-        self.dataCH2 = self.instrumentsDict["myOscillo"].query("CURVe?")
+        #self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
+        #self.dataCH2 = self.instrumentsDict["myOscillo"].query("CURVe?")
         #self.instrumentsDict["myOscillo"].write("DATa:SOURce CH3")
         #self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
         workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
-        workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
+        #workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
         #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
         self.threadpool.start(workerch1)
-        self.threadpool.start(workerch2)
+        #self.threadpool.start(workerch2)
         #self.threadpool.start(workerch3)
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
         converted = list(map(int, list(string.split(","))))
         self.dataCH1 = converted
+        log.info(self.dataCH1)
         #print(len(self.dataCH1))
         #print(type(self.dataCH1))
 
@@ -142,27 +146,26 @@ class PlasmaAnalyser(QObject):
         self.dataCH3 = converted
 
     def save_status(self):
-        self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
-        cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
-        self.dx = self.trigInterval/cycles/len(self.dataCH1)
+        #self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
+        #cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
+        #self.dx = self.trigInterval/cycles/len(self.dataCH1)
         worker1 = Worker(self.calcul_graph1)
-        worker2 = Worker(self.calcul_graph2, self.surface)
-        worker3 = Worker(self.calcul_graph3, cycles, self.surface, )
-        worker4 = Worker(self.calcul_graph4)
-        worker5 = Worker(self.calcul_graph5)
-        worker6 = Worker(self.calcul_graph6)
+        #worker2 = Worker(self.calcul_graph2, self.surface)
+        #worker3 = Worker(self.calcul_graph3, cycles, self.surface, )
+        #worker4 = Worker(self.calcul_graph4)
+        #worker5 = Worker(self.calcul_graph5)
+        #worker6 = Worker(self.calcul_graph6)
 
         self.threadpool.start(worker1)
-        self.threadpool.start(worker2)
-        self.threadpool.start(worker3)
-        self.threadpool.start(worker4)
-        self.threadpool.start(worker5)
-        self.threadpool.start(worker6)
+        #self.threadpool.start(worker2)
+        #self.threadpool.start(worker3)
+        #self.threadpool.start(worker4)
+        #self.threadpool.start(worker5)
+        #self.threadpool.start(worker6)
 
     def calcul_graph1(self, progress_callback):
-        self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList)
+        #self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList)
         self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
-
     def calcul_graph2(self, surface, progress_callback):
         multiplied = np.multiply(self.dataCH1, self.dataCH2)
         ptlist = self.frequency * integrate.trapezoid(multiplied, self.dx) / surface

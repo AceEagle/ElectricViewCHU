@@ -24,7 +24,7 @@ class OptionsView(QWidget, Ui_optionsView):
         self.instrumentsList = None
         self.myOscilloStr = ""
         self.myAFGStr = ""
-        self.nbDataList = ["10k", "100k", "1M", "10M"]
+        self.nbDataList = ["1000", "10000", "100000", "1M", "10M"]
         self.modeList = ["Continuous", "Sweep", "Modulation", "Burst"]
         self.waveformList = ["Sine", "Square", "Ramp", "Pulse", "Arb"]
         self.mode = ""
