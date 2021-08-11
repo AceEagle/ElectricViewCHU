@@ -63,7 +63,7 @@ class PlasmaAnalyser(QObject):
         self.instrumentsDict["myOscillo"].write(f"HORizontal:RECOrdlength {nbData}")
 
     def change_surface_and_trigInt(self, surface, trigInt):
-        self.surface = surface
+        self.surface = float(surface)
         self.trigInterval = trigInt
 
     def get_oscillo(self):
@@ -140,7 +140,8 @@ class PlasmaAnalyser(QObject):
 
     def save_status(self):
         self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
-        cycles = self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?")
+        cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
+        self.dx = self.trigInterval/cycles/len(self.dataCH1)
         worker1 = Worker(self.calcul_graph1)
         worker2 = Worker(self.calcul_graph2, self.surface)
         worker3 = Worker(self.calcul_graph3, cycles, self.surface, )
@@ -161,12 +162,12 @@ class PlasmaAnalyser(QObject):
 
     def calcul_graph2(self, surface, progress_callback):
         multiplied = np.multiply(self.dataCH1, self.dataCH2)
-        ptlist = self.frequency * integrate.trapezoid(multiplied) / surface
+        ptlist = self.frequency * integrate.trapezoid(multiplied, self.dx) / surface
         self.savedStatusDataDict["Power (m)"]["data"]["y"].extend(ptlist)
 
     def calcul_graph3(self, cycles, surface, progress_callback):
         multiplied = np.multiply(self.dataCH1, self.dataCH2)
-        ptlist = self.frequency * integrate.trapezoid(multiplied) / (surface * cycles)
+        ptlist = self.frequency * integrate.trapezoid(multiplied, self.dx) / (surface * cycles)
         self.savedStatusDataDict["Power (t)"]["data"]["x"].extend(self.xList)
         self.savedStatusDataDict["Power (t)"]["data"]["y"].extend(ptlist)
         print("calcul 3")
