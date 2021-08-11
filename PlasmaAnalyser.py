@@ -17,6 +17,8 @@ log = logging.getLogger(__name__)
 
 SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
+
+# noinspection PyUnresolvedReferences
 class PlasmaAnalyser(QObject):
     s_data_changed = pyqtSignal(dict, list, int)
     instruments_connected = pyqtSignal(list)
@@ -33,6 +35,7 @@ class PlasmaAnalyser(QObject):
         self.instrumentsDict = {"myOscillo": None, "myAFG": None}
         self.xList = []
         self.surface = 0
+        self.trigInterval = 0
         for x in range(100000):
             self.xList.append(x)
         self.timeList = []
@@ -56,7 +59,7 @@ class PlasmaAnalyser(QObject):
         self.instrumentsDict["myAFG"].write(f"SOURce1:{mode}:MODE")
         self.instrumentsDict["myAFG"].write(f":SOURCE:FREQUENCY {freq}KHZ")
         self.instrumentsDict["myAFG"].write(f"SOURce1:FUNCtion:{wave}")
-        if cycle is not 0:
+        if cycle != 0:
             self.instrumentsDict["myAFG"].write(f"SOURce1:BURSt:NCYCles {cycle}")
 
     def inject_Oscillo(self, nbData):
