@@ -79,7 +79,6 @@ class DataView(QWidget, Ui_dataView):
             fp.writelines(lines)
 
     def initiate_graph(self, graphic, caller=None):
-        print(self.model.instrumentsDict["myAFG"])
         if caller.checkState() == 2:
             self.allPlotsDict[graphic]["displayed"] = 1
             self.update_plots_position()
@@ -120,7 +119,7 @@ class DataView(QWidget, Ui_dataView):
         #def update_data(self, simPlotData, ch1list, frequency, VoltageCurrentPhaseShift):
     @pyqtSlot(dict)
     def update_data(self, simPlotData):
-        log.info("updating graph")
+        #log.info("updating graph")
         for graphic in Data().graphics:
             try:
                 #print(simPlotData[graphic]['data']["y"])

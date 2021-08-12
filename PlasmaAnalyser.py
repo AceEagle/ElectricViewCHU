@@ -34,8 +34,7 @@ class PlasmaAnalyser(QObject):
         self.instrumentsDict = {"myOscillo": None, "myAFG": None}
         self.xList = []
         self.surface = 0
-        for x in range(100000):
-            self.xList.append(x)
+        self.x1, self.x2, self.x3, self.x4, self.x5, self.x6 = -1
         self.timeList = []
 
     def new_resource_manager(self):
@@ -57,7 +56,7 @@ class PlasmaAnalyser(QObject):
         self.instrumentsDict["myAFG"].write(f"SOURce1:{mode}:MODE")
         self.instrumentsDict["myAFG"].write(f":SOURCE:FREQUENCY {freq}KHZ")
         self.instrumentsDict["myAFG"].write(f"SOURce1:FUNCtion:{wave}")
-        if cycle is not 0:
+        if cycle != 0:
             self.instrumentsDict["myAFG"].write(f"SOURce1:BURSt:NCYCles {cycle}")
 
     def inject_Oscillo(self, nbData):
@@ -98,8 +97,8 @@ class PlasmaAnalyser(QObject):
             self.save_status()
             self.mutex.lock()
             self.mutex.unlock()
-            #time.sleep(3)
             self.send_data_to_plot()
+            time.sleep(2)
 
     def stop_propagation(self, progress_callback):
         self.launch_state = False
@@ -111,26 +110,51 @@ class PlasmaAnalyser(QObject):
         log.info("=== === === SIMULATION RESETED === === ===")
 
     def get_data_thread(self):
-        #self.timeDivision = float(self.instrumentsDict["myOscillo"].query("HORizontal:SCAle?")[-10:])
-        #self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
+        self.timeDivision = float(self.instrumentsDict["myOscillo"].query("HORizontal:SCAle?")[-10:])
+        self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
+        self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
+        self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
+
+
         self.instrumentsDict["myOscillo"].write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
+        self.x1zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?")
+        self.x1incr = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?")
+        self.y1zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?")
+        self.y1mult = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?")
         self.dataCH1 = self.instrumentsDict["myOscillo"].query("CURVe?")
-        #self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
-        #self.dataCH2 = self.instrumentsDict["myOscillo"].query("CURVe?")
-        #self.instrumentsDict["myOscillo"].write("DATa:SOURce CH3")
-        #self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
+
+
+        self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
+        self.x2zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?")
+        self.x2incr = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?")
+        self.y2zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?")
+        self.y2mult = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?")
+        self.dataCH2 = self.instrumentsDict["myOscillo"].query("CURVe?")
+
+
+        self.instrumentsDict["myOscillo"].write("DATa:SOURce CH3")
+        self.x3zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?")
+        self.x3incr = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?")
+        self.y3zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?")
+        self.y3mult = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?")
+        self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
         workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
-        #workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
-        #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
+        workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
+        workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
         self.threadpool.start(workerch1)
-        #self.threadpool.start(workerch2)
-        #self.threadpool.start(workerch3)
+        self.threadpool.start(workerch2)
+        self.threadpool.start(workerch3)
+
+    def convert_into_real_data(self, data)
+        data = data*
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
         converted = list(map(int, list(string.split(","))))
+        for i, x in enumerate(converted):
+            converted[i] = self.y1zero + (self.y1mult*x)
         self.dataCH1 = converted
-        log.info(self.dataCH1)
+        #log.info(self.dataCH1)
         #print(len(self.dataCH1))
         #print(type(self.dataCH1))
 
@@ -143,48 +167,50 @@ class PlasmaAnalyser(QObject):
         self.dataCH3 = converted
 
     def save_status(self):
-        #self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
-        #cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
-        #self.dx = self.trigInterval/cycles/len(self.dataCH1)
         worker1 = Worker(self.calcul_graph1)
-        #worker2 = Worker(self.calcul_graph2, self.surface)
-        #worker3 = Worker(self.calcul_graph3, cycles, self.surface, )
-        #worker4 = Worker(self.calcul_graph4)
-        #worker5 = Worker(self.calcul_graph5)
-        #worker6 = Worker(self.calcul_graph6)
+        worker2 = Worker(self.calcul_graph2, self.surface)
+        worker3 = Worker(self.calcul_graph3, self.cycles, self.surface, )
+        worker4 = Worker(self.calcul_graph4)
+        worker5 = Worker(self.calcul_graph5)
+        worker6 = Worker(self.calcul_graph6)
 
         self.threadpool.start(worker1)
-        #self.threadpool.start(worker2)
-        #self.threadpool.start(worker3)
-        #self.threadpool.start(worker4)
-        #self.threadpool.start(worker5)
-        #self.threadpool.start(worker6)
+        self.threadpool.start(worker2)
+        self.threadpool.start(worker3)
+        self.threadpool.start(worker4)
+        self.threadpool.start(worker5)
+        self.threadpool.start(worker6)
 
     def calcul_graph1(self, progress_callback):
-        #self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList)
+        self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.x1)
         self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
+
     def calcul_graph2(self, surface, progress_callback):
-        multiplied = np.multiply(self.dataCH1, self.dataCH2)
-        ptlist = self.frequency * integrate.trapezoid(multiplied, self.dx) / surface
-        self.savedStatusDataDict["Power (m)"]["data"]["y"].extend(ptlist)
+        self.x2 +=1
+        ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / surface
+        self.savedStatusDataDict["Power (m)"]["data"]["x"].append(self.x2)
+        self.savedStatusDataDict["Power (m)"]["data"]["y"].append(ptlist)
 
     def calcul_graph3(self, cycles, surface, progress_callback):
-        multiplied = np.multiply(self.dataCH1, self.dataCH2)
-        ptlist = self.frequency * integrate.trapezoid(multiplied, self.dx) / (surface * cycles)
-        self.savedStatusDataDict["Power (t)"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["Power (t)"]["data"]["y"].extend(ptlist)
+        self.x3 += 1
+        ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / (surface * cycles)
+        self.savedStatusDataDict["Power (t)"]["data"]["x"].append(self.x3)
+        self.savedStatusDataDict["Power (t)"]["data"]["y"].append(ptlist)
         print("calcul 3")
 
     def calcul_graph4(self, progress_callback):
-        self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(self.dataCH1)
-        self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH2)
+        self.x4 += 1
+        self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(self.dataCH2)
+        self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH1)
         print("calcul 4")
 
     def calcul_graph5(self, progress_callback):
-        self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"].extend(self.dataCH1)
+        self.x5 += 1
+        self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"].extend(self.dataCH2)
+        self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"].extend(self.dataCH3)
 
     def calcul_graph6(self, progress_callback):
-        self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.xList)
-        self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH1)
+        self.x6 += 1
+        self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.dataCH2)
+        self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH3)
 
