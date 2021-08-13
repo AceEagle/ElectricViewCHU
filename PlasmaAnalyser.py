@@ -12,6 +12,8 @@ from pydispatch import dispatcher
 from Data import Data
 import pyvisa as visa
 from scipy import integrate
+from operator import methodcaller
+import re
 
 log = logging.getLogger(__name__)
 
@@ -33,7 +35,7 @@ class PlasmaAnalyser(QObject):
         self.instrumentsDict = {"myOscillo": None, "myAFG": None}
         self.xList = []
         self.surface = 0
-        self.x1, self.x2, self.x3 = -1
+        self.x1, self.x2, self.x3 = -1, -1, -1
         self.timeList = []
         self.xList1 = []
         self.xList2 = []
@@ -120,37 +122,37 @@ class PlasmaAnalyser(QObject):
 
 
         self.instrumentsDict["myOscillo"].write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
-        self.x1zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?")
-        self.x1incr = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?")
-        self.y1zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?")
-        self.y1mult = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?")
+        self.x1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
+        self.x1incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
+        self.y1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
+        self.y1mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
         self.dataCH1 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
 
         self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
-        self.x2zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?")
-        self.x2incr = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?")
-        self.y2zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?")
-        self.y2mult = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?")
+        self.x2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
+        self.x2incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
+        self.y2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
+        self.y2mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
         self.dataCH2 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
 
-        self.instrumentsDict["myOscillo"].write("DATa:SOURce CH3")
-        self.x3zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?")
-        self.x3incr = self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?")
-        self.y3zero = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?")
-        self.y3mult = self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?")
-        self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
+        #self.instrumentsDict["myOscillo"].write("DATa:SOURce CH3")
+        #self.x3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
+        #self.x3incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
+        #self.y3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
+        #self.y3mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
+        #self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
         workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
         workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
-        workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
+        #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
         self.threadpool.start(workerch1)
         self.threadpool.start(workerch2)
-        self.threadpool.start(workerch3)
+        #self.threadpool.start(workerch3)
 
 
-    def convert_x_into_real_data_1(self, data):
+    def convert_x_into_real_data_1(self):
         self.x1 += 1
         return self.x1zero + (self.x1incr * (self.x1 - 1))
 
@@ -158,31 +160,33 @@ class PlasmaAnalyser(QObject):
         return self.y1zero + (data * self.y1mult)
 
 
-    def convert_x_into_real_data_2(self, data):
+    def convert_x_into_real_data_2(self):
         self.x2 += 1
         return self.x2zero + (self.x2incr * (self.x2 - 1))
 
     def convert_y_into_real_data_2(self, data):
-        return self.y1zero + (data * self.y1mult)
+        return self.y2zero + (data * self.y2mult)
 
-    def convert_x_into_real_data_3(self, data):
+    def convert_x_into_real_data_3(self):
         self.x3 += 1
         return self.x3zero + (self.x3incr * (self.x3 - 1))
 
     def convert_y_into_real_data_3(self, data):
-        return self.y1zero + (data * self.y1mult)
+        return self.y3zero + (data * self.y3mult)
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
-        yconverted = map(self.convert_y_into_real_data_1, list(map(int, list(string.split(",")))))
-        xconverted = map(self.convert_x_into_real_data_1, list(range(0, yconverted)))
+        yconverted = list(map(self.convert_y_into_real_data_1, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
+        for x in yconverted:
+            self.xList1.append(self.convert_x_into_real_data_1())
         self.dataCH1 = yconverted
-        self.xList1 = xconverted
+        #log.info(self.dataCH1)
+        #log.info(self.xList1)
 
     def convert_strlist_to_intlist2(self, string, progress_callback):
-        yconverted = map(self.convert_y_into_real_data_2, list(map(int, list(string.split(",")))))
-        xconverted = map(self.convert_x_into_real_data_2, list(range(0, yconverted)))
+        yconverted = list(map(self.convert_y_into_real_data_2, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
+        for x in yconverted:
+            self.xList2.append(self.convert_x_into_real_data_2())
         self.dataCH2 = yconverted
-        self.xList2 = xconverted
 
     def convert_strlist_to_intlist3(self, string, progress_callback):
         yconverted = map(self.convert_y_into_real_data_3, list(map(int, list(string.split(",")))))
@@ -217,6 +221,8 @@ class PlasmaAnalyser(QObject):
         print("calcul 2")
 
     def calcul_graph3(self, cycles, surface, progress_callback):
+        log.info(len(self.dataCH1))
+        log.info(len(self.dataCH2))
         ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / (surface * cycles)
         self.savedStatusDataDict["Power (t)"]["data"]["x"].append(self.x3)
         self.savedStatusDataDict["Power (t)"]["data"]["y"].append(ptlist)
@@ -233,6 +239,6 @@ class PlasmaAnalyser(QObject):
         print("calcul 5")
 
     def calcul_graph6(self, progress_callback):
-        self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.xList3)
-        self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH3)
+        self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.xList2)
+        self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH2)
         print("calcul 6")
