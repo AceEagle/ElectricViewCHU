@@ -146,24 +146,25 @@ class PlasmaAnalyser(QObject):
         self.threadpool.start(workerch2)
         self.threadpool.start(workerch3)
 
-    def convert_into_real_data(self, data)
-        data = data*
+    def convert_into_real_data_1(self, data):
+        return self.y1zero + (data * self.y1mult)
+
+    def convert_into_real_data_2(self, data):
+        return self.y2zero + (data * self.y2mult)
+
+    def convert_into_real_data_3(self, data):
+        return self.y3zero + (data * self.y3mult)
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
-        converted = list(map(int, list(string.split(","))))
-        for i, x in enumerate(converted):
-            converted[i] = self.y1zero + (self.y1mult*x)
+        converted = map(self.convert_into_real_data_1, list(map(int, list(string.split(",")))))
         self.dataCH1 = converted
-        #log.info(self.dataCH1)
-        #print(len(self.dataCH1))
-        #print(type(self.dataCH1))
 
     def convert_strlist_to_intlist2(self, string, progress_callback):
-        converted = list(map(int, list(string.split(","))))
+        converted = map(self.convert_into_real_data_2, list(map(int, list(string.split(",")))))
         self.dataCH2 = converted
 
     def convert_strlist_to_intlist3(self, string, progress_callback):
-        converted = list(map(int, list(string.split(","))))
+        converted = map(self.convert_into_real_data_3, list(map(int, list(string.split(",")))))
         self.dataCH3 = converted
 
     def save_status(self):
