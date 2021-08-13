@@ -24,7 +24,6 @@ class PlasmaAnalyser(QObject):
 
     def __init__(self):
         super(PlasmaAnalyser, self).__init__()
-        self.newX1, self.newY1, self.newX2, self.newY2 = -1, -1, -1, -1
         self.threadpool = QThreadPool()
         self.rm = visa.ResourceManager()
         self.mutex = QMutex()
@@ -34,8 +33,11 @@ class PlasmaAnalyser(QObject):
         self.instrumentsDict = {"myOscillo": None, "myAFG": None}
         self.xList = []
         self.surface = 0
-        self.x1, self.x2, self.x3, self.x4, self.x5, self.x6 = -1
+        self.x1, self.x2, self.x3 = -1
         self.timeList = []
+        self.xList1 = []
+        self.xList2 = []
+        self.xList3 = []
 
     def new_resource_manager(self):
         log.info("New Resource Manager")
@@ -106,6 +108,7 @@ class PlasmaAnalyser(QObject):
 
     def reset_save_status(self, progress_callback):
         self.create_empty_savedStatusDataDict()
+        self.xList1.clear(), self.xList2.clear(), self.xList3.clear()
         self.send_data_to_plot()
         log.info("=== === === SIMULATION RESETED === === ===")
 
@@ -146,26 +149,46 @@ class PlasmaAnalyser(QObject):
         self.threadpool.start(workerch2)
         self.threadpool.start(workerch3)
 
-    def convert_into_real_data_1(self, data):
+
+    def convert_x_into_real_data_1(self, data):
+        self.x1 += 1
+        return self.x1zero + (self.x1incr * (self.x1 - 1))
+
+    def convert_y_into_real_data_1(self, data):
         return self.y1zero + (data * self.y1mult)
 
-    def convert_into_real_data_2(self, data):
-        return self.y2zero + (data * self.y2mult)
 
-    def convert_into_real_data_3(self, data):
-        return self.y3zero + (data * self.y3mult)
+    def convert_x_into_real_data_2(self, data):
+        self.x2 += 1
+        return self.x2zero + (self.x2incr * (self.x2 - 1))
+
+    def convert_y_into_real_data_2(self, data):
+        return self.y1zero + (data * self.y1mult)
+
+    def convert_x_into_real_data_3(self, data):
+        self.x3 += 1
+        return self.x3zero + (self.x3incr * (self.x3 - 1))
+
+    def convert_y_into_real_data_3(self, data):
+        return self.y1zero + (data * self.y1mult)
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
-        converted = map(self.convert_into_real_data_1, list(map(int, list(string.split(",")))))
-        self.dataCH1 = converted
+        yconverted = map(self.convert_y_into_real_data_1, list(map(int, list(string.split(",")))))
+        xconverted = map(self.convert_x_into_real_data_1, list(range(0, yconverted)))
+        self.dataCH1 = yconverted
+        self.xList1 = xconverted
 
     def convert_strlist_to_intlist2(self, string, progress_callback):
-        converted = map(self.convert_into_real_data_2, list(map(int, list(string.split(",")))))
-        self.dataCH2 = converted
+        yconverted = map(self.convert_y_into_real_data_2, list(map(int, list(string.split(",")))))
+        xconverted = map(self.convert_x_into_real_data_2, list(range(0, yconverted)))
+        self.dataCH2 = yconverted
+        self.xList2 = xconverted
 
     def convert_strlist_to_intlist3(self, string, progress_callback):
-        converted = map(self.convert_into_real_data_3, list(map(int, list(string.split(",")))))
-        self.dataCH3 = converted
+        yconverted = map(self.convert_y_into_real_data_3, list(map(int, list(string.split(",")))))
+        xconverted = map(self.convert_x_into_real_data_3, list(range(0, yconverted)))
+        self.dataCH3 = yconverted
+        self.xList3 = xconverted
 
     def save_status(self):
         worker1 = Worker(self.calcul_graph1)
@@ -183,38 +206,33 @@ class PlasmaAnalyser(QObject):
         self.threadpool.start(worker6)
 
     def calcul_graph1(self, progress_callback):
-        self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.x1)
+        self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList1)
         self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
         print("calcul 1")
 
     def calcul_graph2(self, surface, progress_callback):
-        self.x2 +=1
         ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / surface
         self.savedStatusDataDict["Power (m)"]["data"]["x"].append(self.x2)
         self.savedStatusDataDict["Power (m)"]["data"]["y"].append(ptlist)
         print("calcul 2")
 
     def calcul_graph3(self, cycles, surface, progress_callback):
-        self.x3 += 1
         ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / (surface * cycles)
         self.savedStatusDataDict["Power (t)"]["data"]["x"].append(self.x3)
         self.savedStatusDataDict["Power (t)"]["data"]["y"].append(ptlist)
         print("calcul 3")
 
     def calcul_graph4(self, progress_callback):
-        self.x4 += 1
         self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(self.dataCH2)
         self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH1)
         print("calcul 4")
 
     def calcul_graph5(self, progress_callback):
-        self.x5 += 1
         self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"].extend(self.dataCH2)
         self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"].extend(self.dataCH1)
         print("calcul 5")
 
     def calcul_graph6(self, progress_callback):
-        self.x6 += 1
-        self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.dataCH2)
-        self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH1)
+        self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.xList3)
+        self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH3)
         print("calcul 6")
