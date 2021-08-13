@@ -185,12 +185,14 @@ class PlasmaAnalyser(QObject):
     def calcul_graph1(self, progress_callback):
         self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.x1)
         self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
+        print("calcul 1")
 
     def calcul_graph2(self, surface, progress_callback):
         self.x2 +=1
         ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / surface
         self.savedStatusDataDict["Power (m)"]["data"]["x"].append(self.x2)
         self.savedStatusDataDict["Power (m)"]["data"]["y"].append(ptlist)
+        print("calcul 2")
 
     def calcul_graph3(self, cycles, surface, progress_callback):
         self.x3 += 1
@@ -208,10 +210,11 @@ class PlasmaAnalyser(QObject):
     def calcul_graph5(self, progress_callback):
         self.x5 += 1
         self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"].extend(self.dataCH2)
-        self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"].extend(self.dataCH3)
+        self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"].extend(self.dataCH1)
+        print("calcul 5")
 
     def calcul_graph6(self, progress_callback):
         self.x6 += 1
         self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.dataCH2)
-        self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH3)
-
+        self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH1)
+        print("calcul 6")
