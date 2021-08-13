@@ -126,7 +126,7 @@ class DataView(QWidget, Ui_dataView):
                 kwargs = simPlotData[graphic]['data']
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except:
-                log.info("Fuck ça marche pas")
+                log.info(f"Fuck ça marche pas dans el graph{graphic}")
         #self.lcdNumber.display()
         #self.lcdNumber_2.display(frequency)
         #self.lcdNumber_3.display(self.allPlotsDict["Power (m)"]["data"]["y"][-1])

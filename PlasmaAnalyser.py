@@ -176,7 +176,7 @@ class PlasmaAnalyser(QObject):
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
         yconverted = list(map(self.convert_y_into_real_data_1, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
-        for x in yconverted:
+        for x in range(len(yconverted)):
             self.xList1.append(self.convert_x_into_real_data_1())
         self.dataCH1 = yconverted
         #log.info(self.dataCH1)
@@ -184,7 +184,7 @@ class PlasmaAnalyser(QObject):
 
     def convert_strlist_to_intlist2(self, string, progress_callback):
         yconverted = list(map(self.convert_y_into_real_data_2, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
-        for x in yconverted:
+        for x in range(len(yconverted)):
             self.xList2.append(self.convert_x_into_real_data_2())
         self.dataCH2 = yconverted
 
