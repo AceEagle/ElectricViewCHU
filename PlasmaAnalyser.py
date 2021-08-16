@@ -112,10 +112,15 @@ class PlasmaAnalyser(QObject):
     def reset_save_status(self, progress_callback):
         self.create_empty_savedStatusDataDict()
         self.xList1.clear(), self.xList2.clear(), self.xList3.clear()
+        self.x1 = 0
+        self.x2 = 0
+        self.x3 = 0
         self.send_data_to_plot()
         log.info("=== === === SIMULATION RESETED === === ===")
 
     def get_data_thread(self):
+        self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
+        self.instrumentsDict["myOscillo"].write("HORizontal:POSition 0")
         self.timeDivision = float(self.instrumentsDict["myOscillo"].query("HORizontal:SCAle?")[-10:])
         self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
         self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
