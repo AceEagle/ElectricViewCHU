@@ -67,9 +67,10 @@ class PlasmaAnalyser(QObject):
         print(f"HORizontal:RECOrdlength {nbData}")
         self.instrumentsDict["myOscillo"].write(f"HORizontal:RECOrdlength {nbData}")
 
-    def change_surface_and_trigInt(self, surface, trigInt):
+    def change_surface_and_trigInt(self, surface, trigInt, capacitance):
         self.surface = float(surface)
-        self.trigInterval = trigInt
+        self.trigInterval = float(trigInt)
+        self.capacitance = float(capacitance)
 
     def get_oscillo(self):
         return self.self.instrumentsDict["myOscillo"]
@@ -88,7 +89,7 @@ class PlasmaAnalyser(QObject):
 
     def send_data_to_plot(self, graphics=None):
         #self.s_data_changed.emit(self.savedStatusDataDict, self.dataCH1, self.frequency)
-        self.s_data_changed.emit(self.savedStatusDataDict)
+        self.s_data_changed.emit(self.savedStatusDataDict, self.frequency, self.ch1list)
         log.info("sending data")
 
     def launch_propagation(self, progress_callback):
@@ -165,7 +166,7 @@ class PlasmaAnalyser(QObject):
         return self.x2zero + (self.x2incr * (self.x2 - 1))
 
     def convert_y_into_real_data_2(self, data):
-        return self.y2zero + (data * self.y2mult)
+        return self.capacitance * (self.y2zero + (data * self.y2mult))
 
     def convert_x_into_real_data_3(self):
         self.x3 += 1
@@ -179,6 +180,7 @@ class PlasmaAnalyser(QObject):
         for x in range(len(yconverted)):
             self.xList1.append(self.convert_x_into_real_data_1())
         self.dataCH1 = yconverted
+        self.ch1list = yconverted
         #log.info(self.dataCH1)
         #log.info(self.xList1)
 

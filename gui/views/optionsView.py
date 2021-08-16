@@ -50,7 +50,8 @@ class OptionsView(QWidget, Ui_optionsView):
         self.AFGWaveFormComboBox.currentIndexChanged.connect(self.update_buttons_values_thread)
 
     def update_spinbox_signals(self):
-        self.ElectrodesSurfaceDSpinbox.valueChanged.connect(self.update_buttons_values_thread)
+        self.ElectrodesSurfaceDSpinBox.valueChanged.connect(self.update_buttons_values_thread)
+        self.CapacitanceDSpinBox.valueChanged.connect(self.update_buttons_values_thread)
         self.AFGFrequencyDSpinBox.valueChanged.connect(self.update_buttons_values_thread)
         self.AFGPercentageSpinBox.valueChanged.connect(self.update_buttons_values_thread)
         self.TriggerIntervalDSpinBox.valueChanged.connect(self.update_buttons_values_thread)
@@ -67,11 +68,12 @@ class OptionsView(QWidget, Ui_optionsView):
     def update_buttons_values(self, progress_callback):
         self.mode = self.AFGModeComboBox.currentText()
         self.waveForm = self.AFGWaveFormComboBox.currentText()
-        self.surface = self.ElectrodesSurfaceDSpinbox.value()
+        self.surface = self.ElectrodesSurfaceDSpinBox.value()
         self.frequency = self.AFGFrequencyDSpinBox.value()
         self.cyclePercentage = self.AFGPercentageSpinBox.value()
         self.triggerInterval = self.TriggerIntervalDSpinBox.value()
         self.nbDataPoints = self.NbDataPointsComboBox.currentText()
+        self.capacitance = self.CapacitanceDSpinBox.value()
 
     def update_communication_combobox(self):
         self.model.new_resource_manager()
@@ -105,13 +107,13 @@ class OptionsView(QWidget, Ui_optionsView):
     def inject_parameters_thread(self):
         worker = Worker(self.inject_parameters, self.AFGModeComboBox.currentText(), self.AFGFrequencyDSpinBox.value(),
                         self.AFGWaveFormComboBox.currentText(), self.AFGPercentageSpinBox.value(), self.TriggerIntervalDSpinBox.value(),
-                        self.NbDataPointsComboBox.currentText(), self.ElectrodesSurfaceDSpinbox.value())
+                        self.NbDataPointsComboBox.currentText(), self.ElectrodesSurfaceDSpinBox.value(), self.CapacitanceDSpinBox.value())
         self.threadpool.start(worker)
 
-    def inject_parameters(self, mode, freq, wave, cycle, trigInt, nbData, surface, progress_callback):
+    def inject_parameters(self, mode, freq, wave, cycle, trigInt, nbData, surface, capacitance, progress_callback):
         self.model.inject_AFG(mode, freq, wave, cycle)
         self.model.inject_Oscillo(nbData)
-        self.model.change_surface_and_trigInt(surface, trigInt)
+        self.model.change_surface_and_trigInt(surface, trigInt, capacitance)
 
     def give_AFG_and_Oscillo(self):
         return self.model.instrumentsDict["myOscillo"], self.model.instrumentsDict["myOscillo"]

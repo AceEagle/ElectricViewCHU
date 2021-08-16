@@ -118,7 +118,7 @@ class DataView(QWidget, Ui_dataView):
 
         #def update_data(self, simPlotData, ch1list, frequency, VoltageCurrentPhaseShift):
     @pyqtSlot(dict)
-    def update_data(self, simPlotData):
+    def update_data(self, simPlotData, frequency, ch1list):
         #log.info("updating graph")
         for graphic in Data().graphics:
             try:
@@ -127,14 +127,13 @@ class DataView(QWidget, Ui_dataView):
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except:
                 log.info(f"Fuck ça marche pas dans el graph{graphic}")
-        #self.lcdNumber.display()
-        #self.lcdNumber_2.display(frequency)
-        #self.lcdNumber_3.display(self.allPlotsDict["Power (m)"]["data"]["y"][-1])
-        #self.lcdNumber_4.display(self.allPlotsDict["Power (t)"]["data"]["y"][-1])
+        self.lcdNumber_2.display(frequency)
+        self.lcdNumber_3.display(self.allPlotsDict["Power (m)"]["data"]["y"][-1])
+        self.lcdNumber_4.display(self.allPlotsDict["Power (t)"]["data"]["y"][-1])
         #self.lcdNumber_5.display(self.allPlotsDict["Lissajous asymetria"]["data"]["y"][-1])
         #self.lcdNumber_6.display(self.allPlotsDict["Charge asymetria"]["data"]["y"][-1])
-        #self.lcdNumber_7.display(min(ch1list))
-        #self.lcdNumber_8.display(max(ch1list))
+        self.lcdNumber_7.display(min(ch1list))
+        self.lcdNumber_8.display(max(ch1list))
         #self.lcdNumber_9.display(VoltageCurrentPhaseShift)
 
     def launch_data(self):
