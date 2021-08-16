@@ -41,6 +41,12 @@ class PlasmaAnalyser(QObject):
         self.xList2 = []
         self.xList3 = []
 
+    def load_parameters(self, jsonFilePath):
+        with open(jsonFilePath) as f:
+            parametersFile = json.load(f)
+        self.parameters = parametersFile[0]
+        return self.parameters
+
     def new_resource_manager(self):
         log.info("New Resource Manager")
         self.rm.close()

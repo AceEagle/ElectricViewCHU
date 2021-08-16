@@ -58,8 +58,18 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def initialise_combobox(self):
         self.AFGModeComboBox.addItems(self.modeList)
+        self.AFGModeComboBox.setCurrentText("Burst")
         self.AFGWaveFormComboBox.addItems(self.waveformList)
+        self.AFGModeComboBox.setCurrentText("Sine")
         self.NbDataPointsComboBox.addItems(self.nbDataList)
+        self.AFGModeComboBox.setCurrentText("10000")
+        self.AFGFrequencyDSpinBox.setValue(10.00)
+        self.AFGPercentageSpinBox.setValue(50)
+        self.TriggerIntervalDSpinBox.setValue(10.00)
+        self.ElectrodesSurfaceDSpinBox.setValue(28.31)
+        self.CapacitanceDSpinBox.setValue(20.00)
+
+
 
     def update_buttons_values_thread(self):
         worker = Worker(self.update_buttons_values)

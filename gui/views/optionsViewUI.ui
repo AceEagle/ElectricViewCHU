@@ -468,7 +468,7 @@
           </spacer>
          </item>
          <item row="3" column="1">
-          <widget class="QDoubleSpinBox" name="CapacitanceDSpinbox"/>
+          <widget class="QDoubleSpinBox" name="CapacitanceDSpinBox"/>
          </item>
          <item row="3" column="2">
           <widget class="QLabel" name="label_6">
