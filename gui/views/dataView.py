@@ -1,6 +1,4 @@
-import time
 import pandas as pd
-import json
 from PyQt5.QtWidgets import QWidget, QFileDialog
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThreadPool
 from PyQt5 import uic

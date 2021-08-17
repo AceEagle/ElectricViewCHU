@@ -1,0 +1,6 @@
+,VoltageX,VoltageY,Power (m)X,Power (m)Y,Power (t)X,Power (t)y,LissajousX,LissajousY,Lissajous asymetriaX,Lissajous asymetriaY,Voltage asymetriaX,Voltage asymetriaY,Frequency,Voltage-Current Phase shift,Charge asymetria ratio,Voltage asymetria (Min),Voltage asymetria (Max)
+0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
+4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5
