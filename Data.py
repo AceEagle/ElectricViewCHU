@@ -17,5 +17,5 @@ class Data:
                          "Power (t)": 0,
                          "Lissajous": 0,
                          "Lissajous asymetria": 0,
-                         "Charge asymetria": 0,}
+                         "Charge asymetria": 0}
 

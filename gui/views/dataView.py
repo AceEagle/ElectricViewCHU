@@ -1,4 +1,6 @@
 import time
+import pandas as pd
+import json
 from PyQt5.QtWidgets import QWidget, QFileDialog
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThreadPool
 from PyQt5 import uic
@@ -36,10 +38,25 @@ class DataView(QWidget, Ui_dataView):
         self.connect_signals()
         self.allPlotsDict = {}
         self.create_plots()
-        self.saved_data = None
+        self.data_saving_pandas = None
         self.initialize_view()
+        self.initiate_data_saving_python()
         log.info("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
+    def initiate_data_saving_python(self):
+        self.data_saving_python = {
+            "Voltage" : {"x":[], "y":[]},
+            "Power (m)" : {"x":[], "y":[]},
+            "Power (t)" : {"x":[], "y":[]},
+            "Lissajous" : {"x":[], "y":[]},
+            "Lissajous asymetria" : {"x":[], "y":[]},
+            "Voltage asymetria" : {"x":[], "y":[]},
+            "Frequency": [],
+            "Voltage-Current Phase shift": [],
+            "Charge asymetria ratio": [],
+            "Voltage asymetria (Min)": [],
+            "Voltage asymetria (Max)": []
+        }
 
     def connect_buttons(self):
         self.LaunchDataFButton.clicked.connect(self.launch_data)
@@ -73,10 +90,8 @@ class DataView(QWidget, Ui_dataView):
         else:
             name = name[0]
 
-        lines = "test1 lmao"
-
         with open(name, 'w') as fp:
-            fp.writelines(lines)
+            fp.writelines(json.dumps(self.data_saving_pandas))
 
     def initiate_graph(self, graphic, caller=None):
         if caller.checkState() == 2:
@@ -124,16 +139,24 @@ class DataView(QWidget, Ui_dataView):
             try:
                 #print(simPlotData[graphic]['data']["y"])
                 kwargs = simPlotData[graphic]['data']
+                self.data_saving_python[graphic]["y"].extend(kwargs["y"])
+                self.data_saving_python[graphic]["x"].extend(kwargs["x"])
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except:
                 log.info(f"Fuck ça marche pas dans el graph{graphic}")
+
         self.lcdNumber_2.display(frequency)
+        self.data_saving_python["frequency"].append(frequency)
         self.lcdNumber_3.display(self.allPlotsDict["Power (m)"]["data"]["y"][-1])
         self.lcdNumber_4.display(self.allPlotsDict["Power (t)"]["data"]["y"][-1])
         #self.lcdNumber_5.display(self.allPlotsDict["Lissajous asymetria"]["data"]["y"][-1])
         #self.lcdNumber_6.display(self.allPlotsDict["Charge asymetria"]["data"]["y"][-1])
-        self.lcdNumber_7.display(min(ch1list))
-        self.lcdNumber_8.display(max(ch1list))
+        min1 = min(ch1list)
+        self.lcdNumber_7.display(min1)
+        self.data_saving_python["Voltage asymetria (Min)"].append(min1)
+        max1 = max(ch1list)
+        self.lcdNumber_8.display(max1)
+        self.data_saving_python["Voltage asymetria (Max)"].append(max1)
         #self.lcdNumber_9.display(VoltageCurrentPhaseShift)
 
     def launch_data(self):
@@ -156,10 +179,10 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.setEnabled(True)
         worker = Worker(self.model.stop_propagation)
         self.threadpool.start(worker)
+        self.data_saving_pandas = pd.DataFrame(data=self.data_saving_python)
 
     def reset_data(self):
         self.stop_data()
-        self.saved_data = None
         self.LaunchDataFButton.stop_flash()
         self.LaunchDataFButton.setEnabled(False)
         self.LaunchDataFButton.setText("Start")
@@ -167,6 +190,8 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.clicked.connect(self.launch_data)
         self.LaunchDataFButton.setEnabled(True)
         self.ResetDataPButton.setStyleSheet("background-color : None")
+        self.initiate_data_saving_python()
+        self.data_saving_pandas = None
         worker = Worker(self.model.reset_save_status)
         self.threadpool.start(worker)
 
