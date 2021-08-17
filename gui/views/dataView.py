@@ -90,8 +90,9 @@ class DataView(QWidget, Ui_dataView):
         else:
             name = name[0]
 
-        with open(name, 'w') as fp:
-            fp.writelines(json.dumps(self.data_saving_pandas))
+        self.data_saving_pandas.to_csv(name)
+        #with open(name, 'w') as fp:
+        #    fp.writelines(json.dumps(self.data_saving_pandas))
 
     def initiate_graph(self, graphic, caller=None):
         if caller.checkState() == 2:
