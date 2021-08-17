@@ -91,8 +91,8 @@ class OptionsView(QWidget, Ui_optionsView):
         self.nbDataPoints = self.NbDataPointsComboBox.currentText()
         self.capacitance = self.CapacitanceDSpinBox.value()
         self.channels["voltage"] = self.VoltageComboBox.currentText()
-        self.channels["voltage"] = self.ChargeComboBox.currentText()
-        self.channels["voltage"] = self.CurrentComboBox.currentText()
+        self.channels["charge"] = self.ChargeComboBox.currentText()
+        self.channels["current"] = self.CurrentComboBox.currentText()
 
     def update_communication_combobox(self):
         self.model.new_resource_manager()

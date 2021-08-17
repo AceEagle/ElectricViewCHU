@@ -21,7 +21,7 @@ SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
 class PlasmaAnalyser(QObject):
     #s_data_changed = pyqtSignal(dict, list, int)
-    s_data_changed = pyqtSignal(dict)
+    s_data_changed = pyqtSignal(dict, float, int, int)
     instruments_connected = pyqtSignal(list)
 
     def __init__(self):
@@ -102,8 +102,8 @@ class PlasmaAnalyser(QObject):
         #self.s_data_changed.emit(self.savedStatusDataDict, self.dataCH1, self.frequency)
         max1 = max(self.dataCH1)
         min1 = min(self.dataCH1)
-        voltageCurrentPhaseShift = self.xlist1[self.dataCH1.index(max(self.dataCH1[:self.nbData/self.cycles]))] - self.xlist3[self.dataCH3.index(max(self.dataCH3[:self.nbData/self.cycles]))]
-        self.s_data_changed.emit(self.savedStatusDataDict, self.frequency, self.ch1list, max1, min1, voltageCurrentPhaseShift)
+        #voltageCurrentPhaseShift = self.xList1[self.dataCH1.index(max(self.dataCH1[:self.nbData/self.cycles]))] - self.xList3[self.dataCH3.index(max(self.dataCH3[:self.nbData/self.cycles]))]
+        self.s_data_changed.emit(self.savedStatusDataDict, self.frequency, max1, min1)
         log.info("sending data")
 
     def launch_propagation(self, progress_callback):
@@ -135,13 +135,15 @@ class PlasmaAnalyser(QObject):
     def get_data_thread(self):
         self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
         self.instrumentsDict["myOscillo"].write("HORizontal:POSition 0")
-        self.timeDivision = float(self.instrumentsDict["myOscillo"].query("HORizontal:SCAle?")[-10:])
         self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
         self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
         self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
+        self.instrumentsDict["myOscillo"].write("ACQuire:STOPAfter SEQuence")
 
 
-        self.instrumentsDict["myOscillo"].write(f":DATa:ENCdg ASCIi;:DATa:SOURce {self.voltageCh}")
+        self.instrumentsDict["myOscillo"].write(f":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
+        self.instrumentsDict["myOscillo"].write(":DATa:STARt 1")
+        self.instrumentsDict["myOscillo"].write(f":DATa:STOP {str(self.nbData)}")
         self.x1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
         self.x1incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
         self.y1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
@@ -149,7 +151,7 @@ class PlasmaAnalyser(QObject):
         self.dataCH1 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
 
-        self.instrumentsDict["myOscillo"].write(f"DATa:SOURce {self.chargeCh}")
+        self.instrumentsDict["myOscillo"].write(f"DATa:SOURce CH2")
         self.x2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
         self.x2incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
         self.y2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
@@ -157,7 +159,7 @@ class PlasmaAnalyser(QObject):
         self.dataCH2 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
 
-        #self.instrumentsDict["myOscillo"].write(f"DATa:SOURce {currentCh}")
+        #self.instrumentsDict["myOscillo"].write(f"DATa:SOURce CH3")
         #self.x3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
         #self.x3incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
         #self.y3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
@@ -242,6 +244,8 @@ class PlasmaAnalyser(QObject):
         print("calcul 2")
 
     def calcul_graph3(self, cycles, surface, progress_callback):
+        log.info(self.dataCH1)
+        log.info(self.dataCH2)
         log.info(len(self.dataCH1))
         log.info(len(self.dataCH2))
         ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / (surface * cycles)

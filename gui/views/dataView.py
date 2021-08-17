@@ -43,18 +43,24 @@ class DataView(QWidget, Ui_dataView):
 
     def initiate_data_saving_python(self):
         self.data_saving_python = {
-            "Voltage" : {"x":[], "y":[]},
-            "Power (m)" : {"x":[], "y":[]},
-            "Power (t)" : {"x":[], "y":[]},
-            "Lissajous" : {"x":[], "y":[]},
-            "Lissajous asymetria" : {"x":[], "y":[]},
-            "Voltage asymetria" : {"x":[], "y":[]},
+            "VoltageX": [],
+            "VoltageY": [],
+            "Power (m)X": [],
+            "Power (m)Y": [],
+            "Power (t)X": [],
+            "Power (t)y": [],
+            "LissajousX": [],
+            "LissajousY": [],
+            "Lissajous asymetriaX": [],
+            "Lissajous asymetriaY": [],
+            "Voltage asymetriaX": [],
+            "Voltage asymetriaY": [],
             "Frequency": [],
             "Voltage-Current Phase shift": [],
             "Charge asymetria ratio": [],
             "Voltage asymetria (Min)": [],
             "Voltage asymetria (Max)": []
-        }
+}
 
     def connect_buttons(self):
         self.LaunchDataFButton.clicked.connect(self.launch_data)
@@ -132,14 +138,14 @@ class DataView(QWidget, Ui_dataView):
 
         #def update_data(self, simPlotData, ch1list, frequency, VoltageCurrentPhaseShift):
     @pyqtSlot(dict)
-    def update_data(self, simPlotData, frequency, max1, min1, VoltageCurrentPhaseShift):
+    def update_data(self, simPlotData, frequency, max1, min1):
         #log.info("updating graph")
         for graphic in Data().graphics:
             try:
                 #print(simPlotData[graphic]['data']["y"])
                 kwargs = simPlotData[graphic]['data']
-                self.data_saving_python[graphic]["y"].extend(kwargs["y"])
-                self.data_saving_python[graphic]["x"].extend(kwargs["x"])
+                self.data_saving_python[f"{graphic}Y"].extend(kwargs["y"])
+                self.data_saving_python[f"{graphic}X"].extend(kwargs["x"])
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except:
                 log.info(f"Fuck ça marche pas dans el graph{graphic}")
@@ -154,7 +160,7 @@ class DataView(QWidget, Ui_dataView):
         self.data_saving_python["Voltage asymetria (Min)"].append(min1)
         self.lcdNumber_8.display(max1)
         self.data_saving_python["Voltage asymetria (Max)"].append(max1)
-        self.lcdNumber_9.display(VoltageCurrentPhaseShift)
+        #self.lcdNumber_9.display(VoltageCurrentPhaseShift)
 
     def launch_data(self):
         self.LaunchDataFButton.start_flash()
@@ -176,7 +182,7 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.setEnabled(True)
         worker = Worker(self.model.stop_propagation)
         self.threadpool.start(worker)
-        self.data_saving_pandas = pd.DataFrame(data=self.data_saving_python)
+        self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python)
 
     def reset_data(self):
         self.stop_data()
