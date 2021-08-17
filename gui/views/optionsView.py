@@ -70,7 +70,7 @@ class OptionsView(QWidget, Ui_optionsView):
         self.AFGWaveFormComboBox.addItems(self.waveformList)
         self.AFGModeComboBox.setCurrentText("Sine")
         self.NbDataPointsComboBox.addItems(self.nbDataList)
-        self.AFGModeComboBox.setCurrentText("10000")
+        self.AFGModeComboBox.setCurrentText("100000")
         self.AFGFrequencyDSpinBox.setValue(10.00)
         self.AFGPercentageSpinBox.setValue(50)
         self.TriggerIntervalDSpinBox.setValue(10.00)
