@@ -134,7 +134,7 @@ class DataView(QWidget, Ui_dataView):
 
         #def update_data(self, simPlotData, ch1list, frequency, VoltageCurrentPhaseShift):
     @pyqtSlot(dict)
-    def update_data(self, simPlotData, frequency, ch1list):
+    def update_data(self, simPlotData, frequency, max1, min1, VoltageCurrentPhaseShift):
         #log.info("updating graph")
         for graphic in Data().graphics:
             try:
@@ -152,13 +152,11 @@ class DataView(QWidget, Ui_dataView):
         self.lcdNumber_4.display(self.allPlotsDict["Power (t)"]["data"]["y"][-1])
         #self.lcdNumber_5.display(self.allPlotsDict["Lissajous asymetria"]["data"]["y"][-1])
         #self.lcdNumber_6.display(self.allPlotsDict["Charge asymetria"]["data"]["y"][-1])
-        min1 = min(ch1list)
         self.lcdNumber_7.display(min1)
         self.data_saving_python["Voltage asymetria (Min)"].append(min1)
-        max1 = max(ch1list)
         self.lcdNumber_8.display(max1)
         self.data_saving_python["Voltage asymetria (Max)"].append(max1)
-        #self.lcdNumber_9.display(VoltageCurrentPhaseShift)
+        self.lcdNumber_9.display(VoltageCurrentPhaseShift)
 
     def launch_data(self):
         self.LaunchDataFButton.start_flash()

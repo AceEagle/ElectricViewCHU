@@ -100,7 +100,10 @@ class PlasmaAnalyser(QObject):
 
     def send_data_to_plot(self, graphics=None):
         #self.s_data_changed.emit(self.savedStatusDataDict, self.dataCH1, self.frequency)
-        self.s_data_changed.emit(self.savedStatusDataDict, self.frequency, self.ch1list)
+        max1 = max(self.dataCH1)
+        min1 = min(self.dataCH1)
+        voltageCurrentPhaseShift = self.xlist1[self.dataCH1.index(max(self.dataCH1[:self.nbData/self.cycles]))] - self.xlist3[self.dataCH3.index(max(self.dataCH3[:self.nbData/self.cycles]))]
+        self.s_data_changed.emit(self.savedStatusDataDict, self.frequency, self.ch1list, max1, min1, voltageCurrentPhaseShift)
         log.info("sending data")
 
     def launch_propagation(self, progress_callback):
