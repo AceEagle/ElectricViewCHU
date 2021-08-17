@@ -75,7 +75,7 @@ class OptionsView(QWidget, Ui_optionsView):
         self.AFGPercentageSpinBox.setValue(50)
         self.TriggerIntervalDSpinBox.setValue(10.00)
         self.ElectrodesSurfaceDSpinBox.setValue(28.31)
-        self.CapacitanceDSpinBox.setValue(20.00)
+        self.CapacitanceDSpinBox.setValue(0.22)
 
     def update_buttons_values_thread(self):
         worker = Worker(self.update_buttons_values)

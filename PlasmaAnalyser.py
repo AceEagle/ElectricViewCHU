@@ -81,7 +81,7 @@ class PlasmaAnalyser(QObject):
     def change_surface_and_trigInt(self, surface, trigInt, capacitance):
         self.surface = float(surface)
         self.trigInterval = float(trigInt)
-        self.capacitance = float(capacitance)
+        self.capacitance = float(capacitance) * 1E-6
 
     def get_oscillo(self):
         return self.self.instrumentsDict["myOscillo"]
