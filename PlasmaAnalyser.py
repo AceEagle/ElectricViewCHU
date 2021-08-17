@@ -41,6 +41,11 @@ class PlasmaAnalyser(QObject):
         self.xList2 = []
         self.xList3 = []
 
+    def change_channels(self, channeldict):
+        self.voltageCh = channeldict["voltage"]
+        self.chargeCh = channeldict["charge"]
+        self.currentCh = channeldict["current"]
+
     def load_parameters(self, jsonFilePath):
         with open(jsonFilePath) as f:
             parametersFile = json.load(f)
@@ -70,7 +75,7 @@ class PlasmaAnalyser(QObject):
             self.instrumentsDict["myAFG"].write(f"SOURce1:BURSt:NCYCles {cycle}")
 
     def inject_Oscillo(self, nbData):
-        print(f"HORizontal:RECOrdlength {nbData}")
+        #print(f"HORizontal:RECOrdlength {nbData}")
         self.instrumentsDict["myOscillo"].write(f"HORizontal:RECOrdlength {nbData}")
 
     def change_surface_and_trigInt(self, surface, trigInt, capacitance):
@@ -133,7 +138,7 @@ class PlasmaAnalyser(QObject):
         self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
 
 
-        self.instrumentsDict["myOscillo"].write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
+        self.instrumentsDict["myOscillo"].write(f":DATa:ENCdg ASCIi;:DATa:SOURce {self.voltageCh}")
         self.x1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
         self.x1incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
         self.y1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
@@ -141,7 +146,7 @@ class PlasmaAnalyser(QObject):
         self.dataCH1 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
 
-        self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
+        self.instrumentsDict["myOscillo"].write(f"DATa:SOURce {self.chargeCh}")
         self.x2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
         self.x2incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
         self.y2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
@@ -149,7 +154,7 @@ class PlasmaAnalyser(QObject):
         self.dataCH2 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
 
-        #self.instrumentsDict["myOscillo"].write("DATa:SOURce CH3")
+        #self.instrumentsDict["myOscillo"].write(f"DATa:SOURce {currentCh}")
         #self.x3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
         #self.x3incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
         #self.y3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
