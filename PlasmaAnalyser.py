@@ -152,6 +152,8 @@ class PlasmaAnalyser(QObject):
 
 
         self.instrumentsDict["myOscillo"].write(f"DATa:SOURce CH2")
+        self.instrumentsDict["myOscillo"].write(":DATa:STARt 1")
+        self.instrumentsDict["myOscillo"].write(f":DATa:STOP {str(self.nbData)}")
         self.x2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
         self.x2incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
         self.y2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
@@ -160,6 +162,8 @@ class PlasmaAnalyser(QObject):
 
 
         #self.instrumentsDict["myOscillo"].write(f"DATa:SOURce CH3")
+        #self.instrumentsDict["myOscillo"].write(":DATa:STARt 1")
+        #self.instrumentsDict["myOscillo"].write(f":DATa:STOP {str(self.nbData)}")
         #self.x3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
         #self.x3incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
         #self.y3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
