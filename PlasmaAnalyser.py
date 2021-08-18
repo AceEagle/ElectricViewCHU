@@ -35,7 +35,7 @@ class PlasmaAnalyser(QObject):
         self.instrumentsDict = {"myOscillo": None, "myAFG": None}
         self.xList = []
         self.surface = 0
-        self.x1, self.x2, self.x3 = -1, -1, -1
+        self.x1, self.x2, self.x3 = 1, 1, 1
         self.timeList = []
         self.xList1 = []
         self.xList2 = []
@@ -117,7 +117,8 @@ class PlasmaAnalyser(QObject):
             self.mutex.lock()
             self.mutex.unlock()
             self.send_data_to_plot()
-            time.sleep(2)
+            print("Je dors")
+            time.sleep(1)
 
     def stop_propagation(self, progress_callback):
         self.launch_state = False
@@ -151,7 +152,7 @@ class PlasmaAnalyser(QObject):
         self.y1mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
         self.dataCH1 = self.instrumentsDict["myOscillo"].query_ascii_values("CURVe?")
         print(len(self.dataCH1))
-        log.info(self.dataCH1)
+        #log.info(self.dataCH1)
 
         self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
         #self.instrumentsDict["myOscillo"].write(":DATa:STARt 1")
@@ -162,7 +163,7 @@ class PlasmaAnalyser(QObject):
         self.y2mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
         self.dataCH2 = self.instrumentsDict["myOscillo"].query_ascii_values("CURVe?")
         print(len(self.dataCH2))
-        log.info(self.dataCH2)
+        #log.info(self.dataCH2)
 
 
         #self.instrumentsDict["myOscillo"].write(f"DATa:SOURce CH2")
@@ -174,7 +175,7 @@ class PlasmaAnalyser(QObject):
         #self.y3mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
         #self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
-        #self.instrumentsDict["myOscillo"].write("ACQuire:STATE ON")
+        self.instrumentsDict["myOscillo"].write("ACQuire:STATE ON")
 
         workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
         workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
@@ -209,24 +210,30 @@ class PlasmaAnalyser(QObject):
     def convert_strlist_to_intlist1(self, string, progress_callback):
         #yconverted = list(map(self.convert_y_into_real_data_1, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
         #log.debug(yconverted)
+        self.xList1 = []
         yconverted = list(map(self.convert_y_into_real_data_1, self.dataCH1))
         for x in range(len(yconverted)):
-            self.xList1.append(self.convert_x_into_real_data_1())
+            self.xList1.append(float(self.convert_x_into_real_data_1()))
         self.dataCH1 = yconverted
+        print(len(self.dataCH1), len(self.xList1))
         #self.ch1List = yconverted
         #log.info(self.dataCH1)
         #log.info(self.xList1)
 
     def convert_strlist_to_intlist2(self, string, progress_callback):
+        self.mutex.lock()
         #yconverted = list(map(self.convert_y_into_real_data_2, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
         #print(yconverted)
         #log.debug(yconverted)
+        self.xList2 = []
         yconverted = list(map(self.convert_y_into_real_data_2, self.dataCH2))
         for x in range(len(yconverted)):
             self.xList2.append(self.convert_x_into_real_data_2())
         self.dataCH2 = yconverted
+        self.mutex.unlock()
 
     def convert_strlist_to_intlist3(self, string, progress_callback):
+        self.xList3 = []
         yconverted = map(self.convert_y_into_real_data_3, list(map(int, list(string.split(",")))))
         xconverted = map(self.convert_x_into_real_data_3, list(range(0, yconverted)))
         self.dataCH3 = yconverted
@@ -259,6 +266,7 @@ class PlasmaAnalyser(QObject):
         print("calcul 2")
 
     def calcul_graph3(self, cycles, surface, progress_callback):
+        self.mutex.lock()
         #log.info(self.dataCH1)
         #log.info(self.dataCH2)
         log.info(len(self.dataCH1))
@@ -267,6 +275,7 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict["Power (t)"]["data"]["x"].append(self.x3)
         self.savedStatusDataDict["Power (t)"]["data"]["y"].append(ptlist)
         print("calcul 3")
+        self.mutex.unlock()
 
     def calcul_graph4(self, progress_callback):
         self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH2)
