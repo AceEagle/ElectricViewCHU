@@ -140,6 +140,7 @@ class DataView(QWidget, Ui_dataView):
     @pyqtSlot(dict)
     def update_data(self, simPlotData):
         #log.info("updating graph")
+        #print(simPlotData)
         for graphic in Data().graphics:
             try:
                 #print(simPlotData[graphic]['data']["y"])
@@ -151,11 +152,11 @@ class DataView(QWidget, Ui_dataView):
                 log.info(f"Fuck ça marche pas dans el graph{graphic}")
 
         self.lcdNumber_2.display(self.model.frequency)
-        self.data_saving_python["frequency"].append(self.model.frequency)
-        self.lcdNumber_3.display(self.allPlotsDict["Power (m)"]["data"]["y"][-1])
-        self.lcdNumber_4.display(self.allPlotsDict["Power (t)"]["data"]["y"][-1])
-        #self.lcdNumber_5.display(self.allPlotsDict["Lissajous asymetria"]["data"]["y"][-1])
-        #self.lcdNumber_6.display(self.allPlotsDict["Charge asymetria"]["data"]["y"][-1])
+        self.data_saving_python["Frequency"].append(self.model.frequency)
+        #self.lcdNumber_3.display(simPlotData["Power (m)"]["data"]["y"][-1])
+        #self.lcdNumber_4.display(simPlotData["Power (t)"]["data"]["y"][-1])
+        #self.lcdNumber_5.display(simPlotData["Lissajous asymetria"]["data"]["y"][-1])
+        #self.lcdNumber_6.display(simPlotData["Charge asymetria"]["data"]["y"][-1])
         self.lcdNumber_7.display(self.model.min1)
         self.data_saving_python["Voltage asymetria (Min)"].append(self.model.min1)
         self.lcdNumber_8.display(self.model.max1)
@@ -182,7 +183,7 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.setEnabled(True)
         worker = Worker(self.model.stop_propagation)
         self.threadpool.start(worker)
-        self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python)
+        self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python,orient='index')
 
     def reset_data(self):
         self.stop_data()
