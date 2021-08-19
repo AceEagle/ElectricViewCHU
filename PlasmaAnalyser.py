@@ -36,6 +36,8 @@ class PlasmaAnalyser(QObject):
         self.xList = []
         self.surface = 0
         self.x1, self.x2, self.x3 = 1, 1, 1
+        self.worker1finished, self.worker2finished, self.worker3finished = False, False, False
+        self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
         self.timeList = []
         self.xList1 = []
         self.xList2 = []
@@ -104,21 +106,17 @@ class PlasmaAnalyser(QObject):
         self.min1 = min(self.dataCH1)
         #voltageCurrentPhaseShift = self.xList1[self.dataCH1.index(max(self.dataCH1[:self.nbData/self.cycles]))] - self.xList3[self.dataCH3.index(max(self.dataCH3[:self.nbData/self.cycles]))]
         self.s_data_changed.emit(self.savedStatusDataDict)
+        time.sleep(2)
+        if self.launch_state == True:
+            self.continue_propagation()
         log.info("sending data")
 
     def launch_propagation(self, progress_callback):
         self.launch_state = True
         log.info("=== === === SIMULATION STARTED === === ===")
-        while self.launch_state is True:
-            self.get_data_thread()
-            self.mutex.lock()
-            self.mutex.unlock()
-            self.save_status()
-            self.mutex.lock()
-            self.mutex.unlock()
-            self.send_data_to_plot()
-            print("Je dors")
-            time.sleep(1)
+
+    def continue_propagation(self):
+        self.get_data_thread()
 
     def stop_propagation(self, progress_callback):
         self.launch_state = False
@@ -132,6 +130,56 @@ class PlasmaAnalyser(QObject):
         self.x3 = 0
         self.send_data_to_plot()
         log.info("=== === === SIMULATION RESETED === === ===")
+
+    def thread_to_true1(self):
+        self.worker1finished = True
+        self.wait_for_3threads()
+
+    def thread_to_true2(self):
+        self.worker2finished = True
+        self.wait_for_3threads()
+
+    def thread_to_true3(self):
+        self.worker3finished = True
+        self.wait_for_3threads()
+
+    def calcul_to_true1(self):
+        self.calcul1finished = True
+        self.wait_for_6threads()
+
+    def calcul_to_true2(self):
+        self.calcul2finished = True
+        self.wait_for_6threads()
+
+    def calcul_to_true3(self):
+        self.calcul3finished = True
+        self.wait_for_6threads()
+
+    def calcul_to_true4(self):
+        self.calcul4finished = True
+        self.wait_for_6threads()
+
+    def calcul_to_true5(self):
+        self.calcul5finished = True
+        self.wait_for_6threads()
+
+    def calcul_to_true6(self):
+        self.calcul6finished = True
+        self.wait_for_6threads()
+
+    def wait_for_6threads(self):
+        if self.calcul1finished and self.calcul2finished and self.calcul3finished and self.calcul4finished and self.calcul5finished and self.calcul6finished == True:
+            self.send_data_to_plot()
+            self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
+        else:
+            pass
+
+    def wait_for_3threads(self):
+        if self.worker1finished and self.worker2finished == True:
+            self.save_status()
+            self.worker1finished, self.worker2finished, self.worker3finished = False, False, False
+        else:
+            pass
 
     def get_data_thread(self):
         self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
@@ -180,6 +228,11 @@ class PlasmaAnalyser(QObject):
         workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
         workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
         #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
+
+        workerch1.signals.finished.connect(self.thread_to_true1)
+        workerch2.signals.finished.connect(self.thread_to_true2)
+        #workerch3.signals.finished.connect(self.thread_to_true3)
+
         self.threadpool.start(workerch1)
         self.threadpool.start(workerch2)
         #self.threadpool.start(workerch3)
@@ -215,13 +268,12 @@ class PlasmaAnalyser(QObject):
         for x in range(len(yconverted)):
             self.xList1.append(float(self.convert_x_into_real_data_1()))
         self.dataCH1 = yconverted
-        print(len(self.dataCH1), len(self.xList1))
+        #print(len(self.dataCH1), len(self.xList1))
         #self.ch1List = yconverted
         #log.info(self.dataCH1)
         #log.info(self.xList1)
 
     def convert_strlist_to_intlist2(self, string, progress_callback):
-        self.mutex.lock()
         #yconverted = list(map(self.convert_y_into_real_data_2, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
         #print(yconverted)
         #log.debug(yconverted)
@@ -230,7 +282,6 @@ class PlasmaAnalyser(QObject):
         for x in range(len(yconverted)):
             self.xList2.append(self.convert_x_into_real_data_2())
         self.dataCH2 = yconverted
-        self.mutex.unlock()
 
     def convert_strlist_to_intlist3(self, string, progress_callback):
         self.xList3 = []
@@ -246,6 +297,13 @@ class PlasmaAnalyser(QObject):
         worker4 = Worker(self.calcul_graph4)
         worker5 = Worker(self.calcul_graph5)
         worker6 = Worker(self.calcul_graph6)
+
+        worker1.signals.finished.connect(self.calcul_to_true1)
+        worker2.signals.finished.connect(self.calcul_to_true2)
+        worker3.signals.finished.connect(self.calcul_to_true3)
+        worker4.signals.finished.connect(self.calcul_to_true4)
+        worker5.signals.finished.connect(self.calcul_to_true5)
+        worker6.signals.finished.connect(self.calcul_to_true6)
 
         self.threadpool.start(worker1)
         self.threadpool.start(worker2)
@@ -266,7 +324,6 @@ class PlasmaAnalyser(QObject):
         print("calcul 2")
 
     def calcul_graph3(self, cycles, surface, progress_callback):
-        self.mutex.lock()
         #log.info(self.dataCH1)
         #log.info(self.dataCH2)
         log.info(len(self.dataCH1))
@@ -275,7 +332,6 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict["Power (t)"]["data"]["x"].append(self.x3)
         self.savedStatusDataDict["Power (t)"]["data"]["y"].append(ptlist)
         print("calcul 3")
-        self.mutex.unlock()
 
     def calcul_graph4(self, progress_callback):
         self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH2)
