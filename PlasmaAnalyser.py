@@ -38,9 +38,9 @@ class PlasmaAnalyser(QObject):
         self.worker1finished, self.worker2finished, self.worker3finished = False, False, False
         self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
         self.timeList,  self.xList1, self.xList2, self.xList3 = [], [], [], []
-        self.cycles = float(0)
-        self.surface = float(0)
-        self.frequency = float(0)
+        self.cycles = 1
+        self.surface = 1
+        self.frequency = 1
 
         self.create_threads()
         self.create_workers()
@@ -246,6 +246,7 @@ class PlasmaAnalyser(QObject):
         self.wait_for_6threads()
 
     def wait_for_6threads(self):
+        log.debug("waitfor6thread")
         if self.calcul1finished and self.calcul2finished and self.calcul3finished and self.calcul4finished and self.calcul5finished and self.calcul6finished == True:
             self.send_data_to_plot()
             self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
