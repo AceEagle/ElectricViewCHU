@@ -37,6 +37,7 @@ class PlasmaAnalyser(QObject):
         self.surface = 0
         self.x1, self.x2, self.x3 = 1, 1, 1
         self.timeList = []
+        self.dataTest = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         self.xList1 = []
         self.xList2 = []
         self.xList3 = []
@@ -134,35 +135,39 @@ class PlasmaAnalyser(QObject):
         log.info("=== === === SIMULATION RESETED === === ===")
 
     def get_data_thread(self):
-        self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
-        self.instrumentsDict["myOscillo"].write("HORizontal:SCAle 1E-3")
-        self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
-        self.instrumentsDict["myOscillo"].write("HORizontal:POSition 0")
-        self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
-        self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
+        self.surface = 28
+        self.cycles = 50
+        self.nbData= 10
+        self.frequency = 10000
+        #self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
+        #self.instrumentsDict["myOscillo"].write("HORizontal:SCAle 1E-3")
+        #self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
+        #self.instrumentsDict["myOscillo"].write("HORizontal:POSition 0")
+        #self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
+        #self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
 
 
-        self.instrumentsDict["myOscillo"].write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
-        self.instrumentsDict["myOscillo"].write("ACQuire:STATE OFF")
+        #self.instrumentsDict["myOscillo"].write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
+        #self.instrumentsDict["myOscillo"].write("ACQuire:STATE OFF")
         #self.instrumentsDict["myOscillo"].write(":DATa:STARt 1")
         #self.instrumentsDict["myOscillo"].write(f":DATa:STOP {str(self.nbData)}")
-        self.x1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
-        self.x1incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
-        self.y1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
-        self.y1mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
-        self.dataCH1 = self.instrumentsDict["myOscillo"].query_ascii_values("CURVe?")
-        print(len(self.dataCH1))
+        #self.x1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
+        #self.x1incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
+        #self.y1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
+        #self.y1mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
+        #self.dataCH1 = self.instrumentsDict["myOscillo"].query_ascii_values("CURVe?")
+        #print(len(self.dataCH1))
         #log.info(self.dataCH1)
 
-        self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
+        #self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
         #self.instrumentsDict["myOscillo"].write(":DATa:STARt 1")
         #self.instrumentsDict["myOscillo"].write(f":DATa:STOP {str(self.nbData)}")
-        self.x2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
-        self.x2incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
-        self.y2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
-        self.y2mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
-        self.dataCH2 = self.instrumentsDict["myOscillo"].query_ascii_values("CURVe?")
-        print(len(self.dataCH2))
+        #self.x2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
+        #self.x2incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
+        #self.y2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
+        #self.y2mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
+        #self.dataCH2 = self.instrumentsDict["myOscillo"].query_ascii_values("CURVe?")
+        #print(len(self.dataCH2))
         #log.info(self.dataCH2)
 
 
@@ -175,10 +180,11 @@ class PlasmaAnalyser(QObject):
         #self.y3mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
         #self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
 
-        self.instrumentsDict["myOscillo"].write("ACQuire:STATE ON")
+        #self.instrumentsDict["myOscillo"].write("ACQuire:STATE ON")
 
-        workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
-        workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
+        workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataTest)
+        workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataTest)
+        #workerch2.signals.finished.connect(self.save_status)
         #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
         self.threadpool.start(workerch1)
         self.threadpool.start(workerch2)
@@ -187,38 +193,39 @@ class PlasmaAnalyser(QObject):
 
     def convert_x_into_real_data_1(self):
         self.x1 += 1
-        return self.x1zero + (self.x1incr * (self.x1 - 1))
+        return 2 + (2 * (self.x1 - 1))
 
     def convert_y_into_real_data_1(self, data):
-        return self.y1zero + (data * self.y1mult)
+        return 2 + (data * 2)
 
 
     def convert_x_into_real_data_2(self):
         self.x2 += 1
-        return self.x2zero + (self.x2incr * (self.x2 - 1))
+        return 2 + (2 * (self.x2 - 1))
 
     def convert_y_into_real_data_2(self, data):
-        return self.capacitance * (self.y2zero + (data * self.y2mult))
+        return 2 * (2 + (data * 2))
 
     def convert_x_into_real_data_3(self):
         self.x3 += 1
-        return self.x3zero + (self.x3incr * (self.x3 - 1))
+        return 2 + (2 * (self.x3 - 1))
 
     def convert_y_into_real_data_3(self, data):
-        return self.y3zero + (data * self.y3mult)
+        return 2 + (data * 2)
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
         #yconverted = list(map(self.convert_y_into_real_data_1, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
         #log.debug(yconverted)
         self.xList1 = []
-        yconverted = list(map(self.convert_y_into_real_data_1, self.dataCH1))
+        yconverted = list(map(self.convert_y_into_real_data_1, self.dataTest))
         for x in range(len(yconverted)):
             self.xList1.append(float(self.convert_x_into_real_data_1()))
         self.dataCH1 = yconverted
-        print(len(self.dataCH1), len(self.xList1))
+        #print(len(self.dataCH1), len(self.xList1))
         #self.ch1List = yconverted
         #log.info(self.dataCH1)
         #log.info(self.xList1)
+        print("calculCH2")
 
     def convert_strlist_to_intlist2(self, string, progress_callback):
         self.mutex.lock()
@@ -230,6 +237,7 @@ class PlasmaAnalyser(QObject):
         for x in range(len(yconverted)):
             self.xList2.append(self.convert_x_into_real_data_2())
         self.dataCH2 = yconverted
+        print("calculCH2")
         self.mutex.unlock()
 
     def convert_strlist_to_intlist3(self, string, progress_callback):

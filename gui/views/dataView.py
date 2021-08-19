@@ -151,16 +151,16 @@ class DataView(QWidget, Ui_dataView):
             except:
                 log.info(f"Fuck ça marche pas dans el graph{graphic}")
 
-        self.lcdNumber_2.display(self.model.frequency)
-        self.data_saving_python["Frequency"].append(self.model.frequency)
+        #self.lcdNumber_2.display(self.model.frequency)
+        #self.data_saving_python["Frequency"].append(self.model.frequency)
         #self.lcdNumber_3.display(simPlotData["Power (m)"]["data"]["y"][-1])
         #self.lcdNumber_4.display(simPlotData["Power (t)"]["data"]["y"][-1])
         #self.lcdNumber_5.display(simPlotData["Lissajous asymetria"]["data"]["y"][-1])
         #self.lcdNumber_6.display(simPlotData["Charge asymetria"]["data"]["y"][-1])
-        self.lcdNumber_7.display(self.model.min1)
-        self.data_saving_python["Voltage asymetria (Min)"].append(self.model.min1)
-        self.lcdNumber_8.display(self.model.max1)
-        self.data_saving_python["Voltage asymetria (Max)"].append(self.model.max1)
+        #self.lcdNumber_7.display(self.model.min1)
+        #self.data_saving_python["Voltage asymetria (Min)"].append(self.model.min1)
+        #self.lcdNumber_8.display(self.model.max1)
+        #self.data_saving_python["Voltage asymetria (Max)"].append(self.model.max1)
         #self.lcdNumber_9.display(VoltageCurrentPhaseShift)
 
     def launch_data(self):
