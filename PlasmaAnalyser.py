@@ -33,15 +33,14 @@ class PlasmaAnalyser(QObject):
         self.connect_to_signals()
         self.instrumentsDict = {"myOscillo": None, "myAFG": None}
         self.xList = []
-        self.surface = 0
         self.x1, self.x2, self.x3 = 1, 1, 1
         self.dataCH1, self.dataCH2, self.dataCH3 = None, None, None
         self.worker1finished, self.worker2finished, self.worker3finished = False, False, False
         self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
         self.timeList,  self.xList1, self.xList2, self.xList3 = [], [], [], []
-        self.cycles = None
-        self.surface = None
-        self.frequency = None
+        self.cycles = float(0)
+        self.surface = float(0)
+        self.frequency = float(0)
 
         self.create_threads()
         self.create_workers()
@@ -180,8 +179,19 @@ class PlasmaAnalyser(QObject):
 
     def launch_propagation(self, statusSignal):
         self.launch_state = True
+        self.init_oscillo()
         self.continue_propagation()
         log.info("=== === === SIMULATION STARTED === === ===")
+
+    def init_oscillo(self):
+        self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
+        self.instrumentsDict["myOscillo"].write("HORizontal:SCAle 1E-3")
+        self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
+        self.instrumentsDict["myOscillo"].write("HORizontal:POSition 0")
+        self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
+        #print(self.frequency)
+        self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
+        #print(self.cycles)
 
     def continue_propagation(self):
         self.get_data_thread()
@@ -250,14 +260,6 @@ class PlasmaAnalyser(QObject):
             pass
 
     def get_data_thread(self):
-        self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
-        self.instrumentsDict["myOscillo"].write("HORizontal:SCAle 1E-3")
-        self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
-        self.instrumentsDict["myOscillo"].write("HORizontal:POSition 0")
-        self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
-        self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
-
-
         self.instrumentsDict["myOscillo"].write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
         self.instrumentsDict["myOscillo"].write("ACQuire:STATE OFF")
         #self.instrumentsDict["myOscillo"].write(":DATa:STARt 1")
@@ -304,7 +306,6 @@ class PlasmaAnalyser(QObject):
     def convert_y_into_real_data_1(self, data):
         return self.y1zero + (data * self.y1mult)
 
-
     def convert_x_into_real_data_2(self):
         self.x2 += 1
         return self.x2zero + (self.x2incr * (self.x2 - 1))
@@ -350,6 +351,7 @@ class PlasmaAnalyser(QObject):
         self.xList3 = xconverted
 
     def save_status(self):
+        print(self.surface, self.frequency, self.cycles)
         self.qthreadcal1.start()
         self.qthreadcal2.start()
         self.qthreadcal3.start()

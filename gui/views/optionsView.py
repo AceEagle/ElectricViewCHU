@@ -27,7 +27,13 @@ class OptionsView(QWidget, Ui_optionsView):
         self.modeList = ["Continuous", "Sweep", "Modulation", "Burst"]
         self.waveformList = ["Sine", "Square", "Ramp", "Pulse", "Arb"]
         self.mode = ""
+        self.triggerInterval = None
+        self.nbDataPoints = None
+        self.surface = None
+        self.capacitance = None
         self.waveForm = ""
+        self.cyclePercentage = None
+        self.frequency = None
         self.channelListe = ["CH1", "CH2", "CH3", "CH4"]
         self.channels = {"voltage" : "", "charge" : "", "current" : ""}
 
@@ -48,10 +54,7 @@ class OptionsView(QWidget, Ui_optionsView):
 
     def create_workers(self):
         self.workerbuttons = Worker(self.update_buttons_values)
-        self.workerparameters = Worker(self.inject_parameters, self.AFGModeComboBox.currentText(), self.AFGFrequencyDSpinBox.value(),
-                                       self.AFGWaveFormComboBox.currentText(), self.AFGPercentageSpinBox.value(),
-                                       self.TriggerIntervalDSpinBox.value(),self.NbDataPointsComboBox.currentText(),
-                                       self.ElectrodesSurfaceDSpinBox.value(), self.CapacitanceDSpinBox.value(),self.channels)
+        self.workerparameters = Worker(self.inject_parameters)
 
     def connect_threads(self):
         self.workerbuttons.moveToThread(self.qthreadbuttons)
@@ -106,7 +109,7 @@ class OptionsView(QWidget, Ui_optionsView):
         self.waveForm = self.AFGWaveFormComboBox.currentText()
         self.surface = self.ElectrodesSurfaceDSpinBox.value()
         self.frequency = self.AFGFrequencyDSpinBox.value()
-        self.cyclePercentage = self.AFGPercentageSpinBox.value()
+        self.cycles = self.AFGPercentageSpinBox.value()
         self.triggerInterval = self.TriggerIntervalDSpinBox.value()
         self.nbDataPoints = self.NbDataPointsComboBox.currentText()
         self.capacitance = self.CapacitanceDSpinBox.value()
@@ -135,14 +138,14 @@ class OptionsView(QWidget, Ui_optionsView):
         self.model.connect_afg(myAFGStr)
 
     def inject_parameters_thread(self):
+        self.update_buttons_values_thread()
         self.qthreadparameters.start()
 
-    def inject_parameters(self, mode, freq, wave, cycle, trigInt, nbData, surface, capacitance, channels, statusSignal):
-        self.model.change_channels(channels)
-        self.model.inject_AFG(mode, freq, wave, cycle)
-        self.model.inject_Oscillo(nbData)
-        self.model.change_surface_and_trigInt(surface, trigInt, capacitance)
+    def inject_parameters(self, statusSignal):
+        self.model.change_channels(self.channels)
+        self.model.inject_AFG(self.mode, self.frequency, self.waveForm, self.cycles)
+        self.model.inject_Oscillo(self.nbDataPoints)
+        self.model.change_surface_and_trigInt(self.surface, self.triggerInterval, self.capacitance)
 
     def give_AFG_and_Oscillo(self):
         return self.model.instrumentsDict["myOscillo"], self.model.instrumentsDict["myOscillo"]
-
