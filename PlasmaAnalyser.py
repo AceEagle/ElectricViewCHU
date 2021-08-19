@@ -4,8 +4,8 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import json
-from tools.pyqtWorker import Worker
-from PyQt5.QtCore import pyqtSignal, QObject, QThreadPool, QMutex
+from tools.threadWorker import Worker
+from PyQt5.QtCore import pyqtSignal, QObject, QThreadPool, QMutex, QThread
 import datetime
 import logging
 from pydispatch import dispatcher
@@ -26,9 +26,12 @@ class PlasmaAnalyser(QObject):
 
     def __init__(self):
         super(PlasmaAnalyser, self).__init__()
-        self.threadpool = QThreadPool()
+
+        self.create_threads()
+        self.create_workers()
+        self.connect_threads()
+
         self.rm = visa.ResourceManager()
-        self.mutex = QMutex()
         self.savedStatusDataDict = {}
         self.create_empty_savedStatusDataDict()
         self.connect_to_signals()
@@ -42,6 +45,69 @@ class PlasmaAnalyser(QObject):
         self.xList1 = []
         self.xList2 = []
         self.xList3 = []
+
+    def create_threads(self):
+        self.qthreadch1 = QThread()
+        self.qthreadch2 = QThread()
+        self.qthreadch3 = QThread()
+
+        self.qthreadcal1 = QThread()
+        self.qthreadcal2 = QThread()
+        self.qthreadcal3 = QThread()
+        self.qthreadcal4 = QThread()
+        self.qthreadcal5 = QThread()
+        self.qthreadcal6 = QThread()
+
+    def create_workers(self):
+        self.workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
+        self.workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
+        #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
+
+        self.workercal1 = Worker(self.calcul_graph1)
+        self.workercal2 = Worker(self.calcul_graph2, self.surface)
+        self.workercal3 = Worker(self.calcul_graph3, self.cycles, self.surface, )
+        self.workercal4 = Worker(self.calcul_graph4)
+        self.workercal5 = Worker(self.calcul_graph5)
+        self.workercal6 = Worker(self.calcul_graph6)
+
+        self.workerch1.signals.finished.connect(self.thread_to_true1)
+        self.workerch2.signals.finished.connect(self.thread_to_true2)
+        #workerch3.signals.finished.connect(self.thread_to_true3)
+
+        self.workercal1.signals.finished.connect(self.calcul_to_true1)
+        self.workercal2.signals.finished.connect(self.calcul_to_true2)
+        self.workercal3.signals.finished.connect(self.calcul_to_true3)
+        self.workercal4.signals.finished.connect(self.calcul_to_true4)
+        self.workercal5.signals.finished.connect(self.calcul_to_true5)
+        self.workercal6.signals.finished.connect(self.calcul_to_true6)
+
+    def connect_threads(self):
+        self.workerch1.moveToThread(self.qthreadch1)
+        self.qthreadch1.started.connect(self.workerch1.run)
+        
+        self.workerch2.moveToThread(self.qthreadch2)
+        self.qthreadch2.started.connect(self.workerch2.run)
+        
+        #self.workerch3.moveToThread(self.qthreadch3)
+        #self.qthreadch3.started.connect(self.workerch3.run)
+
+        self.workercal1.moveToThread(self.qthreadcal1)
+        self.qthreadcal1.started.connect(self.workercal1.run)
+
+        self.workercal2.moveToThread(self.qthreadcal2)
+        self.qthreadcal2.started.connect(self.workercal2.run)
+
+        self.workercal3.moveToThread(self.qthreadcal3)
+        self.qthreadcal3.started.connect(self.workercal3.run)
+
+        self.workercal4.moveToThread(self.qthreadcal4)
+        self.qthreadcal4.started.connect(self.workercal4.run)
+
+        self.workercal5.moveToThread(self.qthreadcal5)
+        self.qthreadcal5.started.connect(self.workercal5.run)
+
+        self.workercal6.moveToThread(self.qthreadcal6)
+        self.qthreadcal6.started.connect(self.workercal6.run)
 
     def change_channels(self, channeldict):
         self.voltageCh = channeldict["voltage"]
@@ -113,6 +179,7 @@ class PlasmaAnalyser(QObject):
 
     def launch_propagation(self, progress_callback):
         self.launch_state = True
+        self.continue_propagation()
         log.info("=== === === SIMULATION STARTED === === ===")
 
     def continue_propagation(self):
@@ -225,18 +292,9 @@ class PlasmaAnalyser(QObject):
 
         self.instrumentsDict["myOscillo"].write("ACQuire:STATE ON")
 
-        workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
-        workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
-        #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
-
-        workerch1.signals.finished.connect(self.thread_to_true1)
-        workerch2.signals.finished.connect(self.thread_to_true2)
-        #workerch3.signals.finished.connect(self.thread_to_true3)
-
-        self.threadpool.start(workerch1)
-        self.threadpool.start(workerch2)
-        #self.threadpool.start(workerch3)
-
+        self.qthreadch1.start()
+        self.qthreadch2.start()
+        #self.qthreadch3.start()
 
     def convert_x_into_real_data_1(self):
         self.x1 += 1
@@ -291,26 +349,12 @@ class PlasmaAnalyser(QObject):
         self.xList3 = xconverted
 
     def save_status(self):
-        worker1 = Worker(self.calcul_graph1)
-        worker2 = Worker(self.calcul_graph2, self.surface)
-        worker3 = Worker(self.calcul_graph3, self.cycles, self.surface, )
-        worker4 = Worker(self.calcul_graph4)
-        worker5 = Worker(self.calcul_graph5)
-        worker6 = Worker(self.calcul_graph6)
-
-        worker1.signals.finished.connect(self.calcul_to_true1)
-        worker2.signals.finished.connect(self.calcul_to_true2)
-        worker3.signals.finished.connect(self.calcul_to_true3)
-        worker4.signals.finished.connect(self.calcul_to_true4)
-        worker5.signals.finished.connect(self.calcul_to_true5)
-        worker6.signals.finished.connect(self.calcul_to_true6)
-
-        self.threadpool.start(worker1)
-        self.threadpool.start(worker2)
-        self.threadpool.start(worker3)
-        self.threadpool.start(worker4)
-        self.threadpool.start(worker5)
-        self.threadpool.start(worker6)
+        self.qthreadcal1.start()
+        self.qthreadcal2.start()
+        self.qthreadcal3.start()
+        self.qthreadcal4.start()
+        self.qthreadcal5.start()
+        self.qthreadcal6.start()
 
     def calcul_graph1(self, progress_callback):
         self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList1)

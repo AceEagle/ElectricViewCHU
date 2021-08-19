@@ -7,7 +7,7 @@ import time
 log = logging.getLogger(__name__)
 
 
-class Worker(QRunnable):
+class Worker(QObject):
 
     def __init__(self, fn, *args, **kwargs):
         super(Worker, self).__init__()
