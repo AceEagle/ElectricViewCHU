@@ -53,8 +53,6 @@ class OptionsView(QWidget, Ui_optionsView):
                                        self.TriggerIntervalDSpinBox.value(),self.NbDataPointsComboBox.currentText(),
                                        self.ElectrodesSurfaceDSpinBox.value(), self.CapacitanceDSpinBox.value(),self.channels)
 
-        self.workerch1.signals.finished.connect(self.thread_to_true1)
-
     def connect_threads(self):
         self.workerbuttons.moveToThread(self.qthreadbuttons)
         self.qthreadbuttons.started.connect(self.workerbuttons.run)
@@ -103,7 +101,7 @@ class OptionsView(QWidget, Ui_optionsView):
     def update_buttons_values_thread(self):
         self.qthreadbuttons.start()
 
-    def update_buttons_values(self, progress_callback):
+    def update_buttons_values(self, statusSignal):
         self.mode = self.AFGModeComboBox.currentText()
         self.waveForm = self.AFGWaveFormComboBox.currentText()
         self.surface = self.ElectrodesSurfaceDSpinBox.value()
@@ -139,7 +137,7 @@ class OptionsView(QWidget, Ui_optionsView):
     def inject_parameters_thread(self):
         self.qthreadparameters.start()
 
-    def inject_parameters(self, mode, freq, wave, cycle, trigInt, nbData, surface, capacitance, channels, progress_callback):
+    def inject_parameters(self, mode, freq, wave, cycle, trigInt, nbData, surface, capacitance, channels, statusSignal):
         self.model.change_channels(channels)
         self.model.inject_AFG(mode, freq, wave, cycle)
         self.model.inject_Oscillo(nbData)

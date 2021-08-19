@@ -178,7 +178,7 @@ class PlasmaAnalyser(QObject):
             self.continue_propagation()
         log.info("sending data")
 
-    def launch_propagation(self, progress_callback):
+    def launch_propagation(self, statusSignal):
         self.launch_state = True
         self.continue_propagation()
         log.info("=== === === SIMULATION STARTED === === ===")
@@ -186,11 +186,11 @@ class PlasmaAnalyser(QObject):
     def continue_propagation(self):
         self.get_data_thread()
 
-    def stop_propagation(self, progress_callback):
+    def stop_propagation(self, statusSignal):
         self.launch_state = False
         log.info("=== === === SIMULATION STOPPED === === ===")
 
-    def reset_save_status(self, progress_callback):
+    def reset_save_status(self, statusSignal):
         self.create_empty_savedStatusDataDict()
         self.xList1.clear(), self.xList2.clear(), self.xList3.clear()
         self.x1 = 0
@@ -319,7 +319,7 @@ class PlasmaAnalyser(QObject):
     def convert_y_into_real_data_3(self, data):
         return self.y3zero + (data * self.y3mult)
 
-    def convert_strlist_to_intlist1(self, string, progress_callback):
+    def convert_strlist_to_intlist1(self, string, statusSignal):
         #yconverted = list(map(self.convert_y_into_real_data_1, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
         #log.debug(yconverted)
         self.xList1 = []
@@ -332,7 +332,7 @@ class PlasmaAnalyser(QObject):
         #log.info(self.dataCH1)
         #log.info(self.xList1)
 
-    def convert_strlist_to_intlist2(self, string, progress_callback):
+    def convert_strlist_to_intlist2(self, string, statusSignal):
         #yconverted = list(map(self.convert_y_into_real_data_2, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
         #print(yconverted)
         #log.debug(yconverted)
@@ -342,7 +342,7 @@ class PlasmaAnalyser(QObject):
             self.xList2.append(self.convert_x_into_real_data_2())
         self.dataCH2 = yconverted
 
-    def convert_strlist_to_intlist3(self, string, progress_callback):
+    def convert_strlist_to_intlist3(self, string, statusSignal):
         self.xList3 = []
         yconverted = map(self.convert_y_into_real_data_3, list(map(int, list(string.split(",")))))
         xconverted = map(self.convert_x_into_real_data_3, list(range(0, yconverted)))
@@ -357,18 +357,18 @@ class PlasmaAnalyser(QObject):
         self.qthreadcal5.start()
         self.qthreadcal6.start()
 
-    def calcul_graph1(self, progress_callback):
+    def calcul_graph1(self, statusSignal):
         self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList1)
         self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
         print("calcul 1")
 
-    def calcul_graph2(self, surface, progress_callback):
+    def calcul_graph2(self, surface, statusSignal):
         ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / surface
         self.savedStatusDataDict["Power (m)"]["data"]["x"].append(self.x2)
         self.savedStatusDataDict["Power (m)"]["data"]["y"].append(ptlist)
         print("calcul 2")
 
-    def calcul_graph3(self, cycles, surface, progress_callback):
+    def calcul_graph3(self, cycles, surface, statusSignal):
         #log.info(self.dataCH1)
         #log.info(self.dataCH2)
         log.info(len(self.dataCH1))
@@ -378,17 +378,17 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict["Power (t)"]["data"]["y"].append(ptlist)
         print("calcul 3")
 
-    def calcul_graph4(self, progress_callback):
+    def calcul_graph4(self, statusSignal):
         self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH2)
         self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(self.dataCH1)
         print("calcul 4")
 
-    def calcul_graph5(self, progress_callback):
+    def calcul_graph5(self, statusSignal):
         self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"].extend(self.dataCH2)
         self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"].extend(self.dataCH1)
         print("calcul 5")
 
-    def calcul_graph6(self, progress_callback):
+    def calcul_graph6(self, statusSignal):
         self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.xList2)
         self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH2)
         print("calcul 6")
