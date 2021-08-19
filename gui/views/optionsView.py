@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import pyqtSignal, QThreadPool
+from PyQt5.QtCore import pyqtSignal, QThreadPool, QThread
 import os
 from PyQt5 import uic
-from tools.pyqtWorker import Worker
+from tools.threadWorker import Worker
 import logging
 log = logging.getLogger(__name__)
 
@@ -20,7 +20,6 @@ class OptionsView(QWidget, Ui_optionsView):
         self.model = model
         print(self.model)
         self.setupUi(self)
-        self.threadpool = QThreadPool()
         self.instrumentsList = None
         self.myOscilloStr = ""
         self.myAFGStr = ""
@@ -38,6 +37,30 @@ class OptionsView(QWidget, Ui_optionsView):
         self.connect_combobox_signals()
         self.update_spinbox_signals()
         log.info("Connecting optionsView GUI Widgets")
+
+        self.create_threads()
+        self.create_workers()
+        self.connect_threads()
+
+    def create_threads(self):
+        self.qthreadbuttons = QThread()
+        self.qthreadparameters = QThread()
+
+    def create_workers(self):
+        self.workerbuttons = Worker(self.update_buttons_values)
+        self.workerparameters = Worker(self.inject_parameters, self.AFGModeComboBox.currentText(), self.AFGFrequencyDSpinBox.value(),
+                                       self.AFGWaveFormComboBox.currentText(), self.AFGPercentageSpinBox.value(),
+                                       self.TriggerIntervalDSpinBox.value(),self.NbDataPointsComboBox.currentText(),
+                                       self.ElectrodesSurfaceDSpinBox.value(), self.CapacitanceDSpinBox.value(),self.channels)
+
+        self.workerch1.signals.finished.connect(self.thread_to_true1)
+
+    def connect_threads(self):
+        self.workerbuttons.moveToThread(self.qthreadbuttons)
+        self.qthreadbuttons.started.connect(self.workerbuttons.run)
+
+        self.workerparameters.moveToThread(self.qthreadparameters)
+        self.qthreadparameters.started.connect(self.workerparameters.run)
 
     def connect_buttons(self):
         self.ConnectToInstrumentsPButton.clicked.connect(self.connect_instruments)
@@ -78,8 +101,7 @@ class OptionsView(QWidget, Ui_optionsView):
         self.CapacitanceDSpinBox.setValue(0.22)
 
     def update_buttons_values_thread(self):
-        worker = Worker(self.update_buttons_values)
-        self.threadpool.start(worker)
+        self.qthreadbuttons.start()
 
     def update_buttons_values(self, progress_callback):
         self.mode = self.AFGModeComboBox.currentText()
@@ -114,20 +136,8 @@ class OptionsView(QWidget, Ui_optionsView):
         self.model.connect_oscillo(myOscilloStr)
         self.model.connect_afg(myAFGStr)
 
-    # def connect_instruments_thread(self):
-    #     myOscilloStr = (str(self.USBPortsOscilloComboBox.currentText()))
-    #     myAFGStr = str(self.USBPortsAFGComboBox.currentText())
-    #     worker1 = Worker(self.model.connect_oscillo, myOscilloStr)
-    #     worker2 = Worker(self.model.connect_afg, myAFGStr)
-    #     self.threadpool.start(worker1)
-    #     self.threadpool.start(worker2)
-    #     print(self.model.instrumentsDict["myAFG"])
-
     def inject_parameters_thread(self):
-        worker = Worker(self.inject_parameters, self.AFGModeComboBox.currentText(), self.AFGFrequencyDSpinBox.value(),
-                        self.AFGWaveFormComboBox.currentText(), self.AFGPercentageSpinBox.value(), self.TriggerIntervalDSpinBox.value(),
-                        self.NbDataPointsComboBox.currentText(), self.ElectrodesSurfaceDSpinBox.value(), self.CapacitanceDSpinBox.value(), self.channels)
-        self.threadpool.start(worker)
+        self.qthreadparameters.start()
 
     def inject_parameters(self, mode, freq, wave, cycle, trigInt, nbData, surface, capacitance, channels, progress_callback):
         self.model.change_channels(channels)

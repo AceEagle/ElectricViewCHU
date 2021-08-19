@@ -1,6 +1,6 @@
 import pandas as pd
 from PyQt5.QtWidgets import QWidget, QFileDialog
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThreadPool
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThreadPool, QThread
 from PyQt5 import uic
 import logging
 import os
@@ -9,7 +9,7 @@ import math
 from Data import Data
 from pyqtgraph import PlotItem
 from gui.widgets.QFlashButton import QFlashButton
-from tools.pyqtWorker import Worker
+from tools.threadWorker import Worker
 
 log = logging.getLogger(__name__)
 
@@ -39,7 +39,30 @@ class DataView(QWidget, Ui_dataView):
         self.data_saving_pandas = None
         self.initialize_view()
         self.initiate_data_saving_python()
-        log.info("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
+
+        self.create_threads()
+        self.create_workers()
+        self.connect_threads()
+
+    def create_threads(self):
+        self.qthreadlaunch = QThread()
+        self.qthreadstop = QThread()
+        self.qthreadreset = QThread()
+
+    def create_workers(self):
+        self.workerlaunch = Worker(self.model.launch_propagation)
+        self.workerstop = Worker(self.model.stop_propagation)
+        self.workerreset = Worker(self.model.reset_save_status)
+
+    def connect_threads(self):
+        self.workerlaunch.moveToThread(self.qthreadlaunch)
+        self.qthreadlaunch.started.connect(self.workerlaunch.run)
+
+        self.workerstop.moveToThread(self.qthreadstop)
+        self.qthreadstop.started.connect(self.workerstop.run)
+
+        self.workerreset.moveToThread(self.qthreadreset)
+        self.qthreadreset.started.connect(self.workerreset.run)
 
     def initiate_data_saving_python(self):
         self.data_saving_python = {
@@ -170,8 +193,7 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.setText("Stop")
         self.LaunchDataFButton.setEnabled(True)
         self.ResetDataPButton.setStyleSheet("background-color : red")
-        worker = Worker(self.model.launch_propagation)
-        self.threadpool.start(worker)
+        self.qthreadlaunch.start()
 
     def stop_data(self):
         self.LaunchDataFButton.stop_flash()
@@ -181,8 +203,7 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.clicked.disconnect()
         self.LaunchDataFButton.clicked.connect(self.launch_data)
         self.LaunchDataFButton.setEnabled(True)
-        worker = Worker(self.model.stop_propagation)
-        self.threadpool.start(worker)
+        self.qthreadstop.start()
         self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python,orient='index')
 
     def reset_data(self):
@@ -196,6 +217,5 @@ class DataView(QWidget, Ui_dataView):
         self.ResetDataPButton.setStyleSheet("background-color : None")
         self.initiate_data_saving_python()
         self.data_saving_pandas = None
-        worker = Worker(self.model.reset_save_status)
-        self.threadpool.start(worker)
+        self.qthreadreset.start()
 

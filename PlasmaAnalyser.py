@@ -27,10 +27,6 @@ class PlasmaAnalyser(QObject):
     def __init__(self):
         super(PlasmaAnalyser, self).__init__()
 
-        self.create_threads()
-        self.create_workers()
-        self.connect_threads()
-
         self.rm = visa.ResourceManager()
         self.savedStatusDataDict = {}
         self.create_empty_savedStatusDataDict()
@@ -39,12 +35,17 @@ class PlasmaAnalyser(QObject):
         self.xList = []
         self.surface = 0
         self.x1, self.x2, self.x3 = 1, 1, 1
+        self.dataCH1, self.dataCH2, self.dataCH3 = None, None, None
         self.worker1finished, self.worker2finished, self.worker3finished = False, False, False
         self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
-        self.timeList = []
-        self.xList1 = []
-        self.xList2 = []
-        self.xList3 = []
+        self.timeList,  self.xList1, self.xList2, self.xList3 = [], [], [], []
+        self.cycles = None
+        self.surface = None
+        self.frequency = None
+
+        self.create_threads()
+        self.create_workers()
+        self.connect_threads()
 
     def create_threads(self):
         self.qthreadch1 = QThread()
