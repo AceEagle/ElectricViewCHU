@@ -19,8 +19,9 @@ log = logging.getLogger(__name__)
 
 SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
+
 class PlasmaAnalyser(QObject):
-    #s_data_changed = pyqtSignal(dict, list, int)
+    # s_data_changed = pyqtSignal(dict, list, int)
     s_data_changed = pyqtSignal(dict)
     instruments_connected = pyqtSignal(list)
 
@@ -38,7 +39,7 @@ class PlasmaAnalyser(QObject):
         self.dataCH1, self.dataCH2, self.dataCH3 = None, None, None
         self.worker1finished, self.worker2finished, self.worker3finished = False, False, False
         self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
-        self.timeList,  self.xList1, self.xList2, self.xList3 = [], [], [], []
+        self.timeList, self.xList1, self.xList2, self.xList3 = [], [], [], []
         self.cycles = 1
         self.surface = 1
         self.frequency = 1
@@ -60,9 +61,9 @@ class PlasmaAnalyser(QObject):
         self.qthreadcal6 = QThread()
 
     def create_workers(self):
-        self.workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataCH1)
-        self.workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataCH2)
-        #workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataCH3)
+        self.workerch1 = Worker(self.convert_strlist_to_intlist1, self.dataTest)
+        self.workerch2 = Worker(self.convert_strlist_to_intlist2, self.dataTest)
+        self.workerch3 = Worker(self.convert_strlist_to_intlist3, self.dataTest)
 
         self.workercal1 = Worker(self.calcul_graph1)
         self.workercal2 = Worker(self.calcul_graph2, self.surface)
@@ -73,7 +74,7 @@ class PlasmaAnalyser(QObject):
 
         self.workerch1.signals.finished.connect(self.thread_to_true1)
         self.workerch2.signals.finished.connect(self.thread_to_true2)
-        #workerch3.signals.finished.connect(self.thread_to_true3)
+        self.workerch3.signals.finished.connect(self.thread_to_true3)
 
         self.workercal1.signals.finished.connect(self.calcul_to_true1)
         self.workercal2.signals.finished.connect(self.calcul_to_true2)
@@ -85,12 +86,12 @@ class PlasmaAnalyser(QObject):
     def connect_threads(self):
         self.workerch1.moveToThread(self.qthreadch1)
         self.qthreadch1.started.connect(self.workerch1.run)
-        
+
         self.workerch2.moveToThread(self.qthreadch2)
         self.qthreadch2.started.connect(self.workerch2.run)
-        
-        #self.workerch3.moveToThread(self.qthreadch3)
-        #self.qthreadch3.started.connect(self.workerch3.run)
+
+        self.workerch3.moveToThread(self.qthreadch3)
+        self.qthreadch3.started.connect(self.workerch3.run)
 
         self.workercal1.moveToThread(self.qthreadcal1)
         self.qthreadcal1.started.connect(self.workercal1.run)
@@ -127,14 +128,14 @@ class PlasmaAnalyser(QObject):
         self.rm = visa.ResourceManager()
 
     def connect_oscillo(self, oscilloStr):
-        log.info("Connection to instruments")
+        log.info("Connection to oscillo")
         self.instrumentsDict["myOscillo"] = self.rm.open_resource(oscilloStr)
-        print(self.instrumentsDict["myOscillo"])
+        log.debug(self.instrumentsDict["myOscillo"])
 
     def connect_afg(self, afgStr):
-        log.info("Connection to instruments")
+        log.info("Connection to afg")
         self.instrumentsDict["myAFG"] = self.rm.open_resource(afgStr)
-        print(self.instrumentsDict["myAFG"])
+        log.debug(self.instrumentsDict["myAFG"])
 
     def inject_AFG(self, mode, freq, wave, cycle):
         self.instrumentsDict["myAFG"].write(f"SOURce1:{mode}:MODE")
@@ -144,7 +145,7 @@ class PlasmaAnalyser(QObject):
             self.instrumentsDict["myAFG"].write(f"SOURce1:BURSt:NCYCles {cycle}")
 
     def inject_Oscillo(self, nbData):
-        #print(f"HORizontal:RECOrdlength {nbData}")
+        # log.debug(f"HORizontal:RECOrdlength {nbData}")
         self.instrumentsDict["myOscillo"].write(f"HORizontal:RECOrdlength {nbData}")
 
     def change_surface_and_trigInt(self, surface, trigInt, capacitance):
@@ -161,28 +162,28 @@ class PlasmaAnalyser(QObject):
     def create_empty_savedStatusDataDict(self):
         for graphic in Data().graphics:
             self.savedStatusDataDict[graphic] = {}
-            self.savedStatusDataDict[graphic]["data"] = {"x":[], "y":[]}
-        # print(self.savedStatusDataDict)
+            self.savedStatusDataDict[graphic]["data"] = {"x": [], "y": []}
+        # log.debug(self.savedStatusDataDict)
 
     def connect_to_signals(self):
         pass
 
     def send_data_to_plot(self, graphics=None):
-        #self.s_data_changed.emit(self.savedStatusDataDict, self.dataCH1, self.frequency)
-        self.max1 = max(self.dataCH1)
-        self.min1 = min(self.dataCH1)
-        #voltageCurrentPhaseShift = self.xList1[self.dataCH1.index(max(self.dataCH1[:self.nbData/self.cycles]))] - self.xList3[self.dataCH3.index(max(self.dataCH3[:self.nbData/self.cycles]))]
+        # self.s_data_changed.emit(self.savedStatusDataDict, self.dataCH1, self.frequency)
+        #self.max1 = max(self.dataCH1)
+        #self.min1 = min(self.dataCH1)
+        # voltageCurrentPhaseShift = self.xList1[self.dataCH1.index(max(self.dataCH1[:self.nbData/self.cycles]))] - self.xList3[self.dataCH3.index(max(self.dataCH3[:self.nbData/self.cycles]))]
         self.s_data_changed.emit(self.savedStatusDataDict)
-        time.sleep(2)
+        time.sleep(5)
         if self.launch_state == True:
             self.continue_propagation()
-        log.info("sending data")
+        log.info("sending data to main thread")
 
     def launch_propagation(self, statusSignal):
         self.launch_state = True
-        self.init_oscillo()
-        self.continue_propagation()
+        # self.init_oscillo()
         log.info("=== === === SIMULATION STARTED === === ===")
+        self.continue_propagation()
 
     def init_oscillo(self):
         self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
@@ -190,9 +191,9 @@ class PlasmaAnalyser(QObject):
         self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
         self.instrumentsDict["myOscillo"].write("HORizontal:POSition 0")
         self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
-        #print(self.frequency)
+        # log.debug(self.frequency)
         self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
-        #print(self.cycles)
+        # log.debug(self.cycles)
 
     def continue_propagation(self):
         self.get_data_thread()
@@ -210,20 +211,24 @@ class PlasmaAnalyser(QObject):
         self.send_data_to_plot()
         log.info("=== === === SIMULATION RESETED === === ===")
 
-    def thread_to_true1(self):
-        self.worker1finished = True
-        self.wait_for_3threads()
     def get_data_thread(self):
         self.surface = 28
         self.cycles = 50
-        self.nbData= 10
+        self.nbData = 10
         self.frequency = 10000
-        #self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
-        #self.instrumentsDict["myOscillo"].write("HORizontal:SCAle 1E-3")
-        #self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
-        #self.instrumentsDict["myOscillo"].write("HORizontal:POSition 0")
-        #self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
-        #self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
+        # self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
+        # self.instrumentsDict["myOscillo"].write("HORizontal:SCAle 1E-3")
+        # self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
+        # self.instrumentsDict["myOscillo"].write("HORizontal:POSition 0")
+        # self.frequency = float(self.instrumentsDict["myAFG"].query(":SOURCE:FREQUENCY?"))
+        # self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
+        self.qthreadch1.start()
+        self.qthreadch2.start()
+        self.qthreadch3.start()
+
+    def thread_to_true1(self):
+        self.worker1finished = True
+        self.wait_for_3threads()
 
     def thread_to_true2(self):
         self.worker2finished = True
@@ -235,79 +240,47 @@ class PlasmaAnalyser(QObject):
 
     def calcul_to_true1(self):
         self.calcul1finished = True
+        log.debug("CalcultoTrue 1")
         self.wait_for_6threads()
 
     def calcul_to_true2(self):
         self.calcul2finished = True
+        log.debug("CalcultoTrue 2")
         self.wait_for_6threads()
 
     def calcul_to_true3(self):
         self.calcul3finished = True
+        log.debug("CalcultoTrue 3")
         self.wait_for_6threads()
 
     def calcul_to_true4(self):
         self.calcul4finished = True
+        log.debug("CalcultoTrue 4")
         self.wait_for_6threads()
 
     def calcul_to_true5(self):
         self.calcul5finished = True
+        log.debug("CalcultoTrue 5")
         self.wait_for_6threads()
 
     def calcul_to_true6(self):
         self.calcul6finished = True
+        log.debug("CalcultoTrue 6")
         self.wait_for_6threads()
 
     def wait_for_6threads(self):
-        log.debug("waitfor6thread")
-        if self.calcul1finished and self.calcul2finished and self.calcul3finished and self.calcul4finished and self.calcul5finished and self.calcul6finished == True:
-            self.send_data_to_plot()
+        if self.calcul1finished is True and self.calcul2finished is True and self.calcul3finished is True and self.calcul4finished is True and self.calcul5finished is True and self.calcul6finished is True:
             self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
+            self.send_data_to_plot()
         else:
-            pass
+            log.debug("pass wait for 6 calculsthreads")
 
     def wait_for_3threads(self):
-        if self.worker1finished and self.worker2finished == True:
-            self.save_status()
+        if self.worker1finished is True and self.worker2finished is True and self.worker3finished is True:
             self.worker1finished, self.worker2finished, self.worker3finished = False, False, False
+            self.save_status()
         else:
-            pass
-
-        #self.instrumentsDict["myOscillo"].write(":DATa:STARt 1")
-        #self.instrumentsDict["myOscillo"].write(f":DATa:STOP {str(self.nbData)}")
-        #self.x1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
-        #self.x1incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
-        #self.y1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
-        #self.y1mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
-        #self.dataCH1 = self.instrumentsDict["myOscillo"].query_ascii_values("CURVe?")
-        #print(len(self.dataCH1))
-        #log.info(self.dataCH1)
-
-        #self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
-        #self.instrumentsDict["myOscillo"].write(":DATa:STARt 1")
-        #self.instrumentsDict["myOscillo"].write(f":DATa:STOP {str(self.nbData)}")
-        #self.x2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
-        #self.x2incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
-        #self.y2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
-        #self.y2mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
-        #self.dataCH2 = self.instrumentsDict["myOscillo"].query_ascii_values("CURVe?")
-        #print(len(self.dataCH2))
-        #log.info(self.dataCH2)
-
-
-        #self.instrumentsDict["myOscillo"].write(f"DATa:SOURce CH2")
-        #self.instrumentsDict["myOscillo"].write(":DATa:STARt 1")
-        #self.instrumentsDict["myOscillo"].write(f":DATa:STOP {str(self.nbData)}")
-        #self.x3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
-        #self.x3incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
-        #self.y3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
-        #self.y3mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
-        #self.dataCH3 = self.instrumentsDict["myOscillo"].query("CURVe?")
-
-        #self.instrumentsDict["myOscillo"].write("ACQuire:STATE ON")
-
-        self.qthreadch1.start()
-        self.qthreadch2.start()
-        #self.qthreadch3.start()
+            log.debug("pass wait for 3 channelthreads")
 
     def convert_x_into_real_data_1(self):
         self.x1 += 1
@@ -331,38 +304,40 @@ class PlasmaAnalyser(QObject):
         return 2 + (data * 2)
 
     def convert_strlist_to_intlist1(self, string, statusSignal):
-        #yconverted = list(map(self.convert_y_into_real_data_1, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
-        #log.debug(yconverted)
+        # yconverted = list(map(self.convert_y_into_real_data_1, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
+        # log.debug(yconverted)
         self.xList1 = []
-        yconverted = list(map(self.convert_y_into_real_data_1, self.dataTest))
+        yconverted = list(map(self.convert_y_into_real_data_1, string))
         for x in range(len(yconverted)):
-            self.xList1.append(float(self.convert_x_into_real_data_1()))
+            self.xList1.append(self.convert_x_into_real_data_1())
         self.dataCH1 = yconverted
-        #print(len(self.dataCH1), len(self.xList1))
-        #self.ch1List = yconverted
-        #log.info(self.dataCH1)
-        #log.info(self.xList1)
-        print("calculCH2")
+        # log.debug(len(self.dataCH1), len(self.xList1))
+        # self.ch1List = yconverted
+        # log.info(self.dataCH1)
+        # log.info(self.xList1)
+        log.debug("calculCH1")
 
     def convert_strlist_to_intlist2(self, string, statusSignal):
-        #yconverted = list(map(self.convert_y_into_real_data_2, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
-        #print(yconverted)
-        #log.debug(yconverted)
+        # yconverted = list(map(self.convert_y_into_real_data_2, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
+        # log.debug(yconverted)
+        # log.debug(yconverted)
         self.xList2 = []
-        yconverted = list(map(self.convert_y_into_real_data_2, self.dataCH2))
+        yconverted = list(map(self.convert_y_into_real_data_2, string))
         for x in range(len(yconverted)):
             self.xList2.append(self.convert_x_into_real_data_2())
         self.dataCH2 = yconverted
+        log.debug("calculCH2")
 
     def convert_strlist_to_intlist3(self, string, statusSignal):
         self.xList3 = []
-        yconverted = map(self.convert_y_into_real_data_3, list(map(int, list(string.split(",")))))
-        xconverted = map(self.convert_x_into_real_data_3, list(range(0, yconverted)))
+        yconverted = list(map(self.convert_y_into_real_data_3, string))
+        for x in range(len(yconverted)):
+            self.xList3.append(self.convert_x_into_real_data_3())
         self.dataCH3 = yconverted
-        self.xList3 = xconverted
+        log.debug("calculCH3")
 
     def save_status(self):
-        print(self.surface, self.frequency, self.cycles)
+        log.debug("save_status (after wait for 3 channelthread)")
         self.qthreadcal1.start()
         self.qthreadcal2.start()
         self.qthreadcal3.start()
@@ -373,35 +348,35 @@ class PlasmaAnalyser(QObject):
     def calcul_graph1(self, statusSignal):
         self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList1)
         self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
-        print("calcul 1")
+        log.debug("calcul 1")
 
     def calcul_graph2(self, surface, statusSignal):
         ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / surface
         self.savedStatusDataDict["Power (m)"]["data"]["x"].append(self.x2)
         self.savedStatusDataDict["Power (m)"]["data"]["y"].append(ptlist)
-        print("calcul 2")
+        log.debug("calcul 2")
 
     def calcul_graph3(self, cycles, surface, statusSignal):
-        #log.info(self.dataCH1)
-        #log.info(self.dataCH2)
-        log.info(len(self.dataCH1))
-        log.info(len(self.dataCH2))
+        # log.info(self.dataCH1)
+        # log.info(self.dataCH2)
+        #log.info(len(self.dataCH1))
+        #log.info(len(self.dataCH2))
         ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / (surface * cycles)
         self.savedStatusDataDict["Power (t)"]["data"]["x"].append(self.x3)
         self.savedStatusDataDict["Power (t)"]["data"]["y"].append(ptlist)
-        print("calcul 3")
+        log.debug("calcul 3")
 
     def calcul_graph4(self, statusSignal):
         self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH2)
         self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(self.dataCH1)
-        print("calcul 4")
+        log.debug("calcul 4")
 
     def calcul_graph5(self, statusSignal):
         self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"].extend(self.dataCH2)
         self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"].extend(self.dataCH1)
-        print("calcul 5")
+        log.debug("calcul 5")
 
     def calcul_graph6(self, statusSignal):
         self.savedStatusDataDict["Charge asymetria"]["data"]["x"].extend(self.xList2)
         self.savedStatusDataDict["Charge asymetria"]["data"]["y"].extend(self.dataCH2)
-        print("calcul 6")
+        log.debug("calcul 6")
