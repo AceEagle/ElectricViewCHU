@@ -107,12 +107,13 @@ class PlasmaAnalyser(QObject):
         #voltageCurrentPhaseShift = self.xList1[self.dataCH1.index(max(self.dataCH1[:self.nbData/self.cycles]))] - self.xList3[self.dataCH3.index(max(self.dataCH3[:self.nbData/self.cycles]))]
         self.s_data_changed.emit(self.savedStatusDataDict)
         if self.launch_state is True:
+            time.sleep(2)
             self.continue_propagation()
         log.info("sending data")
 
     def launch_propagation(self, progress_callback):
         self.launch_state = True
-        self.continue_propagation(self)
+        self.continue_propagation()
         log.info("=== === === SIMULATION STARTED === === ===")
 
     def continue_propagation(self):
@@ -248,13 +249,14 @@ class PlasmaAnalyser(QObject):
 
     def convert_x_into_real_data_2(self):
         self.x2 += 1
+        self.x3 += 1
         return self.x2zero + (self.x2incr * (self.x2 - 1))
 
     def convert_y_into_real_data_2(self, data):
         return self.capacitance * (self.y2zero + (data * self.y2mult))
 
     def convert_x_into_real_data_3(self):
-        self.x3 += 1
+        #self.x3 += 1
         return self.x3zero + (self.x3incr * (self.x3 - 1))
 
     def convert_y_into_real_data_3(self, data):
