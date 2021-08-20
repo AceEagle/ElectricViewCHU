@@ -107,7 +107,7 @@ class PlasmaAnalyser(QObject):
         #voltageCurrentPhaseShift = self.xList1[self.dataCH1.index(max(self.dataCH1[:self.nbData/self.cycles]))] - self.xList3[self.dataCH3.index(max(self.dataCH3[:self.nbData/self.cycles]))]
         self.s_data_changed.emit(self.savedStatusDataDict)
         if self.launch_state is True:
-            time.sleep(2)
+            log.debug("Sleep time")
             self.continue_propagation()
         log.info("sending data")
 
@@ -183,6 +183,7 @@ class PlasmaAnalyser(QObject):
             pass
 
     def get_data_thread(self):
+        self.instrumentsDict["myOscillo"].write("ACQuire:STATE ON")
         self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
         self.instrumentsDict["myOscillo"].write("HORizontal:SCAle 1E-3")
         self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
@@ -336,8 +337,12 @@ class PlasmaAnalyser(QObject):
         log.debug("calcul 3")
 
     def calcul_graph4(self, progress_callback):
-        self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(self.dataCH2)
-        self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(self.dataCH1)
+        semi2 = self.dataCH2[:int((len(self.dataCH2) / 2))]
+        t2 = int(-(len(semi2)/self.cycles))
+        datach2T = self.dataCH2[t2*2:t2]
+        datach1T = self.dataCH1[t2*2:t2]
+        self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(datach2T)
+        self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(datach1T)
         log.debug("calcul 4")
 
     def calcul_graph5(self, progress_callback):

@@ -139,15 +139,21 @@ class DataView(QWidget, Ui_dataView):
         #def update_data(self, simPlotData, ch1list, frequency, VoltageCurrentPhaseShift):
     @pyqtSlot(dict)
     def update_data(self, simPlotData):
+        log.debug("Plot time")
         #log.info("updating graph")
         #print(simPlotData)
         for graphic in Data().graphics:
             try:
                 #print(simPlotData[graphic]['data']["y"])
                 kwargs = simPlotData[graphic]['data']
-                self.data_saving_python[f"{graphic}Y"].extend(kwargs["y"])
-                self.data_saving_python[f"{graphic}X"].extend(kwargs["x"])
-                self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
+                if graphic == "Lissajous":
+                    self.data_saving_python[f"{graphic}Y"].append(kwargs["y"])
+                    self.data_saving_python[f"{graphic}X"].append(kwargs["x"])
+                    self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
+                else:
+                    self.data_saving_python[f"{graphic}Y"] = (kwargs["y"])
+                    self.data_saving_python[f"{graphic}X"] = (kwargs["x"])
+                    self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
             except Exception as e:
                 log.error(e)
 
