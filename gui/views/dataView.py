@@ -36,12 +36,30 @@ class DataView(QWidget, Ui_dataView):
         self.connect_signals()
         self.allPlotsDict = {}
         self.create_plots()
-        self.data_saving_pandas = None
         self.initialize_view()
         self.initiate_data_saving_python()
         log.info("Initiating multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
     def initiate_data_saving_python(self):
+        self.data_saving_pandas = {
+            "VoltageX": [],
+            "VoltageY": [],
+            "Power (m)X": [],
+            "Power (m)Y": [],
+            "Power (t)X": [],
+            "Power (t)Y": [],
+            "LissajousX": [],
+            "LissajousY": [],
+            "Lissajous asymetriaX": [],
+            "Lissajous asymetriaY": [],
+            "Charge asymetriaX": [],
+            "Charge asymetriaY": [],
+            "Frequency": [],
+            "Voltage-Current Phase shift": [],
+            "Charge asymetria ratio": [],
+            "Voltage asymetria (Min)": [],
+            "Voltage asymetria (Max)": []
+        }
         self.data_saving_python = {
             "VoltageX": [],
             "VoltageY": [],
@@ -98,11 +116,10 @@ class DataView(QWidget, Ui_dataView):
             name = name[0] + '.csv'
         else:
             name = name[0]
-        print(self.data_saving_python)
-        
-        CSV = "\n".join([str(k) + ',' + ','.join(str(v)) for k, v in self.data_saving_python.items()])
-        with open(name, "w") as file:
-            file.write(CSV)
+        for i, (x, y) in enumerate(self.data_saving_python.items()):
+            self.data_saving_pandas[x] = list(map(str, y))
+        df = pd.DataFrame.from_dict(self.data_saving_pandas, orient="index")
+        df.to_csv(name)
         #self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python, orient='index')
         #self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python)
         #self.data_saving_pandas.to_csv(name)
