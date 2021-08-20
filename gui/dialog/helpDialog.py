@@ -6,7 +6,7 @@ from PyQt5 import uic
 
 log = logging.getLogger(__name__)
 
-helpDialogUiPath = os.path.dirname(os.path.realpath(__file__)) + '{0}helpDialogUi.ui'.format(os.sep)
+helpDialogUiPath = os.path.dirname(os.path.realpath(__file__)) + '{0}helpDialogUI.ui'.format(os.sep)
 Ui_helpDialog, QtBaseClass = uic.loadUiType(helpDialogUiPath)
 
 
