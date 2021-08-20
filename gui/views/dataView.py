@@ -82,6 +82,11 @@ class DataView(QWidget, Ui_dataView):
 
     def initialize_view(self):
         self.VoltageCheckBox.setChecked(True)
+        self.PowerMCheckBox.setChecked(True)
+        self.PowerTCheckBox.setChecked(True)
+        self.LissajousCheckBox.setChecked(True)
+        self.LissajousAsyCheckBox.setChecked(True)
+        self.ChargeAsyCheckBox.setChecked(True)
 
     def search_file(self):
         name = QFileDialog.getSaveFileName(self, 'Save File', '', 'Txt Files (*.txt);;All Files (*)',
@@ -114,7 +119,7 @@ class DataView(QWidget, Ui_dataView):
 
     def create_plots(self):
         for graphic in Data().graphics:
-            self.allPlotsDict[graphic] = {"plotItem": PlotItem(), "displayed": 0}
+            self.allPlotsDict[graphic] = {"plotItem": PlotItem(), "displayed": 1}
         for graphic in Data().graphics:
             self.allPlotsDict[graphic]["plotDataItem"] = {}
             dataPlotItem = self.allPlotsDict[graphic]["plotItem"].plot()
