@@ -89,17 +89,24 @@ class DataView(QWidget, Ui_dataView):
         self.ChargeAsyCheckBox.setChecked(True)
 
     def search_file(self):
-        name = QFileDialog.getSaveFileName(self, 'Save File', '', 'Txt Files (*.txt);;All Files (*)',
+        name = QFileDialog.getSaveFileName(self, 'Save File', '', 'Csv Files (*.csv);;All Files (*)',
                                            options=QFileDialog.DontUseNativeDialog)
         if name[0] == '':
             log.info("File is not good")
 
-        if name[1] == 'Txt Files (*.txt)' and name[0][-3:] != '.txt':
-            name = name[0] + '.txt'
+        if name[1] == 'Csv Files (*.csv)' and name[0][-3:] != '.csv':
+            name = name[0] + '.csv'
         else:
             name = name[0]
-
-        self.data_saving_pandas.to_csv(name)
+        print(self.data_saving_python)
+        
+        CSV = "\n".join([str(k) + ',' + ','.join(str(v)) for k, v in self.data_saving_python.items()])
+        with open(name, "w") as file:
+            file.write(CSV)
+        #self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python, orient='index')
+        #self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python)
+        #self.data_saving_pandas.to_csv(name)
+        #print(self.data_saving_python)
         #with open(name, 'w') as fp:
         #    fp.writelines(json.dumps(self.data_saving_pandas))
 
@@ -152,8 +159,8 @@ class DataView(QWidget, Ui_dataView):
                 #print(simPlotData[graphic]['data']["y"])
                 kwargs = simPlotData[graphic]['data']
                 if graphic == "Lissajous":
-                    self.data_saving_python[f"{graphic}Y"].append(kwargs["y"])
-                    self.data_saving_python[f"{graphic}X"].append(kwargs["x"])
+                    self.data_saving_python[f"{graphic}Y"].extend(kwargs["y"])
+                    self.data_saving_python[f"{graphic}X"].extend(kwargs["x"])
                     self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
                 else:
                     self.data_saving_python[f"{graphic}Y"] = (kwargs["y"])
@@ -198,7 +205,6 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.setEnabled(True)
         worker = Worker(self.model.stop_propagation)
         self.threadpool.start(worker)
-        self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python,orient='index')
 
     def reset_data(self):
         self.stop_data()
