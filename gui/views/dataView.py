@@ -48,7 +48,7 @@ class DataView(QWidget, Ui_dataView):
             "Power (m)X": [],
             "Power (m)Y": [],
             "Power (t)X": [],
-            "Power (t)y": [],
+            "Power (t)Y": [],
             "LissajousX": [],
             "LissajousY": [],
             "Lissajous asymetriaX": [],
@@ -148,8 +148,8 @@ class DataView(QWidget, Ui_dataView):
                 self.data_saving_python[f"{graphic}Y"].extend(kwargs["y"])
                 self.data_saving_python[f"{graphic}X"].extend(kwargs["x"])
                 self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
-            except:
-                log.info(f"Fuck ça marche pas dans el graph{graphic}")
+            except Exception as e:
+                log.error(e)
 
         self.lcdNumber_2.display(self.model.frequency)
         self.data_saving_python["Frequency"].append(self.model.frequency)
@@ -177,7 +177,6 @@ class DataView(QWidget, Ui_dataView):
         self.LaunchDataFButton.stop_flash()
         self.LaunchDataFButton.setEnabled(False)
         self.LaunchDataFButton.setText("Resume")
-        pass
         self.LaunchDataFButton.clicked.disconnect()
         self.LaunchDataFButton.clicked.connect(self.launch_data)
         self.LaunchDataFButton.setEnabled(True)

@@ -13,9 +13,9 @@ class Data:
                                "parameter8": globalParameters["parameter8"]}
 
         self.graphics = {"Voltage": 1,
-                         "Power (m)": 0,
-                         "Power (t)": 0,
-                         "Lissajous": 0,
-                         "Lissajous asymetria": 0,
-                         "Charge asymetria": 0}
+                         "Power (m)": 1,
+                         "Power (t)": 1,
+                         "Lissajous": 1,
+                         "Lissajous asymetria": 1,
+                         "Charge asymetria": 1}
 
