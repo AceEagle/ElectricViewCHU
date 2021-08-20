@@ -108,7 +108,8 @@ class PlasmaAnalyser(QObject):
         self.s_data_changed.emit(self.savedStatusDataDict)
         if self.launch_state is True:
             log.debug("Sleep time")
-            self.continue_propagation()
+            worker = Worker(self.continue_propagation)
+            self.threadpool.start(worker)
         log.info("sending data")
 
     def launch_propagation(self, progress_callback):
