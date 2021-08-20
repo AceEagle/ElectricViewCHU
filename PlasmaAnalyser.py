@@ -112,6 +112,7 @@ class PlasmaAnalyser(QObject):
 
     def launch_propagation(self, progress_callback):
         self.launch_state = True
+        self.continue_propagation(self)
         log.info("=== === === SIMULATION STARTED === === ===")
 
     def continue_propagation(self):
