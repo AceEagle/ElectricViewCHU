@@ -280,14 +280,16 @@ class PlasmaAnalyser(QObject):
 
     def convert_x_into_real_data_1(self):
         self.x1 += 1
-        return 2 + (2 * (self.x1 - 1))
+        return self.x1
+        #return 2 + (2 * (self.x1 - 1))
 
     def convert_y_into_real_data_1(self, data):
         return 2 + (data * 2)
 
     def convert_x_into_real_data_2(self):
         self.x2 += 1
-        return 2 + (2 * (self.x2 - 1))
+        return self.x2
+        #return 2 + (2 * (self.x2 - 1))
 
     def convert_y_into_real_data_2(self, data):
         return 2 * (2 + (data * 2))
@@ -347,7 +349,8 @@ class PlasmaAnalyser(QObject):
         log.debug("calcul 1")
 
     def calcul_graph2(self, surface, statusSignal):
-        ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / surface
+        #ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / surface
+        ptlist = sum(self.dataCH2)/float(len(self.dataCH2))
         self.savedStatusDataDict["Power (m)"]["data"]["x"].append(self.x2)
         self.savedStatusDataDict["Power (m)"]["data"]["y"].append(ptlist)
         log.debug("calcul 2")
@@ -357,9 +360,11 @@ class PlasmaAnalyser(QObject):
         # log.info(self.dataCH2)
         #log.info(len(self.dataCH1))
         #log.info(len(self.dataCH2))
-        ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / (surface * cycles)
+        #ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / (surface * cycles)
+        ptlist = sum(self.dataCH1) / float(len(self.dataCH1))
         self.savedStatusDataDict["Power (t)"]["data"]["x"].append(self.x3)
         self.savedStatusDataDict["Power (t)"]["data"]["y"].append(ptlist)
+        print(self.savedStatusDataDict["Power (t)"]["data"]["y"])
         log.debug("calcul 3")
 
     def calcul_graph4(self, statusSignal):

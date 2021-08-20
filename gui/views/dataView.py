@@ -138,11 +138,11 @@ class DataView(QWidget, Ui_dataView):
     def create_plots(self):
         for graphic in Data().graphics:
             self.allPlotsDict[graphic] = {"plotItem": PlotItem(), "displayed": 0}
-        for graphic in Data().graphics:
             self.allPlotsDict[graphic]["plotDataItem"] = {}
             dataPlotItem = self.allPlotsDict[graphic]["plotItem"].plot()
             self.allPlotsDict[graphic]["plotDataItem"][graphic] = dataPlotItem
             self.allPlotsDict[graphic]["plotItem"].setTitle(graphic)
+            self.allPlotsDict[graphic]["plotDataItem"][graphic].setDynamicRangeLimit(None)
 
     def update_plots_position(self):
         self.graphicsView.clear()
