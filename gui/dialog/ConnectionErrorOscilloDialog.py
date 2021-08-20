@@ -6,16 +6,16 @@ from PyQt5 import uic
 
 log = logging.getLogger(__name__)
 
-ConnectionErrorDialogUiPath = os.path.dirname(os.path.realpath(__file__)) + '{0}ConnectionErrorDialogUI.ui'.format(os.sep)
-Ui_connectionErrorDialog, QtBaseClass = uic.loadUiType(ConnectionErrorDialogUiPath)
+ConnectionErrorOscilloDialogUiPath = os.path.dirname(os.path.realpath(__file__)) + '{0}ConnectionErrorOscilloDialogUI.ui'.format(os.sep)
+Ui_connectionErrorOscilloDialog, QtBaseClass = uic.loadUiType(ConnectionErrorOscilloDialogUiPath)
 
 
-class ConnectionErrorDialog(QDialog, Ui_connectionErrorDialog):
+class ConnectionErrorOscilloDialog(QDialog, Ui_connectionErrorOscilloDialog):
 
     s_windowClose = pyqtSignal()
 
     def __init__(self):
-        super(ConnectionErrorDialog, self).__init__()
+        super(ConnectionErrorOscilloDialog, self).__init__()
         self.setupUi(self)
         self.setAttribute(Qt.WA_AlwaysStackOnTop)
 

@@ -1,5 +1,7 @@
 import random
 import time
+from gui.dialog.ConnectionErrorOscilloDialog import ConnectionErrorOscilloDialog
+from gui.dialog.ConnectionErrorAFGDialog import ConnectionErrorAFGDialog
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,6 +28,8 @@ class PlasmaAnalyser(QObject):
 
     def __init__(self):
         super(PlasmaAnalyser, self).__init__()
+        self.connectionErrorOscilloDialog = ConnectionErrorOscilloDialog()
+        self.connectionErrorAFGDialog = ConnectionErrorAFGDialog()
         self.threadpool = QThreadPool()
         self.rm = visa.ResourceManager()
         self.mutex = QMutex()
@@ -61,13 +65,21 @@ class PlasmaAnalyser(QObject):
 
     def connect_oscillo(self, oscilloStr):
         log.info("Connection to instruments")
-        self.instrumentsDict["myOscillo"] = self.rm.open_resource(oscilloStr)
-        log.debug(self.instrumentsDict["myOscillo"])
+        try:
+            self.instrumentsDict["myOscillo"] = self.rm.open_resource(oscilloStr)
+            log.debug(self.instrumentsDict["myOscillo"])
+        except:
+            #self.setEnabled(False)
+            self.connectionErrorOscilloDialog.exec_()
 
     def connect_afg(self, afgStr):
         log.info("Connection to instruments")
-        self.instrumentsDict["myAFG"] = self.rm.open_resource(afgStr)
-        log.debug(self.instrumentsDict["myAFG"])
+        try:
+            self.instrumentsDict["myAFG"] = self.rm.open_resource(afgStr)
+            log.debug(self.instrumentsDict["myAFG"])
+        except:
+            #self.setEnabled(False)
+            self.connectionErrorAFGDialog.exec_()
 
     def inject_AFG(self, mode, freq, wave, cycle):
         self.instrumentsDict["myAFG"].write(f"SOURce1:{mode}:MODE")

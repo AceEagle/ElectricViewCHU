@@ -28,7 +28,7 @@
       </font>
      </property>
      <property name="text">
-      <string>ERROR: Unable to connect to the Oscilloscope. Check connection state in Keysight Connection Expert and/or check drivers forthe instrument.</string>
+      <string>ERROR: Unable to connect to the AFG. Check connection state in Keysight Connection Expert and/or check drivers forthe instrument.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
