@@ -242,7 +242,8 @@ class PlasmaAnalyser(QObject):
         return self.x1zero + (self.x1incr * (self.x1 - 1))
 
     def convert_y_into_real_data_1(self, data):
-        return self.y1zero + (data * self.y1mult)
+        return data
+        #self.y1zero + (data * self.y1mult)
 
 
     def convert_x_into_real_data_2(self):
@@ -250,7 +251,8 @@ class PlasmaAnalyser(QObject):
         return self.x2zero + (self.x2incr * (self.x2 - 1))
 
     def convert_y_into_real_data_2(self, data):
-        return self.capacitance * (self.y2zero + (data * self.y2mult))
+        return self.capacitance * data
+        #(self.y2zero + (data * self.y2mult))
 
     def convert_x_into_real_data_3(self):
         self.x3 += 1
