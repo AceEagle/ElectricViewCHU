@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>287</width>
-    <height>69</height>
+    <height>114</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,30 +20,20 @@
    <string>Help</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QPushButton" name="OkPButton">
+     <property name="text">
+      <string>OK</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Software Version: 0.1</string>
+      <string>ERROR: Unable to connect to the Oscilloscope/AFG. Check connection state in Keysight Connection Expert and/or check drivers for instruments</string>
      </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Contact Developper: mathieu.vigneault.19@gmail.com</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Last Update: 17/08/2021</string>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
