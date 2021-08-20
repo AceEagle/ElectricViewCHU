@@ -71,13 +71,13 @@ class DataView(QWidget, Ui_dataView):
             "Power (m)X": [],
             "Power (m)Y": [],
             "Power (t)X": [],
-            "Power (t)y": [],
+            "Power (t)Y": [],
             "LissajousX": [],
             "LissajousY": [],
             "Lissajous asymetriaX": [],
             "Lissajous asymetriaY": [],
-            "Voltage asymetriaX": [],
-            "Voltage asymetriaY": [],
+            "Charge asymetriaX": [],
+            "Charge asymetriaY": [],
             "Frequency": [],
             "Voltage-Current Phase shift": [],
             "Charge asymetria ratio": [],
@@ -165,14 +165,12 @@ class DataView(QWidget, Ui_dataView):
         #log.info("updating graph")
         #print(simPlotData)
         for graphic in Data().graphics:
-            try:
-                #print(simPlotData[graphic]['data']["y"])
-                kwargs = simPlotData[graphic]['data']
-                self.data_saving_python[f"{graphic}Y"].extend(kwargs["y"])
-                self.data_saving_python[f"{graphic}X"].extend(kwargs["x"])
-                self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
-            except:
-                log.info(f"Fuck ça marche pas dans el graph{graphic}")
+            #print(simPlotData[graphic]['data']["y"])
+            kwargs = simPlotData[graphic]['data']
+            self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)
+            self.data_saving_python[f"{graphic}Y"].extend(kwargs["y"])
+            self.data_saving_python[f"{graphic}X"].extend(kwargs["x"])
+
 
         #self.lcdNumber_2.display(self.model.frequency)
         #self.data_saving_python["Frequency"].append(self.model.frequency)

@@ -173,17 +173,16 @@ class PlasmaAnalyser(QObject):
         #self.max1 = max(self.dataCH1)
         #self.min1 = min(self.dataCH1)
         # voltageCurrentPhaseShift = self.xList1[self.dataCH1.index(max(self.dataCH1[:self.nbData/self.cycles]))] - self.xList3[self.dataCH3.index(max(self.dataCH3[:self.nbData/self.cycles]))]
+        log.debug(self.savedStatusDataDict["Voltage"]["data"]["y"])
         self.s_data_changed.emit(self.savedStatusDataDict)
-        time.sleep(5)
-        if self.launch_state == True:
-            self.continue_propagation()
         log.info("sending data to main thread")
 
     def launch_propagation(self, statusSignal):
-        self.launch_state = True
         # self.init_oscillo()
+        self.launch_state = True
         log.info("=== === === SIMULATION STARTED === === ===")
-        self.continue_propagation()
+        while self.launch_state == True:
+            self.get_data_thread()
 
     def init_oscillo(self):
         self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
@@ -194,9 +193,6 @@ class PlasmaAnalyser(QObject):
         # log.debug(self.frequency)
         self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
         # log.debug(self.cycles)
-
-    def continue_propagation(self):
-        self.get_data_thread()
 
     def stop_propagation(self, statusSignal):
         self.launch_state = False
