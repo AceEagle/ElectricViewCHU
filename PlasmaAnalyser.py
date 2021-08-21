@@ -203,7 +203,7 @@ class PlasmaAnalyser(QObject):
         self.cycles = float(self.instrumentsDict["myAFG"].query("SOURce1:BURSt:NCYCles?"))
 
 
-        self.instrumentsDict["myOscillo"].write(":DATa:ENCdg ASCIi;:DATa:SOURce CH1")
+        self.instrumentsDict["myOscillo"].write(f":DATa:ENCdg ASCIi;:DATa:SOURce {self.voltageCh}")
         self.instrumentsDict["myOscillo"].write("ACQuire:STATE OFF")
 
         self.x1zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
@@ -214,7 +214,7 @@ class PlasmaAnalyser(QObject):
         log.debug(len(self.dataCH1))
         #log.info(self.dataCH1)
 
-        self.instrumentsDict["myOscillo"].write("DATa:SOURce CH2")
+        self.instrumentsDict["myOscillo"].write(f"DATa:SOURce {self.chargeCh}")
         self.x2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
         self.x2incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
         self.y2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
@@ -224,7 +224,7 @@ class PlasmaAnalyser(QObject):
         #log.info(self.dataCH2)
 
 
-        self.instrumentsDict["myOscillo"].write(f"DATa:SOURce CH3")
+        self.instrumentsDict["myOscillo"].write(f"DATa:SOURce {self.currentCh}")
         self.x3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
         self.x3incr = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XINcr?"))
         self.y3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YZEro?"))
