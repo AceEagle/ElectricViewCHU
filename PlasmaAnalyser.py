@@ -1,28 +1,19 @@
-import random
-import time
 from gui.dialog.ConnectionErrorOscilloDialog import ConnectionErrorOscilloDialog
 from gui.dialog.ConnectionErrorAFGDialog import ConnectionErrorAFGDialog
-import math
 import numpy as np
-import matplotlib.pyplot as plt
 import json
 from tools.pyqtWorker import Worker
 from PyQt5.QtCore import pyqtSignal, QObject, QThreadPool, QMutex
-import datetime
 import logging
-from pydispatch import dispatcher
 from Data import Data
 import pyvisa as visa
-from scipy import integrate
-from operator import methodcaller
-import re
 
 log = logging.getLogger(__name__)
 
 SIGNAL_PLOT_TOGGLED = "plot.toggled.graphic"
 
+
 class PlasmaAnalyser(QObject):
-    #s_data_changed = pyqtSignal(dict, list, int)
     s_data_changed = pyqtSignal(dict)
     instruments_connected = pyqtSignal(list)
 
@@ -43,9 +34,7 @@ class PlasmaAnalyser(QObject):
         self.worker1finished, self.worker2finished, self.worker3finished = False, False, False
         self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
         self.timeList = []
-        self.xList1 = []
-        self.xList2 = []
-        self.xList3 = []
+        self.xList1, self.xList2, self.xList3 = [], [], []
 
     def change_channels(self, channeldict):
         self.voltageCh = channeldict["voltage"]
