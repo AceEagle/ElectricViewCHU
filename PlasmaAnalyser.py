@@ -3,7 +3,7 @@ from gui.dialog.ConnectionErrorAFGDialog import ConnectionErrorAFGDialog
 import numpy as np
 import json
 from tools.pyqtWorker import Worker
-from PyQt5.QtCore import pyqtSignal, QObject, QThreadPool, QMutex
+from PyQt5.QtCore import pyqtSignal, QObject, QThreadPool
 import logging
 from Data import Data
 import pyvisa as visa
@@ -19,22 +19,21 @@ class PlasmaAnalyser(QObject):
 
     def __init__(self):
         super(PlasmaAnalyser, self).__init__()
-        self.connectionErrorOscilloDialog = ConnectionErrorOscilloDialog()
-        self.connectionErrorAFGDialog = ConnectionErrorAFGDialog()
-        self.threadpool = QThreadPool()
-        self.rm = visa.ResourceManager()
-        self.mutex = QMutex()
-        self.savedStatusDataDict = {}
-        self.create_empty_savedStatusDataDict()
-        self.connect_to_signals()
         self.instrumentsDict = {"myOscillo": None, "myAFG": None}
-        self.xList = []
         self.surface = 0
         self.x1, self.x2, self.x3 = 1, 1, 1
         self.worker1finished, self.worker2finished, self.worker3finished = False, False, False
         self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
         self.timeList = []
-        self.xList1, self.xList2, self.xList3 = [], [], []
+        self.timeList, self.xList1, self.xList2, self.xList3 = [], [], [], []
+
+        self.connectionErrorOscilloDialog = ConnectionErrorOscilloDialog()
+        self.connectionErrorAFGDialog = ConnectionErrorAFGDialog()
+        self.threadpool = QThreadPool()
+        self.rm = visa.ResourceManager()
+        self.savedStatusDataDict = {}
+        self.create_empty_savedStatusDataDict()
+        self.connect_to_signals()
 
     def change_channels(self, channeldict):
         self.voltageCh = channeldict["voltage"]
