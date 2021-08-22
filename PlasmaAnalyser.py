@@ -75,7 +75,6 @@ class PlasmaAnalyser(QObject):
             self.instrumentsDict["myAFG"].write(f"SOURce1:BURSt:NCYCles {cycle}")
 
     def inject_Oscillo(self, nbData):
-        #log.debug(f"HORizontal:RECOrdlength {nbData}")
         self.instrumentsDict["myOscillo"].write(f"HORizontal:RECOrdlength {nbData}")
 
     def change_surface_and_trigInt(self, surface, trigInt, capacitance):
@@ -93,16 +92,13 @@ class PlasmaAnalyser(QObject):
         for graphic in Data().graphics:
             self.savedStatusDataDict[graphic] = {}
             self.savedStatusDataDict[graphic]["data"] = {"x":[], "y":[]}
-        # log.debug(self.savedStatusDataDict)
 
     def connect_to_signals(self):
         pass
 
     def send_data_to_plot(self, graphics=None):
-        #self.s_data_changed.emit(self.savedStatusDataDict, self.dataCH1, self.frequency)
         self.max1 = max(self.dataCH1)
         self.min1 = min(self.dataCH1)
-        #voltageCurrentPhaseShift = self.xList1[self.dataCH1.index(max(self.dataCH1[:self.nbData/self.cycles]))] - self.xList3[self.dataCH3.index(max(self.dataCH3[:self.nbData/self.cycles]))]
         self.s_data_changed.emit(self.savedStatusDataDict)
         if self.launch_state is True:
             log.debug("Sleep time")
@@ -200,7 +196,6 @@ class PlasmaAnalyser(QObject):
         self.y1mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
         self.dataCH1 = self.instrumentsDict["myOscillo"].query_ascii_values("CURVe?")
         log.debug(len(self.dataCH1))
-        #log.info(self.dataCH1)
 
         self.instrumentsDict["myOscillo"].write(f"DATa:SOURce {self.chargeCh}")
         self.x2zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
@@ -209,8 +204,6 @@ class PlasmaAnalyser(QObject):
         self.y2mult = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:YMUlt?"))
         self.dataCH2 = self.instrumentsDict["myOscillo"].query_ascii_values("CURVe?")
         log.debug(len(self.dataCH2))
-        #log.info(self.dataCH2)
-
 
         self.instrumentsDict["myOscillo"].write(f"DATa:SOURce {self.currentCh}")
         self.x3zero = float(self.instrumentsDict["myOscillo"].query(":WFMOutpre:XZEro?"))
@@ -258,22 +251,13 @@ class PlasmaAnalyser(QObject):
         return self.y3zero + (data * self.y3mult)
 
     def convert_strlist_to_intlist1(self, string, progress_callback):
-        #yconverted = list(map(self.convert_y_into_real_data_1, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
-        #log.debug(yconverted)
         self.xList1 = []
         yconverted = list(map(self.convert_y_into_real_data_1, self.dataCH1))
         for x in range(len(yconverted)):
             self.xList1.append(float(self.convert_x_into_real_data_1()))
         self.dataCH1 = yconverted
-        #log.debug(len(self.dataCH1), len(self.xList1))
-        #self.ch1List = yconverted
-        #log.info(self.dataCH1)
-        #log.info(self.xList1)
 
     def convert_strlist_to_intlist2(self, string, progress_callback):
-        #yconverted = list(map(self.convert_y_into_real_data_2, list(map(int, (re.split("\n|, ", string)[0].split(","))))))
-        #log.debug(yconverted)
-        #log.debug(yconverted)
         self.xList2 = []
         yconverted = list(map(self.convert_y_into_real_data_2, self.dataCH2))
         for x in range(len(yconverted)):
@@ -321,8 +305,6 @@ class PlasmaAnalyser(QObject):
         log.debug("calcul 2")
 
     def calcul_graph3(self, cycles, surface, progress_callback):
-        #log.info(self.dataCH1)
-        #log.info(self.dataCH2)
         log.info(len(self.dataCH1))
         log.info(len(self.dataCH2))
         ptlist = self.frequency * np.trapz(self.dataCH1, x=self.dataCH2) / (surface * cycles)
