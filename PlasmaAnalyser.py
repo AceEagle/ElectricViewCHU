@@ -102,12 +102,14 @@ class PlasmaAnalyser(QObject):
     def send_data_to_plot(self, graphics=None):
         self.max1 = max(self.dataCH1)
         self.min1 = min(self.dataCH1)
+        log.info("sending data")
         self.s_data_changed.emit(self.savedStatusDataDict)
         if self.launch_state is True:
-            log.debug("Sleep time")
+            if self.acquisition is not None:
+                log.debug("Sleep time")
+                time.sleep(self.acquisition)
             worker = Worker(self.launch_propagation)
             self.threadpool.start(worker)
-        log.info("sending data")
 
     def launch_propagation(self, progress_callback):
         self.launch_state = True
