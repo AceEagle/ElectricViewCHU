@@ -318,9 +318,8 @@ class PlasmaAnalyser(QObject):
         t2 = int((semi2len/self.cycles))
         datach2T = self.dataCH2[-(semi2len+(t2*2)):-(semi2len+t2)]
         datach1T = self.dataCH1[-(semi2len+(t2*2)):-(semi2len+t2)]
-        print(datach1T)
-        self.savedStatusDataDict["Lissajous"]["data"]["y"].extend(datach2T)
-        self.savedStatusDataDict["Lissajous"]["data"]["x"].extend(datach1T)
+        self.savedStatusDataDict["Lissajous"]["data"]["y"] = datach2T
+        self.savedStatusDataDict["Lissajous"]["data"]["x"] = datach1T
         log.debug("calcul 4")
 
     def calcul_graph5(self, progress_callback):

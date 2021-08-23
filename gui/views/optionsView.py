@@ -18,7 +18,6 @@ class OptionsView(QWidget, Ui_optionsView):
     def __init__(self, model=None, controller=None):
         super(OptionsView, self).__init__()
         self.model = model
-        print(self.model)
         self.setupUi(self)
         self.threadpool = QThreadPool()
         self.instrumentsList = None
@@ -113,15 +112,6 @@ class OptionsView(QWidget, Ui_optionsView):
         myAFGStr = str(self.USBPortsAFGComboBox.currentText())
         self.model.connect_oscillo(myOscilloStr)
         self.model.connect_afg(myAFGStr)
-
-    # def connect_instruments_thread(self):
-    #     myOscilloStr = (str(self.USBPortsOscilloComboBox.currentText()))
-    #     myAFGStr = str(self.USBPortsAFGComboBox.currentText())
-    #     worker1 = Worker(self.model.connect_oscillo, myOscilloStr)
-    #     worker2 = Worker(self.model.connect_afg, myAFGStr)
-    #     self.threadpool.start(worker1)
-    #     self.threadpool.start(worker2)
-    #     print(self.model.instrumentsDict["myAFG"])
 
     def inject_parameters_thread(self):
         worker = Worker(self.inject_parameters, self.AFGModeComboBox.currentText(), self.AFGFrequencyDSpinBox.value(),

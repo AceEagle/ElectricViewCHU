@@ -27,7 +27,6 @@ class DataView(QWidget, Ui_dataView):
         super(DataView, self).__init__()
         self.setupUi(self)
         self.model = model
-        print(self.model)
         self.threadpool = QThreadPool()
         self.plotItem = None
         self.dataPlotItem = None
@@ -120,12 +119,6 @@ class DataView(QWidget, Ui_dataView):
             self.data_saving_pandas[x] = list(map(str, y))
         df = pd.DataFrame.from_dict(self.data_saving_pandas, orient="index")
         df.to_csv(name)
-        #self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python, orient='index')
-        #self.data_saving_pandas = pd.DataFrame.from_dict(self.data_saving_python)
-        #self.data_saving_pandas.to_csv(name)
-        #print(self.data_saving_python)
-        #with open(name, 'w') as fp:
-        #    fp.writelines(json.dumps(self.data_saving_pandas))
 
     def initiate_graph(self, graphic, caller=None):
         if caller.checkState() == 2:
@@ -165,15 +158,11 @@ class DataView(QWidget, Ui_dataView):
                 except:
                     pass
 
-        #def update_data(self, simPlotData, ch1list, frequency, VoltageCurrentPhaseShift):
     @pyqtSlot(dict)
     def update_data(self, simPlotData):
         log.debug("Plot time")
-        #log.info("updating graph")
-        #print(simPlotData)
         for graphic in Data().graphics:
             try:
-                #print(simPlotData[graphic]['data']["y"])
                 kwargs = simPlotData[graphic]['data']
                 if graphic == "Lissajous":
                     self.data_saving_python[f"{graphic}Y"].extend(kwargs["y"])
