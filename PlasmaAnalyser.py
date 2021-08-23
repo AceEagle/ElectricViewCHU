@@ -1,3 +1,5 @@
+import time
+
 from gui.dialog.ConnectionErrorOscilloDialog import ConnectionErrorOscilloDialog
 from gui.dialog.ConnectionErrorAFGDialog import ConnectionErrorAFGDialog
 import numpy as np
@@ -77,10 +79,11 @@ class PlasmaAnalyser(QObject):
     def inject_Oscillo(self, nbData):
         self.instrumentsDict["myOscillo"].write(f"HORizontal:RECOrdlength {nbData}")
 
-    def change_surface_and_trigInt(self, surface, trigInt, capacitance):
+    def change_surface_and_trigInt(self, surface, trigInt, capacitance, acquisition):
         self.surface = float(surface)
         self.trigInterval = float(trigInt)
         self.capacitance = float(capacitance) * 1E-6
+        self.acquisition = acquisition
 
     def get_oscillo(self):
         return self.self.instrumentsDict["myOscillo"]
@@ -108,11 +111,11 @@ class PlasmaAnalyser(QObject):
 
     def launch_propagation(self, progress_callback):
         self.launch_state = True
-        self.continue_propagation()
         log.info("=== === === SIMULATION STARTED === === ===")
-
-    def continue_propagation(self):
-        self.get_data_thread()
+        if self.acquisition is not None:
+            time.sleep(self.acquisition)
+        else:
+            self.get_data_thread()
 
     def stop_propagation(self, progress_callback):
         self.launch_state = False
