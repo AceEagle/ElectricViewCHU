@@ -208,6 +208,7 @@ class PlasmaAnalyser(QObject):
         log.info("=== === === SIMULATION RESETED === === ===")
 
     def get_data_thread(self):
+        time.sleep(4)
         self.surface = 28
         self.cycles = 50
         self.nbData = 10
