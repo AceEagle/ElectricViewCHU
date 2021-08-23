@@ -28,6 +28,7 @@ class PlasmaAnalyser(QObject):
         self.calcul1finished, self.calcul2finished, self.calcul3finished, self.calcul4finished, self.calcul5finished, self.calcul6finished = False, False, False, False, False, False
         self.timeList = []
         self.timeList, self.xList1, self.xList2, self.xList3 = [], [], [], []
+        self.vcc, self.falsevcc = 0, 0
 
         self.connectionErrorOscilloDialog = ConnectionErrorOscilloDialog()
         self.connectionErrorAFGDialog = ConnectionErrorAFGDialog()
@@ -298,6 +299,11 @@ class PlasmaAnalyser(QObject):
         self.threadpool.start(worker5)
         self.threadpool.start(worker6)
 
+        for x1 in self.cycles:
+            x2 = x1 + 1
+            self.falsevcc += max(self.dataCH1[self.t2*x1:self.t2*x2])-min(self.dataCH1[self.t2*x1:self.t2*x2])
+        self.vcc = self.falsevcc/self.cycles
+
     def calcul_graph1(self, progress_callback):
         self.savedStatusDataDict["Voltage"]["data"]["x"].extend(self.xList1)
         self.savedStatusDataDict["Voltage"]["data"]["y"].extend(self.dataCH1)
@@ -320,7 +326,7 @@ class PlasmaAnalyser(QObject):
     def calcul_graph4(self, progress_callback):
         semi2 = self.dataCH2[:int((len(self.dataCH2) / 2))]
         semi2len = len(semi2)
-        t2 = int((semi2len/self.cycles))
+        self.t2 = int((semi2len/self.cycles))
         datach2T = self.dataCH2[-(semi2len+(t2*2)):-(semi2len+t2)]
         datach1T = self.dataCH1[-(semi2len+(t2*2)):-(semi2len+t2)]
         self.savedStatusDataDict["Lissajous"]["data"]["y"] = datach2T

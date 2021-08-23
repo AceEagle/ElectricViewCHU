@@ -54,7 +54,7 @@ class DataView(QWidget, Ui_dataView):
             "Charge asymetriaX": [],
             "Charge asymetriaY": [],
             "Frequency": [],
-            "Voltage-Current Phase shift": [],
+            "VoltageCharge Phase shift": [],
             "Charge asymetria ratio": [],
             "Voltage asymetria (Min)": [],
             "Voltage asymetria (Max)": []
@@ -72,8 +72,9 @@ class DataView(QWidget, Ui_dataView):
             "Lissajous asymetriaY": [],
             "Charge asymetriaX": [],
             "Charge asymetriaY": [],
+            "Voltage": [],
             "Frequency": [],
-            "Voltage-Current Phase shift": [],
+            "VoltageCharge Phase shift": [],
             "Charge asymetria ratio": [],
             "Voltage asymetria (Min)": [],
             "Voltage asymetria (Max)": []
@@ -175,6 +176,9 @@ class DataView(QWidget, Ui_dataView):
             except Exception as e:
                 log.error(e)
 
+        self.lcdNumber.display(self.model.vcc)
+        self.data_saving_python["Voltage"].append(self.model.vcc)
+
         self.lcdNumber_2.display(self.model.frequency)
         self.data_saving_python["Frequency"].append(self.model.frequency)
 
@@ -190,7 +194,7 @@ class DataView(QWidget, Ui_dataView):
         self.lcdNumber_8.display(self.model.max1)
         self.data_saving_python["Voltage asymetria (Max)"].append(self.model.max1)
 
-        #self.lcdNumber_9.display(self.model.VoltageCurrentPhaseShift)
+        #self.lcdNumber_9.display(self.model.VoltageChargePhaseShift)
 
     def launch_data(self):
         self.LaunchDataFButton.start_flash()
