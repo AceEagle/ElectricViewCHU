@@ -786,9 +786,9 @@
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -804,9 +804,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -923,9 +923,9 @@
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -941,9 +941,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1078,9 +1078,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1202,6 +1202,9 @@
               </property>
               <property name="autoFillBackground">
                <bool>true</bool>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
               </property>
              </widget>
             </item>
@@ -1213,9 +1216,9 @@
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1231,9 +1234,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1350,9 +1353,9 @@
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1368,9 +1371,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1505,9 +1508,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1629,6 +1632,9 @@
               </property>
               <property name="autoFillBackground">
                <bool>true</bool>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
               </property>
              </widget>
             </item>
@@ -1640,9 +1646,9 @@
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1658,9 +1664,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1777,9 +1783,9 @@
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1795,9 +1801,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -1932,9 +1938,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -2056,6 +2062,9 @@
               </property>
               <property name="autoFillBackground">
                <bool>true</bool>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
               </property>
              </widget>
             </item>
@@ -2214,9 +2223,9 @@
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -2232,9 +2241,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -2351,9 +2360,9 @@
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -2369,9 +2378,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -2506,9 +2515,9 @@
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -2635,6 +2644,9 @@
                <string notr="true">border-color: rgb(0, 0, 0);
 border-top-color: rgb(0, 0, 0);</string>
               </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
+              </property>
              </widget>
             </item>
             <item row="3" column="1">
@@ -2645,9 +2657,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -2663,9 +2675,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -2782,9 +2794,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -2800,9 +2812,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -2937,9 +2949,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -3061,6 +3073,9 @@ border-top-color: rgb(0, 0, 0);</string>
               </property>
               <property name="autoFillBackground">
                <bool>true</bool>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
               </property>
              </widget>
             </item>
@@ -3072,9 +3087,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -3090,9 +3105,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -3209,9 +3224,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -3227,9 +3242,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -3364,9 +3379,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -3488,6 +3503,9 @@ border-top-color: rgb(0, 0, 0);</string>
               </property>
               <property name="autoFillBackground">
                <bool>true</bool>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
               </property>
              </widget>
             </item>
@@ -3646,9 +3664,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -3664,9 +3682,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -3783,9 +3801,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -3801,9 +3819,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -3938,9 +3956,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4062,6 +4080,9 @@ border-top-color: rgb(0, 0, 0);</string>
               </property>
               <property name="autoFillBackground">
                <bool>true</bool>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
               </property>
              </widget>
             </item>
@@ -4073,9 +4094,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4091,9 +4112,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4210,9 +4231,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4228,9 +4249,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4365,9 +4386,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4489,6 +4510,9 @@ border-top-color: rgb(0, 0, 0);</string>
               </property>
               <property name="autoFillBackground">
                <bool>true</bool>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
               </property>
              </widget>
             </item>
@@ -4500,9 +4524,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4518,9 +4542,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4637,9 +4661,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="WindowText">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <red>206</red>
+                    <green>24</green>
+                    <blue>24</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4655,9 +4679,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4792,9 +4816,9 @@ border-top-color: rgb(0, 0, 0);</string>
                  <colorrole role="Light">
                   <brush brushstyle="SolidPattern">
                    <color alpha="255">
-                    <red>125</red>
-                    <green>125</green>
-                    <blue>125</blue>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
                    </color>
                   </brush>
                  </colorrole>
@@ -4916,6 +4940,9 @@ border-top-color: rgb(0, 0, 0);</string>
               </property>
               <property name="autoFillBackground">
                <bool>true</bool>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
               </property>
              </widget>
             </item>
