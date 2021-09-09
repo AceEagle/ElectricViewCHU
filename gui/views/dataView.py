@@ -165,7 +165,7 @@ class DataView(QWidget, Ui_dataView):
         for graphic in Data().graphics:
             try:
                 kwargs = simPlotData[graphic]['data']
-                if graphic == "Lissajous":
+                if graphic == "asd":
                     self.data_saving_python[f"{graphic}Y"].extend(kwargs["y"])
                     self.data_saving_python[f"{graphic}X"].extend(kwargs["x"])
                     self.allPlotsDict[graphic]["plotDataItem"][graphic].setData(**kwargs)

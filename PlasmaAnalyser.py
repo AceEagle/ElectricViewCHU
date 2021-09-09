@@ -79,6 +79,7 @@ class PlasmaAnalyser(QObject):
 
     def inject_Oscillo(self, nbData):
         self.instrumentsDict["myOscillo"].write(f"HORizontal:RECOrdlength {nbData}")
+        self.nbData = nbData
 
     def change_surface_and_trigInt(self, surface, trigInt, capacitance, acquisition):
         self.surface = float(surface)
@@ -185,7 +186,6 @@ class PlasmaAnalyser(QObject):
 
     def get_data_thread(self):
         self.instrumentsDict["myOscillo"].write("ACQuire:STATE ON")
-        self.nbData = int(self.instrumentsDict["myOscillo"].query("HORizontal:RECOrdlength?"))
         self.instrumentsDict["myOscillo"].write("HORizontal:SCAle 1E-3")
         self.instrumentsDict["myOscillo"].write("HORizontal:DELay:MODe OFF")
         self.instrumentsDict["myOscillo"].write("HORizontal:POSition 0")
@@ -323,19 +323,26 @@ class PlasmaAnalyser(QObject):
         self.savedStatusDataDict["Power (t)"]["data"]["y"].append(ptlist)
         log.debug("calcul 3")
 
+    #def calcul_graph4(self, progress_callback):
+     #   semi2 = self.dataCH2[:int((len(self.dataCH2) / 2))]
+      #  semi2len = len(semi2)
+       # self.t2 = int((semi2len/self.cycles))
+        #print(semi2len+(self.t2*2))
+        #print(-(semi2len+self.t2))
+        #datach2T = self.dataCH2[-(semi2len+(self.t2*2)):-(semi2len+self.t2)]
+        #datach1T = self.dataCH1[-(semi2len+(self.t2*2)):-(semi2len+self.t2)]
+        #self.savedStatusDataDict["Lissajous"]["data"]["y"] = datach2T
+        #self.savedStatusDataDict["Lissajous"]["data"]["x"] = datach1T
+        #log.debug("calcul 4")
+
     def calcul_graph4(self, progress_callback):
-        semi2 = self.dataCH2[:int((len(self.dataCH2) / 2))]
-        semi2len = len(semi2)
-        self.t2 = int((semi2len/self.cycles))
-        datach2T = self.dataCH2[-(semi2len+(t2*2)):-(semi2len+t2)]
-        datach1T = self.dataCH1[-(semi2len+(t2*2)):-(semi2len+t2)]
-        self.savedStatusDataDict["Lissajous"]["data"]["y"] = datach2T
-        self.savedStatusDataDict["Lissajous"]["data"]["x"] = datach1T
-        log.debug("calcul 4")
+        self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"] = (self.dataCH2)
+        self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"] = (self.dataCH1)
+        log.debug("calcul 5")
 
     def calcul_graph5(self, progress_callback):
-        self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"].extend(self.dataCH2)
-        self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"].extend(self.dataCH1)
+        self.savedStatusDataDict["Lissajous asymetria"]["data"]["y"] = (self.dataCH2)
+        self.savedStatusDataDict["Lissajous asymetria"]["data"]["x"] = (self.dataCH1)
         log.debug("calcul 5")
 
     def calcul_graph6(self, progress_callback):
